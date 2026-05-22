@@ -19,7 +19,13 @@ export default function Navbar() {
         boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)',
       }}>
 
-        <img src="/logo.png" alt="NEXO" style={{ height: '32px', width: '32px', borderRadius: '8px', objectFit: 'contain' }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img src="/logo.png" alt="NEXO" style={{ height: '40px', width: '40px', borderRadius: '10px', objectFit: 'contain' }} />
+          <div>
+            <div style={{ fontFamily: "'Fraunces', serif", fontSize: '18px', fontWeight: 900, color: '#fff', letterSpacing: '-0.5px', lineHeight: 1 }}>NEXO</div>
+            <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.4)', letterSpacing: '1.5px', textTransform: 'uppercase' }}>O2P Platform</div>
+          </div>
+        </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           {['Caracteristicas', 'Roles', 'Metricas'].map(l => (
@@ -42,7 +48,6 @@ export default function Navbar() {
             color: 'rgba(255,255,255,0.75)', fontSize: '13px', fontWeight: 500,
             cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
           }}>Iniciar sesion</button>
-
           <button onClick={() => navigate('/dashboard')} style={{
             padding: '8px 20px', background: '#00C2A8', border: 'none',
             borderRadius: '100px', color: '#060C16', fontSize: '13px',

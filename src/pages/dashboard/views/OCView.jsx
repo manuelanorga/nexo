@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { purchaseOrders } from '../../../data/mockData'
+import { useApp } from '../../../context/AppContext'
+import { useMemo } from 'react'
 import Badge from '../../../components/Badge'
 
 const productos = [
@@ -119,6 +121,26 @@ const ITEMS_PER_PAGE = 5
 
 export default function OCView({ setView }) {
   const [selectedOC, setSelectedOC] = useState(null)
+  const { selectedOCId, setSelectedOCId, searchQuery } = useApp()
+
+  const filtered = useMemo(() => {
+    if (!searchQuery) return purchaseOrders
+    const q = searchQuery.toLowerCase()
+    return purchaseOrders.filter(p =>
+      p.id.toLowerCase().includes(q) ||
+      p.client.toLowerCase().includes(q) ||
+      p.amount.toLowerCase().includes(q) ||
+      p.status.toLowerCase().includes(q)
+    )
+  }, [searchQuery])
+
+  useEffect(() => {
+    if (selectedOCId) {
+      const oc = purchaseOrders.find(p => p.id === selectedOCId)
+      if (oc) setSelectedOC(oc)
+      setSelectedOCId(null)
+    }
+  }, [selectedOCId])
   const [selected, setSelected] = useState([])
   const [page, setPage] = useState(1)
   const totalRegistros = 241
@@ -195,7 +217,7 @@ export default function OCView({ setView }) {
             </tr>
           </thead>
           <tbody>
-            {purchaseOrders.map(p => (
+            {filtered.map(p => (
               <tr key={p.id}
                 style={{ borderBottom: '1px solid rgba(14,77,146,0.05)', background: selected.includes(p.id) ? '#F0F7FF' : 'transparent', transition: 'background .15s' }}
                 onMouseEnter={e => { if (!selected.includes(p.id)) e.currentTarget.style.background = '#F8FBFF' }}

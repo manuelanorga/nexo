@@ -1,4 +1,6 @@
 import Badge from '../../../components/Badge'
+import { useApp } from '../../../context/AppContext'
+import { useMemo } from 'react'
 
 const facturas = [
   { id: 'FAC-1182', oc: 'OC-2025-0839', cadena: 'Tottus', emision: '21/05', vence: '05/06', monto: 'S/61,480', status: 'received' },
@@ -15,6 +17,18 @@ const KPI = ({ label, value, color }) => (
 )
 
 export default function FinancieroView() {
+  const { searchQuery } = useApp()
+
+  const filtered = useMemo(() => {
+    if (!searchQuery) return facturas
+    const q = searchQuery.toLowerCase()
+    return facturas.filter(f =>
+      f.id.toLowerCase().includes(q) ||
+      f.oc.toLowerCase().includes(q) ||
+      f.cadena.toLowerCase().includes(q) ||
+      f.monto.toLowerCase().includes(q)
+    )
+  }, [searchQuery])
   return (
     <div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '12px', marginBottom: '16px' }}>
@@ -34,7 +48,7 @@ export default function FinancieroView() {
             </tr>
           </thead>
           <tbody>
-            {facturas.map(f => (
+            {filtered.map(f => (
               <tr key={f.id} style={{ borderBottom: '1px solid rgba(14,77,146,0.05)' }}>
                 <td style={{ padding: '9px 12px', fontFamily: 'monospace', fontSize: '11px', fontWeight: 700, color: '#0B1F3A' }}>{f.id}</td>
                 <td style={{ padding: '9px 12px', fontFamily: 'monospace', fontSize: '11px', color: '#0E4D92' }}>{f.oc}</td>

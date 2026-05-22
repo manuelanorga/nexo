@@ -1,4 +1,6 @@
 import Badge from '../../../components/Badge'
+import { useApp } from '../../../context/AppContext'
+import { useMemo } from 'react'
 
 const despachos = [
   { id: 'ASN-2025-0421', oc: 'OC-2025-0841', destino: 'Wong', despacho: '18/05', llegada: '23/05', bultos: 32, status: 'confirmed' },
@@ -8,6 +10,17 @@ const despachos = [
 ]
 
 export default function DespachoView() {
+  const { searchQuery } = useApp()
+
+  const filtered = useMemo(() => {
+    if (!searchQuery) return despachos
+    const q = searchQuery.toLowerCase()
+    return despachos.filter(d =>
+      d.id.toLowerCase().includes(q) ||
+      d.oc.toLowerCase().includes(q) ||
+      d.destino.toLowerCase().includes(q)
+    )
+  }, [searchQuery])
   return (
     <div>
       <div style={{ background: '#EEF5FF', border: '1px solid #93C5FD', borderRadius: '8px', padding: '10px 14px', fontSize: '12px', color: '#1E40AF', marginBottom: '14px' }}>
@@ -34,7 +47,7 @@ export default function DespachoView() {
             </tr>
           </thead>
           <tbody>
-            {despachos.map(d => (
+            {filtered.map(d => (
               <tr key={d.id} style={{ borderBottom: '1px solid rgba(14,77,146,0.05)' }}>
                 <td style={{ padding: '9px 12px', fontFamily: 'monospace', fontSize: '11px', fontWeight: 700, color: '#0B1F3A' }}>{d.id}</td>
                 <td style={{ padding: '9px 12px', fontFamily: 'monospace', fontSize: '11px', color: '#0E4D92' }}>{d.oc}</td>

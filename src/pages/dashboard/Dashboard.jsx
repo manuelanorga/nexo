@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useApp } from '../../context/AppContext'
 import Sidebar from '../../components/Sidebar'
 import Topbar from '../../components/Topbar'
 import DashboardView from './views/DashboardView'
@@ -17,6 +18,24 @@ import ReciboView from './views/ReciboView'
 export default function Dashboard() {
   const [role, setRole] = useState('prov')
   const [view, setView] = useState('dashboard')
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const { setSearchQuery } = useApp()
+
+  useEffect(() => {
+    setSearchQuery('')
+  }, [view])
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return
+      if (e.key === 'o' || e.key === 'O') setView('nueva-oc')
+      if (e.key === 's' || e.key === 'S') setView('catalogo')
+      if (e.key === 'l' || e.key === 'L') setView('precios')
+      if (e.key === 'd' || e.key === 'D') setView('devolucion')
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [])
 
   const renderView = () => {
     switch(view) {
@@ -38,7 +57,7 @@ export default function Dashboard() {
       default: return (
         <div style={{ textAlign: 'center', paddingTop: '80px' }}>
           <div style={{ fontFamily: "'Fraunces', serif", fontSize: '26px', fontWeight: 900, color: '#0B1F3A', marginBottom: '8px' }}>
-            Modulo: <span style={{ color: '#00C2A8' }}>{view}</span>
+            <span style={{ color: '#00C2A8' }}>{view}</span>
           </div>
           <div style={{ color: '#6B8BAE', fontSize: '13px' }}>En construccion...</div>
         </div>
@@ -47,11 +66,18 @@ export default function Dashboard() {
   }
 
   return (
-    <div style={{ display: 'flex', height: '100vh', background: '#F0F7FF', fontFamily: "'DM Sans', sans-serif" }}>
-      <Sidebar role={role} setRole={setRole} view={view} setView={setView} />
+    <div style={{ display: 'flex', height: '100vh', background: '#F0F7FF', fontFamily: "'DM Sans', sans-serif", overflow: 'hidden' }}>
+      <Sidebar
+        role={role} setRole={setRole}
+        view={view} setView={setView}
+        open={sidebarOpen} setOpen={setSidebarOpen}
+      />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minWidth: 0 }}>
-        <Topbar role={role} view={view} setView={setView} />
-        <main style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
+        <Topbar
+          role={role} view={view} setView={setView}
+          onMenuClick={() => setSidebarOpen(true)}
+        />
+        <main style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
           {renderView()}
         </main>
       </div>

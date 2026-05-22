@@ -1,4 +1,6 @@
 import Badge from '../../../components/Badge'
+import { useApp } from '../../../context/AppContext'
+import { useMemo } from 'react'
 
 const devoluciones = [
   { id: 'DEV-042', oc: 'OC-2025-0831', cadena: 'Wong', motivo: 'Producto vencido', monto: 'S/4,200', status: 'pending' },
@@ -7,6 +9,18 @@ const devoluciones = [
 ]
 
 export default function DevolucionView() {
+  const { searchQuery } = useApp()
+
+  const filtered = useMemo(() => {
+    if (!searchQuery) return devoluciones
+    const q = searchQuery.toLowerCase()
+    return devoluciones.filter(d =>
+      d.id.toLowerCase().includes(q) ||
+      d.oc.toLowerCase().includes(q) ||
+      d.cadena.toLowerCase().includes(q) ||
+      d.motivo.toLowerCase().includes(q)
+    )
+  }, [searchQuery])
   return (
     <div>
       <div style={{ background: '#FFFBEB', border: '1px solid #FCD34D', borderRadius: '8px', padding: '10px 14px', fontSize: '12px', color: '#92400E', marginBottom: '14px' }}>
@@ -23,7 +37,7 @@ export default function DevolucionView() {
             </tr>
           </thead>
           <tbody>
-            {devoluciones.map(d => (
+            {filtered.map(d => (
               <tr key={d.id} style={{ borderBottom: '1px solid rgba(14,77,146,0.05)' }}>
                 <td style={{ padding: '9px 12px', fontFamily: 'monospace', fontSize: '11px', fontWeight: 700, color: '#0B1F3A' }}>{d.id}</td>
                 <td style={{ padding: '9px 12px', fontFamily: 'monospace', fontSize: '11px', color: '#0E4D92' }}>{d.oc}</td>

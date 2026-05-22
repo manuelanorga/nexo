@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useApp } from '../../context/AppContext'
+import { useTour } from '../../hooks/useTour'
 import Sidebar from '../../components/Sidebar'
 import Topbar from '../../components/Topbar'
 import DashboardView from './views/DashboardView'
@@ -20,10 +21,19 @@ export default function Dashboard() {
   const [view, setView] = useState('dashboard')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { setSearchQuery } = useApp()
+  const { startTour, isTourDone } = useTour(role)
+  const tourStarted = useRef(false)
 
   useEffect(() => {
     setSearchQuery('')
   }, [view])
+
+  useEffect(() => {
+    if (!tourStarted.current && !isTourDone()) {
+      tourStarted.current = true
+      setTimeout(() => startTour(), 800)
+    }
+  }, [role])
 
   useEffect(() => {
     const handler = (e) => {
@@ -71,6 +81,7 @@ export default function Dashboard() {
         role={role} setRole={setRole}
         view={view} setView={setView}
         open={sidebarOpen} setOpen={setSidebarOpen}
+        onTour={startTour}
       />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minWidth: 0 }}>
         <Topbar

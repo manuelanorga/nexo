@@ -37,7 +37,7 @@ const users = {
   ret:  { initials: 'WG', name: 'Wong Supermercados', role: 'Retail' },
 }
 
-function SidebarContent({ role, setRole, view, setView, navigate, onClose }) {
+function SidebarContent({ role, setRole, view, setView, navigate, onClose, onTour }) {
   const nav = navConfig[role]
   const user = users[role]
 
@@ -75,7 +75,7 @@ function SidebarContent({ role, setRole, view, setView, navigate, onClose }) {
             {group.items.map(item => {
               const isActive = view === item.id
               return (
-                <div key={item.id} onClick={() => { setView(item.id); onClose && onClose() }} style={{
+                <div key={item.id} id={'sidebar-' + item.id} onClick={() => { setView(item.id); onClose && onClose() }} style={{
                   display: 'flex', alignItems: 'center', gap: '8px',
                   padding: '7px 14px', cursor: 'pointer', fontSize: '12px',
                   fontFamily: "'DM Sans', sans-serif",
@@ -117,14 +117,22 @@ function SidebarContent({ role, setRole, view, setView, navigate, onClose }) {
           width: '100%', padding: '6px', background: 'transparent',
           border: '1px solid rgba(14,77,146,0.1)', borderRadius: '6px',
           fontSize: '11px', color: '#6B8BAE', cursor: 'pointer',
-          fontFamily: "'DM Sans', sans-serif"
+          fontFamily: "'DM Sans', sans-serif", marginBottom: '6px'
         }}>← Volver a la landing</button>
+        {onTour && (
+          <button onClick={onTour} style={{
+            width: '100%', padding: '6px', background: 'transparent',
+            border: '1px solid rgba(14,77,146,0.1)', borderRadius: '6px',
+            fontSize: '11px', color: '#00C2A8', cursor: 'pointer',
+            fontFamily: "'DM Sans', sans-serif"
+          }}>⚡ Ver tour de NEXO</button>
+        )}
       </div>
     </>
   )
 }
 
-export default function Sidebar({ role, setRole, view, setView, open, setOpen }) {
+export default function Sidebar({ role, setRole, view, setView, open, setOpen, onTour }) {
   const navigate = useNavigate()
   const isMobile = useIsMobile()
 
@@ -143,7 +151,7 @@ export default function Sidebar({ role, setRole, view, setView, open, setOpen })
           transform: open ? 'translateX(0)' : 'translateX(-100%)',
           transition: 'transform .25s ease', boxShadow: '4px 0 20px rgba(0,0,0,0.15)'
         }}>
-          <SidebarContent role={role} setRole={setRole} view={view} setView={setView} navigate={navigate} onClose={() => setOpen(false)} />
+          <SidebarContent role={role} setRole={setRole} view={view} setView={setView} navigate={navigate} onClose={() => setOpen(false)} onTour={onTour} />
         </div>
       </>
     )
@@ -156,7 +164,7 @@ export default function Sidebar({ role, setRole, view, setView, open, setOpen })
       display: 'flex', flexDirection: 'column', height: '100vh',
       position: 'sticky', top: 0
     }}>
-      <SidebarContent role={role} setRole={setRole} view={view} setView={setView} navigate={navigate} />
+      <SidebarContent role={role} setRole={setRole} view={view} setView={setView} navigate={navigate} onTour={onTour} />
     </aside>
   )
 }

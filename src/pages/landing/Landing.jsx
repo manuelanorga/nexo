@@ -31,8 +31,8 @@ const t = {
     statsLabel: 'NEXO en números',
     statsTitle: 'Resultados que\nse miden.',
     stats: [['96%', 'Fill rate promedio'], ['< 3s', 'Procesamiento EDI'], ['0', 'Reportes con expiración'], ['100%', 'Trazabilidad total']],
-    ctaTitle: 'Listo para\nreemplazar a Carvajal.',
-    ctaSub: 'Explora la plataforma completa con vista de proveedor y retail.',
+    ctaTitle: 'La plataforma O2P\nque tu operación merece.',
+    ctaSub: 'Trazabilidad total, cero fricción, dos roles en una sola plataforma.',
     ctaBtn: 'Entrar al dashboard',
     footer: 'NEXO powered by instamovil.com 2025',
     privacy: 'Política de privacidad',
@@ -67,8 +67,8 @@ const t = {
     statsLabel: 'NEXO in numbers',
     statsTitle: 'Results that\nare measured.',
     stats: [['96%', 'Average fill rate'], ['< 3s', 'EDI processing'], ['0', 'Reports with expiry'], ['100%', 'Full traceability']],
-    ctaTitle: 'Ready to\nreplace Carvajal.',
-    ctaSub: 'Explore the full platform with supplier and retail view.',
+    ctaTitle: 'The O2P platform\nyour operation deserves.',
+    ctaSub: 'Full traceability, zero friction, two roles in one platform.',
     ctaBtn: 'Enter dashboard',
     footer: 'NEXO powered by instamovil.com 2025',
     privacy: 'Privacy policy',
@@ -274,17 +274,97 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* STATS */}
+      {/* COMPARATIVA */}
       <section className="section-pad" style={{ padding: '80px 24px', maxWidth: '1100px', margin: '0 auto' }}>
-        <div style={{ fontSize: '11px', color: '#00C2A8', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 500 }}>{tx.statsLabel}</div>
-        <h2 style={{ fontFamily: "'Fraunces', serif", fontSize: 'clamp(28px,4vw,48px)', fontWeight: 900, letterSpacing: '-1.5px', marginBottom: '48px', lineHeight: 1.1, whiteSpace: 'pre-line' }}>{tx.statsTitle}</h2>
-        <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '14px' }}>
-          {tx.stats.map(([num, label]) => (
-            <div key={num} style={{ textAlign: 'center', padding: '36px 20px', background: card, border: `1px solid ${cardBorder}`, borderRadius: '16px', transition: 'all .2s' }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(0,194,168,0.3)'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = cardBorder}>
-              <div style={{ fontFamily: "'Fraunces', serif", fontSize: 'clamp(36px,4vw,52px)', fontWeight: 900, color: '#00C2A8', letterSpacing: '-2px', marginBottom: '12px' }}>{num}</div>
-              <div style={{ fontSize: '13px', color: fg2, lineHeight: 1.5 }}>{label}</div>
+        <div style={{ fontSize: '11px', color: '#00C2A8', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 500 }}>
+          {lang === 'es' ? 'Por qué cambiar' : 'Why switch'}
+        </div>
+        <h2 style={{ fontFamily: "'Fraunces', serif", fontSize: 'clamp(28px,4vw,48px)', fontWeight: 900, letterSpacing: '-1.5px', marginBottom: '48px', lineHeight: 1.1 }}>
+          {lang === 'es' ? <>NEXO vs la <span style={{ color: '#00C2A8' }}>plataforma anterior.</span></> : <>NEXO vs your <span style={{ color: '#00C2A8' }}>previous platform.</span></>}
+        </h2>
+
+        <div style={{ background: card, border: `1px solid ${cardBorder}`, borderRadius: '16px', overflow: 'hidden' }}>
+          {/* Header */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr', background: dark ? 'rgba(255,255,255,0.03)' : 'rgba(14,77,146,0.03)', borderBottom: `1px solid ${cardBorder}` }}>
+            <div style={{ padding: '16px 24px', fontSize: '12px', color: fg2, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              {lang === 'es' ? 'Característica' : 'Feature'}
+            </div>
+            <div style={{ padding: '16px 24px', textAlign: 'center' }}>
+              <div style={{ fontSize: '11px', color: fg2, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>
+                {lang === 'es' ? 'Plataforma anterior' : 'Previous platform'}
+              </div>
+              <div style={{ width: '32px', height: '3px', background: 'rgba(255,255,255,0.15)', borderRadius: '2px', margin: '0 auto' }} />
+            </div>
+            <div style={{ padding: '16px 24px', textAlign: 'center', background: 'rgba(0,194,168,0.05)', borderLeft: '1px solid rgba(0,194,168,0.15)' }}>
+              <div style={{ fontSize: '11px', color: '#00C2A8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px', fontWeight: 700 }}>NEXO</div>
+              <div style={{ width: '32px', height: '3px', background: '#00C2A8', borderRadius: '2px', margin: '0 auto' }} />
+            </div>
+          </div>
+
+          {/* Rows */}
+          {[
+            {
+              feature: lang === 'es' ? 'Descarga de documentos' : 'Document download',
+              old: lang === 'es' ? 'Correo con link que expira en 4 días' : 'Email with link expiring in 4 days',
+              neo: lang === 'es' ? 'Descarga directa, siempre disponible' : 'Direct download, always available',
+              oldBad: true
+            },
+            {
+              feature: lang === 'es' ? 'Trazabilidad del documento' : 'Document traceability',
+              old: lang === 'es' ? 'Tabla plana con estados técnicos' : 'Flat table with technical statuses',
+              neo: lang === 'es' ? 'Timeline visual en lenguaje de negocio' : 'Visual timeline in business language',
+              oldBad: true
+            },
+            {
+              feature: lang === 'es' ? 'Reportes' : 'Reports',
+              old: lang === 'es' ? 'Generados bajo demanda, link expira' : 'Generated on demand, link expires',
+              neo: lang === 'es' ? 'Siempre disponibles, descarga inmediata' : 'Always available, instant download',
+              oldBad: true
+            },
+            {
+              feature: lang === 'es' ? 'Validación de OC' : 'PO validation',
+              old: lang === 'es' ? 'Manual o semi-automática' : 'Manual or semi-automatic',
+              neo: lang === 'es' ? '100% automática en segundos' : '100% automatic in seconds',
+              oldBad: true
+            },
+            {
+              feature: lang === 'es' ? 'Roles de usuario' : 'User roles',
+              old: lang === 'es' ? 'Un solo perfil para todos' : 'Single profile for everyone',
+              neo: lang === 'es' ? 'Proveedor + Retail diferenciados' : 'Differentiated Supplier + Retail',
+              oldBad: true
+            },
+            {
+              feature: lang === 'es' ? 'Integración ERP' : 'ERP integration',
+              old: lang === 'es' ? 'Limitada, requiere configuración compleja' : 'Limited, requires complex setup',
+              neo: lang === 'es' ? 'API REST + SAP + EDI nativo' : 'Native API REST + SAP + EDI',
+              oldBad: true
+            },
+            {
+              feature: lang === 'es' ? 'Experiencia mobile' : 'Mobile experience',
+              old: lang === 'es' ? 'No optimizada para móvil' : 'Not optimized for mobile',
+              neo: lang === 'es' ? 'App para móvil, tablet y desktop' : 'App for mobile, tablet and desktop',
+              oldBad: true
+            },
+            {
+              feature: lang === 'es' ? 'Soporte técnico' : 'Technical support',
+              old: lang === 'es' ? 'Tickets con tiempo indefinido' : 'Tickets with undefined response time',
+              neo: lang === 'es' ? 'SLA garantizado: 30min crítico' : 'Guaranteed SLA: 30min critical',
+              oldBad: true
+            },
+          ].map((row, i) => (
+            <div key={row.feature} style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr', borderBottom: i < 7 ? `1px solid ${cardBorder}` : 'none', transition: 'background .15s' }}
+              onMouseEnter={e => e.currentTarget.style.background = dark ? 'rgba(255,255,255,0.02)' : 'rgba(14,77,146,0.02)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+            >
+              <div style={{ padding: '14px 24px', fontSize: '13px', fontWeight: 600, color: fg, display: 'flex', alignItems: 'center' }}>{row.feature}</div>
+              <div style={{ padding: '14px 24px', display: 'flex', alignItems: 'center', gap: '8px', borderLeft: `1px solid ${cardBorder}` }}>
+                <span style={{ width: '16px', height: '16px', borderRadius: '50%', background: '#FEE2E2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '10px' }}>✕</span>
+                <span style={{ fontSize: '12px', color: fg2 }}>{row.old}</span>
+              </div>
+              <div style={{ padding: '14px 24px', display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(0,194,168,0.04)', borderLeft: '1px solid rgba(0,194,168,0.15)' }}>
+                <span style={{ width: '16px', height: '16px', borderRadius: '50%', background: '#EAF3DE', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '10px', color: '#166534' }}>✓</span>
+                <span style={{ fontSize: '12px', color: fg, fontWeight: 500 }}>{row.neo}</span>
+              </div>
             </div>
           ))}
         </div>

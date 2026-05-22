@@ -4,7 +4,7 @@ import { useApp } from '../../../context/AppContext'
 const initialFacturas = [
   {
     id: 'FAC-1182', tipo: 'FAC', oc: 'OC-2025-0839', cadena: 'Tottus',
-    emision: '21/05/2026', vence: '05/06/2026', diasVence: 14,
+    emisión: '21/05/2026', vence: '05/06/2026', diasVence: 14,
     monto: 'S/61,480', status: 'paid',
     detalle: [
       { nombre: 'Inca Kola 1.5L', cantidad: 24, precio: 'S/62.40', subtotal: 'S/1,497.60' },
@@ -14,7 +14,7 @@ const initialFacturas = [
   },
   {
     id: 'FAC-1181', tipo: 'FAC', oc: 'OC-2025-0837', cadena: 'Vivanda',
-    emision: '19/05/2026', vence: '03/06/2026', diasVence: 12,
+    emisión: '19/05/2026', vence: '03/06/2026', diasVence: 12,
     monto: 'S/19,540', status: 'pending',
     detalle: [
       { nombre: 'Inca Kola 2.5L', cantidad: 48, precio: 'S/42.00', subtotal: 'S/2,016.00' },
@@ -23,7 +23,7 @@ const initialFacturas = [
   },
   {
     id: 'FAC-1180', tipo: 'FAC', oc: 'OC-2025-0836', cadena: 'Wong',
-    emision: '18/05/2026', vence: '02/06/2026', diasVence: 5,
+    emisión: '18/05/2026', vence: '02/06/2026', diasVence: 5,
     monto: 'S/53,210', status: 'pending',
     detalle: [
       { nombre: 'Inca Kola 1.5L', cantidad: 48, precio: 'S/62.40', subtotal: 'S/2,995.20' },
@@ -32,8 +32,8 @@ const initialFacturas = [
   },
   {
     id: 'NC-042', tipo: 'NC', oc: 'OC-2025-0831', cadena: 'Wong',
-    emision: '15/05/2026', vence: '—', diasVence: null,
-    monto: '-S/4,200', status: 'pending', devolucion: 'DEV-042',
+    emisión: '15/05/2026', vence: '—', diasVence: null,
+    monto: '-S/4,200', status: 'pending', devolución: 'DEV-042',
     detalle: [
       { nombre: 'Inca Kola 1.5L', cantidad: 8, precio: 'S/62.40', subtotal: '-S/499.20' },
       { nombre: 'Coca-Cola 500ml', cantidad: 4, precio: 'S/48.00', subtotal: '-S/192.00' },
@@ -91,7 +91,7 @@ function FacturaModal({ doc, onClose, onEnviar }) {
               <TipoBadge tipo={doc.tipo} />
               <span style={{ fontFamily: 'monospace', fontSize: '16px', fontWeight: 700, color: '#0B1F3A' }}>{doc.id}</span>
             </div>
-            <div style={{ fontSize: '12px', color: '#6B8BAE' }}>{doc.cadena} · OC: {doc.oc} {doc.devolucion ? '· DEV: ' + doc.devolucion : ''}</div>
+            <div style={{ fontSize: '12px', color: '#6B8BAE' }}>{doc.cadena} · OC: {doc.oc} {doc.devolución ? '· DEV: ' + doc.devolución : ''}</div>
           </div>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             <StatusBadge status={doc.status} />
@@ -109,7 +109,7 @@ function FacturaModal({ doc, onClose, onEnviar }) {
 
           {isNC && (
             <div style={{ background: '#FFF5F5', border: '1px solid #FECACA', borderRadius: '8px', padding: '10px 14px', fontSize: '12px', color: '#92400E', marginBottom: '16px' }}>
-              Esta nota de crédito fue generada por la devolución <strong>{doc.devolucion}</strong> de {doc.cadena}.
+              Esta nota de crédito fue generada por la devolución <strong>{doc.devolución}</strong> de {doc.cadena}.
             </div>
           )}
 
@@ -119,7 +119,7 @@ function FacturaModal({ doc, onClose, onEnviar }) {
               ['Tipo', doc.tipo === 'FAC' ? 'Factura' : 'Nota de crédito'],
               ['Emisor', 'Arca Continental'],
               ['Receptor', doc.cadena],
-              ['Fecha emisión', doc.emision],
+              ['Fecha emisión', doc.emisión],
               ['Vencimiento', doc.vence],
               ['Días al vence', doc.diasVence ? doc.diasVence + ' días' : '—'],
               ['OC de origen', doc.oc],
@@ -277,7 +277,7 @@ export default function FinancieroView() {
                 <td style={{ padding: '9px 12px', fontFamily: 'monospace', fontSize: '11px', fontWeight: 700, color: '#0B1F3A' }}>{f.id}</td>
                 <td style={{ padding: '9px 12px', fontFamily: 'monospace', fontSize: '11px', color: '#0E4D92' }}>{f.oc}</td>
                 <td style={{ padding: '9px 12px', fontSize: '12px', fontWeight: 600, color: '#0B1F3A' }}>{f.cadena}</td>
-                <td style={{ padding: '9px 12px', fontSize: '11px', color: '#6B8BAE' }}>{f.emision}</td>
+                <td style={{ padding: '9px 12px', fontSize: '11px', color: '#6B8BAE' }}>{f.emisión}</td>
                 <td style={{ padding: '9px 12px', fontSize: '11px', color: '#6B8BAE' }}>{f.vence}</td>
                 <td style={{ padding: '9px 12px' }}><DiasVence dias={f.diasVence} /></td>
                 <td style={{ padding: '9px 12px', fontSize: '12px', fontWeight: 700, color: f.tipo === 'NC' ? '#B91C1C' : '#0B1F3A' }}>{f.monto}</td>

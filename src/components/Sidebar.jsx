@@ -4,13 +4,13 @@ import { useIsMobile } from '../hooks/useMediaQuery'
 const navConfig = {
   prov: [
     { sec: 'Principal', items: [{ id: 'dashboard', label: 'Dashboard' }] },
-    { sec: 'Catalogo', items: [
-      { id: 'catalogo', label: 'Adm. Catalogo' },
+    { sec: 'Catálogo', items: [
+      { id: 'catalogo', label: 'Adm. Catálogo' },
       { id: 'precios', label: 'Listas de Precios' },
     ]},
     { sec: 'Documentos', items: [
-      { id: 'oc', label: 'Ordenes de Compra', badge: '4' },
-      { id: 'despacho', label: 'Aviso Despacho' },
+      { id: 'oc', label: 'Órdenes de Compra', badge: '4' },
+      { id: 'despacho', label: 'Aviso de Despacho' },
       { id: 'recibo', label: 'Aviso de Recibo' },
       { id: 'devolucion', label: 'Devoluciones', badge: '2' },
     ]},
@@ -24,7 +24,7 @@ const navConfig = {
     { sec: 'Principal', items: [{ id: 'dashboard', label: 'Dashboard' }] },
     { sec: 'Mis Pedidos', items: [
       { id: 'nueva-oc', label: 'Nueva Orden', badge: 'NEW', badgeGreen: true },
-      { id: 'mis-ocs', label: 'Mis Ordenes', badge: '3' },
+      { id: 'mis-ocs', label: 'Mis Órdenes', badge: '3' },
       { id: 'recepciones', label: 'Recepciones' },
     ]},
     { sec: 'Finanzas', items: [{ id: 'mis-facturas', label: 'Mis Facturas' }]},

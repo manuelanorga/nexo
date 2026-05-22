@@ -5,7 +5,7 @@ import { useApp } from '../../../context/AppContext'
 const ocList = [
   {
     id: 'OC-2025-0841', client: 'Wong Supermercados', amount: 'S/ 48,320', items: 12,
-    emision: '18/05/2026', entrega: '23/05/2026', status: 'transit', progress: 70,
+    emisión: '18/05/2026', entrega: '23/05/2026', status: 'transit', progress: 70,
     steps: [
       { label: 'OC recibida', desc: 'Documento ingresó al canal NEXO', time: '21/05/2026 18:22:40', status: 'done' },
       { label: 'Validación de reglas', desc: 'Catálogo, precios y condiciones verificadas', time: '21/05/2026 18:22:41', status: 'done' },
@@ -27,7 +27,7 @@ const ocList = [
   },
   {
     id: 'OC-2025-0840', client: 'Plaza Vea', amount: 'S/ 32,150', items: 8,
-    emision: '17/05/2026', entrega: '22/05/2026', status: 'received', progress: 100,
+    emisión: '17/05/2026', entrega: '22/05/2026', status: 'received', progress: 100,
     steps: [
       { label: 'OC recibida', desc: 'Documento ingresó al canal NEXO', time: '17/05/2026 09:10:00', status: 'done' },
       { label: 'Validación de reglas', desc: 'Catálogo, precios y condiciones verificadas', time: '17/05/2026 09:10:02', status: 'done' },
@@ -49,7 +49,7 @@ const ocList = [
   },
   {
     id: 'OC-2025-0839', client: 'Tottus', amount: 'S/ 61,480', items: 15,
-    emision: '16/05/2026', entrega: '21/05/2026', status: 'invoiced', progress: 100,
+    emisión: '16/05/2026', entrega: '21/05/2026', status: 'invoiced', progress: 100,
     steps: [
       { label: 'OC recibida', desc: 'Documento ingresó al canal NEXO', time: '16/05/2026 10:00:00', status: 'done' },
       { label: 'Validación de reglas', desc: 'Todo verificado automáticamente', time: '16/05/2026 10:00:03', status: 'done' },
@@ -71,7 +71,7 @@ const ocList = [
   },
   {
     id: 'OC-2025-0838', client: 'Metro', amount: 'S/ 27,900', items: 6,
-    emision: '15/05/2026', entrega: '20/05/2026', status: 'published', progress: 25,
+    emisión: '15/05/2026', entrega: '20/05/2026', status: 'published', progress: 25,
     steps: [
       { label: 'OC recibida', desc: 'Documento ingresó al canal NEXO', time: '15/05/2026 11:00:00', status: 'done' },
       { label: 'Validación de reglas', desc: 'Verificando catálogo y precios', time: '15/05/2026 11:00:04', status: 'done' },
@@ -90,7 +90,7 @@ const ocList = [
   },
   {
     id: 'OC-2025-0837', client: 'Vivanda', amount: 'S/ 19,540', items: 4,
-    emision: '14/05/2026', entrega: '19/05/2026', status: 'received', progress: 90,
+    emisión: '14/05/2026', entrega: '19/05/2026', status: 'received', progress: 90,
     steps: [
       { label: 'OC recibida', desc: 'Documento ingresó al canal NEXO', time: '14/05/2026 08:00:00', status: 'done' },
       { label: 'Validación de reglas', desc: 'Todo verificado', time: '14/05/2026 08:00:02', status: 'done' },
@@ -191,7 +191,7 @@ function Timeline({ oc, isMobile }) {
             ['N° Orden', oc.id],
             ['Cadena', oc.client],
             ['Proveedor', 'Arca Continental'],
-            ['Fecha emisión', oc.emision],
+            ['Fecha emisión', oc.emisión],
             ['Entrega estimada', oc.entrega],
             ['SKUs', oc.items + ' productos'],
             ['Monto total', oc.amount],

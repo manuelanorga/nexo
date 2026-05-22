@@ -40,7 +40,7 @@ const guias = [
     icon: '↩️', title: 'Registrar una devolución',
     desc: 'Qué hacer cuando recibes mercadería con problemas.',
     pasos: [
-      'Ve a "Recepciones" y busca el aviso de recibo con problemas',
+      'Ve a "Recepciónes" y busca el aviso de recibo con problemas',
       'Haz clic en "Ver" y luego en "Iniciar devolución"',
       'Describe el motivo: producto vencido, embalaje dañado, etc.',
       'Arca recibirá la solicitud y la aprobará en 24-48 horas',
@@ -52,7 +52,7 @@ const guias = [
 const faqs = [
   { q: '¿Cuánto tiempo tarda Arca en confirmar mi OC?', a: 'El sistema valida automáticamente en segundos. Si hay alguna excepción, Arca la revisará manualmente en menos de 2 horas durante horario laboral.' },
   { q: '¿Puedo modificar una OC después de enviarla?', a: 'No. Una vez enviada, la OC no puede modificarse. Si necesitas cambios, cancela la OC desde "Mis Órdenes" y crea una nueva.' },
-  { q: '¿Qué pasa si no recibo todos los productos?', a: 'Al confirmar el recibo en "Recepciones", registra la diferencia. Esto generará automáticamente una solicitud de devolución a Arca.' },
+  { q: '¿Qué pasa si no recibo todos los productos?', a: 'Al confirmar el recibo en "Recepciónes", registra la diferencia. Esto generará automáticamente una solicitud de devolución a Arca.' },
   { q: '¿Los precios en NEXO son los mismos que mis condiciones negociadas?', a: 'Sí. Los precios que ves en NEXO corresponden exactamente a tu lista de precios negociada con Arca Continental.' },
 ]
 

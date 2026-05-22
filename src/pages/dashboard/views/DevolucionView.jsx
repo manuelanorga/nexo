@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useApp } from '../../../context/AppContext'
 
-const initialDevoluciones = [
+const initialDevoluciónes = [
   {
     id: 'DEV-042', oc: 'OC-2025-0831', asn: 'ASN-2025-0415',
     cadena: 'Wong', fecha: '20/05/2026', monto: 'S/4,200',
@@ -169,9 +169,9 @@ function DetalleModal({ dev, onClose, onAprobar, onRechazar }) {
   )
 }
 
-export default function DevolucionView() {
+export default function DevoluciónView() {
   const { searchQuery } = useApp()
-  const [data, setData] = useState(initialDevoluciones)
+  const [data, setData] = useState(initialDevoluciónes)
   const [selectedDev, setSelectedDev] = useState(null)
 
   const filtered = useMemo(() => {
@@ -251,7 +251,7 @@ export default function DevolucionView() {
         </table>
       </div>
       <div style={{ fontSize: '11px', color: '#6B8BAE', textAlign: 'right', marginTop: '8px' }}>
-        Mostrando {filtered.length} de {data.length} devoluciones
+        Mostrando {filtered.length} de {data.length} devoluciónes
       </div>
     </div>
   )

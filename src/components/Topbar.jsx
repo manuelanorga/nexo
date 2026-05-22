@@ -3,18 +3,18 @@ import { useIsMobile } from '../hooks/useMediaQuery'
 import { useApp } from '../context/AppContext'
 
 const titles = {
-  dashboard: 'Dashboard', catalogo: 'Catalogo',
-  precios: 'Listas de Precios', oc: 'Ordenes de Compra',
+  dashboard: 'Dashboard', catálogo: 'Catálogo',
+  precios: 'Listas de Precios', oc: 'Órdenes de Compra',
   despacho: 'Aviso Despacho', recibo: 'Aviso de Recibo',
-  devolucion: 'Devoluciones', financiero: 'Doc. Financieros',
+  devolucion: 'Devoluciónes', financiero: 'Doc. Financieros',
   reportes: 'Reportes', trazabilidad: 'Trazabilidad',
-  'nueva-oc': 'Nueva OC', 'mis-ocs': 'Mis Ordenes',
-  recepciones: 'Recepciones', 'mis-facturas': 'Mis Facturas', ayuda: 'Ayuda',
+  'nueva-oc': 'Nueva OC', 'mis-ocs': 'Mis Órdenes',
+  recepciones: 'Recepciónes', 'mis-facturas': 'Mis Facturas', ayuda: 'Ayuda',
 }
 
 const placeholders = {
   dashboard: 'Buscar OC, cadena...', oc: 'Ej: OC-2025-0841 o Wong...',
-  'mis-ocs': 'Ej: OC-2025-0841...', catalogo: 'Ej: Inca Kola o EAN...',
+  'mis-ocs': 'Ej: OC-2025-0841...', catálogo: 'Ej: Inca Kola o EAN...',
   precios: 'Ej: Retail-Wong...', despacho: 'Ej: ASN-2025-0421...',
   recibo: 'Ej: AR-2025-0291...', devolucion: 'Ej: DEV-042 o Wong...',
   financiero: 'Ej: FAC-1182...', reportes: 'Ej: Fill rate...',
@@ -30,8 +30,8 @@ const quickActions = [
     iconPath: 'M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2'
   },
   {
-    label: 'Nuevo SKU en Catalogo', desc: 'Agregar producto al catalogo',
-    view: 'catalogo', kbd: 'S', iconColor: '#166534', iconBg: '#EAF3DE',
+    label: 'Nuevo SKU en Catálogo', desc: 'Agregar producto al catálogo',
+    view: 'catálogo', kbd: 'S', iconColor: '#166534', iconBg: '#EAF3DE',
     iconPath: 'M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'
   },
   {
@@ -79,7 +79,7 @@ export default function Topbar({ role, view, setView, onMenuClick }) {
     const handler = (e) => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return
       if (e.key === 'o' || e.key === 'O') { setView('nueva-oc'); setMenuOpen(false) }
-      if (e.key === 's' || e.key === 'S') { setView('catalogo'); setMenuOpen(false) }
+      if (e.key === 's' || e.key === 'S') { setView('catálogo'); setMenuOpen(false) }
       if (e.key === 'l' || e.key === 'L') { setView('precios'); setMenuOpen(false) }
       if (e.key === 'd' || e.key === 'D') { setView('devolucion'); setMenuOpen(false) }
     }
@@ -175,7 +175,7 @@ export default function Topbar({ role, view, setView, onMenuClick }) {
               minWidth: '260px', padding: '6px'
             }}>
               <div style={{ fontSize: '10px', color: '#9DB8D9', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', padding: '4px 8px 8px' }}>
-                Accesos rapidos
+                Accesos rápidos
               </div>
 
               {quickActions.map(item => (
@@ -210,7 +210,7 @@ export default function Topbar({ role, view, setView, onMenuClick }) {
                   </svg>
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '12px', fontWeight: 600, color: '#0B1F3A' }}>Nueva Devolucion</div>
+                  <div style={{ fontSize: '12px', fontWeight: 600, color: '#0B1F3A' }}>Nueva Devolución</div>
                   <div style={{ fontSize: '10px', color: '#6B8BAE' }}>Registrar devolucion</div>
                 </div>
                 <Kbd letter="D" />

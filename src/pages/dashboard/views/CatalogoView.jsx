@@ -112,7 +112,7 @@ function ProductModal({ product, onClose, onSave, isNew }) {
   )
 }
 
-export default function CatalogoView() {
+export default function CatálogoView() {
   const { searchQuery } = useApp()
   const [editProduct, setEditProduct] = useState(null)
   const [showNew, setShowNew] = useState(false)
@@ -145,7 +145,7 @@ export default function CatalogoView() {
     const rows = data.map(p => {
       const row = {
         'EAN Producto': p.ean,
-        'Codigo Interno': p.code,
+        'Código Interno': p.code,
         'Descripcion': p.name,
         'Marca': p.brand,
         'Presentacion': p.presentation,
@@ -159,9 +159,9 @@ export default function CatalogoView() {
     })
     const ws = XLSX.utils.json_to_sheet(rows)
     const wb = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(wb, ws, 'Catalogo')
+    XLSX.utils.book_append_sheet(wb, ws, 'Catálogo')
     const fecha = new Date().toISOString().slice(0,10)
-    XLSX.writeFile(wb, 'Catalogo_Arca_' + fecha + '.' + exportFormat)
+    XLSX.writeFile(wb, 'Catálogo_Arca_' + fecha + '.' + exportFormat)
     setShowExport(false)
   }
 

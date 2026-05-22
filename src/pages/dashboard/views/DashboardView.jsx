@@ -5,9 +5,9 @@ import { useIsMobile } from '../../../hooks/useMediaQuery'
 import { useApp } from '../../../context/AppContext'
 
 const kpiTooltips = {
-  'OC Activas': 'Ordenes de compra recibidas y actualmente en proceso de atencion.',
+  'OC Activas': 'Órdenes de compra recibidas y actualmente en proceso de atencion.',
   'En Transito': 'Despachos confirmados que estan en camino al centro de distribucion.',
-  'SKUs Activos': 'Productos del catalogo disponibles para ser ordenados por las cadenas.',
+  'SKUs Activos': 'Productos del catálogo disponibles para ser ordenados por las cadenas.',
   'Pendiente Pago': 'Facturas emitidas pendientes de cobro por parte de las cadenas.',
 }
 
@@ -40,10 +40,10 @@ export default function DashboardView({ role, setView }) {
   if (!isProv) return (
     <div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '14px' }}>
-        <KpiCard label="OCs Activas" value="3" delta="1 confirmada hoy" up color="#166534" tooltip="Ordenes de compra emitidas a Arca Continental actualmente activas." />
+        <KpiCard label="OCs Activas" value="3" delta="1 confirmada hoy" up color="#166534" tooltip="Órdenes de compra emitidas a Arca Continental actualmente activas." />
         <KpiCard label="En camino" value="1" delta="Llega manana" up color="#F59E0B" tooltip="Despachos de Arca en camino a tu centro de distribucion." />
         <KpiCard label="Por pagar" value="S/27.9K" delta="Vence en 8 dias" color="#E05252" tooltip="Facturas pendientes de pago a Arca Continental." />
-        <KpiCard label="Recepciones" value="2" delta="Este mes" up color="#0E4D92" tooltip="Total de recepciones confirmadas en el mes actual." />
+        <KpiCard label="Recepciónes" value="2" delta="Este mes" up color="#0E4D92" tooltip="Total de recepciónes confirmadas en el mes actual." />
       </div>
 
       <div style={{ background: '#EAF3DE', border: '1px solid #86EFAC', borderRadius: '8px', padding: '10px 14px', fontSize: '12px', color: '#166534', marginBottom: '14px' }}>
@@ -51,7 +51,7 @@ export default function DashboardView({ role, setView }) {
       </div>
 
       <div style={{ fontSize: '11px', fontWeight: 600, color: '#6B8BAE', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '10px' }}>
-        Estado de mis ordenes
+        Estado de mis órdenes
       </div>
 
       {[
@@ -101,7 +101,7 @@ export default function DashboardView({ role, setView }) {
 
       {/* Alerta */}
       <div style={{ background: '#FFFBEB', border: '1px solid #FCD34D', borderRadius: '8px', padding: '10px 14px', fontSize: '12px', color: '#92400E', marginBottom: '14px' }}>
-        ⚠ <strong>2 devoluciones</strong> pendientes · <strong>Metro</strong> sin precio en catalogo
+        ⚠ <strong>2 devoluciónes</strong> pendientes · <strong>Metro</strong> sin precio en catálogo
       </div>
 
       {/* Fill rate + OCs — columna unica en mobile */}

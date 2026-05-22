@@ -3,21 +3,21 @@ import * as XLSX from 'xlsx'
 import { useApp } from '../../../context/AppContext'
 
 const initialReportes = [
-  { id: 1, name: 'Catálogo completo Arca', cat: 'Catalogo', gen: '21/05 14:32', size: '245 KB', registros: 50 },
-  { id: 2, name: 'OCs Mayo 2026 — Todas las cadenas', cat: 'Ordenes', gen: '21/05 10:00', size: '1.2 MB', registros: 241 },
+  { id: 1, name: 'Catálogo completo Arca', cat: 'Catálogo', gen: '21/05 14:32', size: '245 KB', registros: 50 },
+  { id: 2, name: 'OCs Mayo 2026 — Todas las cadenas', cat: 'Órdenes', gen: '21/05 10:00', size: '1.2 MB', registros: 241 },
   { id: 3, name: 'Fill rate Q2 2026', cat: 'Analitica', gen: '20/05 09:15', size: '380 KB', registros: 90 },
-  { id: 4, name: 'Devoluciones Abril-Mayo', cat: 'Devoluciones', gen: '18/05 16:40', size: '128 KB', registros: 12 },
+  { id: 4, name: 'Devoluciónes Abril-Mayo', cat: 'Devoluciónes', gen: '18/05 16:40', size: '128 KB', registros: 12 },
   { id: 5, name: 'Facturas pendientes Mayo', cat: 'Financiero', gen: '17/05 11:20', size: '210 KB', registros: 8 },
   { id: 6, name: 'ASN generados Mayo 2026', cat: 'Despacho', gen: '16/05 09:00', size: '95 KB', registros: 24 },
 ]
 
-const categorias = ['Todas', 'Catalogo', 'Ordenes', 'Analitica', 'Devoluciones', 'Financiero', 'Despacho']
+const categorias = ['Todas', 'Catálogo', 'Órdenes', 'Analitica', 'Devoluciónes', 'Financiero', 'Despacho']
 
 const catColors = {
-  Catalogo:    { color: '#0E4D92', bg: '#EEF5FF' },
-  Ordenes:     { color: '#065F46', bg: '#D1FAE5' },
+  Catálogo:    { color: '#0E4D92', bg: '#EEF5FF' },
+  Órdenes:     { color: '#065F46', bg: '#D1FAE5' },
   Analitica:   { color: '#1D4ED8', bg: '#DBEAFE' },
-  Devoluciones:{ color: '#B91C1C', bg: '#FEE2E2' },
+  Devoluciónes:{ color: '#B91C1C', bg: '#FEE2E2' },
   Financiero:  { color: '#166534', bg: '#EAF3DE' },
   Despacho:    { color: '#92400E', bg: '#FEF3C7' },
 }
@@ -78,7 +78,7 @@ function DescargarModal({ reporte, onClose }) {
 }
 
 function NuevoReporteModal({ onClose, onCrear }) {
-  const [form, setForm] = useState({ name: '', cat: 'Ordenes', cadena: 'Todas', desde: '', hasta: '' })
+  const [form, setForm] = useState({ name: '', cat: 'Órdenes', cadena: 'Todas', desde: '', hasta: '' })
   const field = (label, key, placeholder) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
       <label style={{ fontSize: '10px', fontWeight: 600, color: '#6B8BAE', textTransform: 'uppercase', letterSpacing: '0.4px' }}>{label}</label>
@@ -98,7 +98,7 @@ function NuevoReporteModal({ onClose, onCrear }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             <label style={{ fontSize: '10px', fontWeight: 600, color: '#6B8BAE', textTransform: 'uppercase', letterSpacing: '0.4px' }}>Categoría</label>
             <select value={form.cat} onChange={e => setForm(f => ({ ...f, cat: e.target.value }))} style={{ height: '34px', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', padding: '0 10px', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", color: '#0B1F3A', outline: 'none', background: '#fff' }}>
-              {['Ordenes','Catalogo','Analitica','Devoluciones','Financiero','Despacho'].map(c => <option key={c}>{c}</option>)}
+              {['Órdenes','Catálogo','Analitica','Devoluciónes','Financiero','Despacho'].map(c => <option key={c}>{c}</option>)}
             </select>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>

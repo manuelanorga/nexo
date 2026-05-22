@@ -91,7 +91,7 @@ function ConfirmModal({ oc, onClose, onConfirm }) {
 
 function RejectModal({ oc, onClose, onReject }) {
   const [motivo, setMotivo] = useState('')
-  const motivos = ['Producto descontinuado', 'SKU no existe en catalogo', 'Precio no coincide con lista', 'Stock insuficiente', 'Error en la OC', 'Otro']
+  const motivos = ['Producto descontinuado', 'SKU no existe en catálogo', 'Precio no coincide con lista', 'Stock insuficiente', 'Error en la OC', 'Otro']
   const [selected, setSelected] = useState('')
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 1100, background: 'rgba(11,31,58,0.55)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={onClose}>
@@ -412,7 +412,7 @@ export default function OCView({ setView }) {
                       <button onClick={() => setView('trazabilidad')} style={{ padding: '4px 8px', background: '#EEF5FF', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#0E4D92', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>⟳</button>
                       <button
                         onClick={() => {
-                          const rows = [['N° Orden','Cadena','Emision','Entrega','Items','Monto','Estado'],[p.id,p.client,p.date,p.delivery,p.items,p.amount,p.status]]
+                          const rows = [['N° Orden','Cadena','Emisión','Entrega','Items','Monto','Estado'],[p.id,p.client,p.date,p.delivery,p.items,p.amount,p.status]]
                           const csv = rows.map(r => r.join(',')).join('\n')
                           const blob = new Blob([csv], { type: 'text/csv' })
                           const url = URL.createObjectURL(blob)

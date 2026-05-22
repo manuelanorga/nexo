@@ -35,7 +35,7 @@ export default function Landing() {
             fontSize: '12px', color: '#00C2A8', marginBottom: '32px', fontWeight: 500
           }}>
             <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00C2A8' }} />
-            Plataforma O2P para Latinoamerica
+            Plataforma O2P para Latinoamérica
           </div>
 
           <h1 style={{
@@ -43,14 +43,14 @@ export default function Landing() {
             fontWeight: 900, lineHeight: 1.05, letterSpacing: '-2px', margin: '0 0 24px'
           }}>
             De la orden al cobro,<br />
-            <span style={{ color: '#00C2A8' }}>sin friccion.</span>
+            <span style={{ color: '#00C2A8' }}>sin fricción.</span>
           </h1>
 
           <p style={{
             fontSize: '18px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.7,
             maxWidth: '540px', margin: '0 auto 40px', fontWeight: 300
           }}>
-            Conectamos proveedores y cadenas comerciales en un unico flujo digital.
+            Conectamos proveedores y cadenas comerciales en un único flujo digital.
             Trazabilidad total, cero papel, cero errores manuales.
           </p>
 
@@ -101,7 +101,7 @@ export default function Landing() {
                 <div style={{ fontFamily: "'Fraunces', serif", fontSize: '14px', fontWeight: 900, color: '#0B1F3A', marginBottom: '16px' }}>
                   NEX<span style={{ color: '#00C2A8' }}>O</span>
                 </div>
-                {['Dashboard','Catalogo','Ord. Compra','Despacho','Financiero','Reportes'].map((item, i) => (
+                {['Dashboard','Catálogo','Órd. Compra','Despacho','Financiero','Reportes'].map((item, i) => (
                   <div key={item} style={{
                     padding: '6px 8px', borderRadius: '6px', fontSize: '10px', marginBottom: '2px',
                     background: i === 0 ? '#EEF5FF' : 'transparent',
@@ -157,7 +157,7 @@ export default function Landing() {
         background: 'rgba(255,255,255,0.02)', padding: '20px 48px',
         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0', overflowX: 'auto'
       }}>
-        {[['OC','Orden de Compra'],['ASN','Aviso de Despacho'],['AR','Aviso de Recibo'],['DEV','Devoluciones'],['FAC','Facturacion'],['PAG','Cobro']].map(([e,l],i,arr) => (
+        {[['OC','Orden de Compra'],['ASN','Aviso de Despacho'],['AR','Aviso de Recibo'],['DEV','Devoluciones'],['FAC','Facturación'],['PAG','Cobro']].map(([e,l],i,arr) => (
           <div key={l} style={{ display: 'flex', alignItems: 'center' }}>
             <div style={{
               padding: '7px 16px', background: 'rgba(0,194,168,0.08)',
@@ -183,15 +183,15 @@ export default function Landing() {
 
       {/* FEATURES */}
       <section style={{ padding: '100px 48px', maxWidth: '1100px', margin: '0 auto' }}>
-        <div style={{ fontSize: '11px', color: '#00C2A8', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 500 }}>Por que NEXO</div>
+        <div style={{ fontSize: '11px', color: '#00C2A8', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 500 }}>¿Por qué NEXO?</div>
         <h2 style={{ fontFamily: "'Fraunces', serif", fontSize: 'clamp(32px,4vw,48px)', fontWeight: 900, letterSpacing: '-1.5px', marginBottom: '64px', lineHeight: 1.1 }}>
           Todo lo que necesitas.<br />Nada de lo que no.
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px' }}>
           {[
-            ['Catalogo inteligente','Gestiona SKUs y precios diferenciados por cadena. Datos visibles de entrada, sin busqueda obligatoria.','Sin busqueda obligatoria'],
-            ['Trazabilidad completa','Timeline visual en lenguaje de negocio. Sin jerga tecnica. Sin "Moviendo a bucket de servicio".','9 etapas trazadas'],
-            ['Reportes sin expiracion','Descarga cualquier reporte en cualquier momento. Sin correos, sin links que vencen.','Siempre disponibles'],
+            ['Catálogo inteligente','Gestiona SKUs y precios diferenciados por cadena. Datos visibles de entrada, sin búsqueda obligatoria.','Sin búsqueda obligatoria'],
+            ['Trazabilidad completa','Timeline visual en lenguaje de negocio. Sin jerga técnica. Sin "Moviendo a bucket de servicio".','9 etapas trazadas'],
+            ['Reportes sin expiración','Descarga cualquier reporte en cualquier momento. Sin correos, sin links que vencen.','Siempre disponibles'],
             ['Integracion ERP nativa','Compatible con SAP, Oracle y Odoo. Cero doble digitacion entre sistemas.','API REST + EDI'],
             ['Dos roles, una plataforma','Vista completa para proveedores. Vista enfocada para retails. Cada uno ve lo que necesita.','Proveedor + Retail'],
             ['Onboarding en minutos','Sin manuales PDF. La plataforma te guia desde el primer login hasta tu primera OC.','vs Carvajal'],
@@ -221,13 +221,13 @@ export default function Landing() {
                 badge: 'Proveedor', bc: '#00C2A8', bb: 'rgba(0,194,168,0.1)', bbr: 'rgba(0,194,168,0.3)',
                 title: 'Arca Continental', sub: 'Vista completa de operaciones',
                 bg: 'linear-gradient(135deg,#0B1F3A,#0E2D52)', border: 'rgba(0,194,168,0.15)', dot: '#00C2A8',
-                items: ['Catalogo + listas de precios por cadena','OCs entrantes de todos los retails','Gestion de despachos y recepciones','Documentos financieros y facturacion','Reportes analiticos sin expiracion','Trazabilidad completa por documento']
+                items: ['Catálogo + listas de precios por cadena','OCs entrantes de todos los retails','Gestión de despachos y recepciones','Documentos financieros y facturación','Reportes analíticos sin expiración','Trazabilidad completa por documento']
               },
               {
                 badge: 'Retail', bc: '#4ADE80', bb: 'rgba(74,222,128,0.1)', bbr: 'rgba(74,222,128,0.3)',
                 title: 'Wong - Tottus - Metro', sub: 'Vista enfocada en sus pedidos',
                 bg: 'linear-gradient(135deg,#052E16,#064E3B)', border: 'rgba(74,222,128,0.15)', dot: '#4ADE80',
-                items: ['Creacion de ordenes de compra','Estado en tiempo real de sus pedidos','Confirmacion de recepciones','Gestion de devoluciones','Facturas y estado de pagos','Centro de ayuda integrado']
+                items: ['Creación de órdenes de compra','Estado en tiempo real de sus pedidos','Confirmación de recepciones','Gestión de devoluciones','Facturas y estado de pagos','Centro de ayuda integrado']
               }
             ].map(r => (
               <div key={r.title} style={{ borderRadius: '20px', padding: '40px', background: r.bg, border: `1px solid ${r.border}` }}>
@@ -253,12 +253,12 @@ export default function Landing() {
 
       {/* STATS */}
       <section style={{ padding: '100px 48px', maxWidth: '1100px', margin: '0 auto' }}>
-        <div style={{ fontSize: '11px', color: '#00C2A8', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 500 }}>NEXO en numeros</div>
+        <div style={{ fontSize: '11px', color: '#00C2A8', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 500 }}>NEXO en números</div>
         <h2 style={{ fontFamily: "'Fraunces', serif", fontSize: 'clamp(32px,4vw,48px)', fontWeight: 900, letterSpacing: '-1.5px', marginBottom: '64px', lineHeight: 1.1 }}>
           Resultados que<br />se miden.
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px' }}>
-          {[['96%','Fill rate promedio'],['menos 3s','Procesamiento EDI'],['0','Reportes con expiracion'],['100%','Trazabilidad total']].map(([num, label]) => (
+          {[['96%','Fill rate promedio'],['menos 3s','Procesamiento EDI'],['0','Reportes sin expiración'],['100%','Trazabilidad total']].map(([num, label]) => (
             <div key={num} style={{ textAlign: 'center', padding: '40px 20px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '16px' }}>
               <div style={{ fontFamily: "'Fraunces', serif", fontSize: '52px', fontWeight: 900, color: '#00C2A8', letterSpacing: '-2px', marginBottom: '12px' }}>{num}</div>
               <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.5 }}>{label}</div>

@@ -46,7 +46,7 @@ function SidebarContent({ role, setRole, view, setView, navigate, onClose }) {
       <div style={{ padding: '18px 16px', borderBottom: '1px solid rgba(14,77,146,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
           <div style={{ fontFamily: "'Fraunces', serif", fontSize: '20px', fontWeight: 900, color: '#0B1F3A' }}>
-            NEX<span style={{ color: '#00C2A8' }}>O</span>
+            <img src="/logo.png" alt="NEXO" style={{ height: '28px', width: '28px', borderRadius: '6px', objectFit: 'contain' }} />
           </div>
           <div style={{ fontSize: '9px', color: '#6B8BAE', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '1px' }}>O2P Platform</div>
         </div>

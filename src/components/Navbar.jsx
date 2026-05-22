@@ -42,12 +42,12 @@ export default function Navbar() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <button onClick={() => navigate('/dashboard')} style={{
+          <button onClick={() => navigate('/login')} style={{
             padding: '8px 18px', background: 'transparent',
             border: '1px solid rgba(255,255,255,0.15)', borderRadius: '100px',
             color: 'rgba(255,255,255,0.75)', fontSize: '13px', fontWeight: 500,
             cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-          }}>Iniciar sesion</button>
+          }}>Iniciar sesión</button>
           <button onClick={() => navigate('/dashboard')} style={{
             padding: '8px 20px', background: '#00C2A8', border: 'none',
             borderRadius: '100px', color: '#060C16', fontSize: '13px',

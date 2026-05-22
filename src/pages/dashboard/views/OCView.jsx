@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
+import { useIsMobile } from '../../../hooks/useMediaQuery'
 import { purchaseOrders } from '../../../data/mockData'
 import Badge from '../../../components/Badge'
 import { useApp } from '../../../context/AppContext'
@@ -253,6 +254,7 @@ export default function OCView({ setView }) {
   const [showFilters, setShowFilters] = useState(false)
   const [orders, setOrders] = useState(extendedOrders)
   const { selectedOCId, setSelectedOCId, searchQuery } = useApp()
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     if (selectedOCId) {
@@ -333,7 +335,40 @@ export default function OCView({ setView }) {
         </div>
       </div>
 
-      {/* Tabla */}
+      {/* Tabla / Cards */}
+      {isMobile ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '10px' }}>
+          {filtered.map(p => {
+            const canAct = ['published','processing'].includes(p.status)
+            const borderColor = canAct ? '#F59E0B' : p.status === 'confirmed' ? '#065F46' : p.status === 'received' ? '#166534' : p.status === 'rejected' ? '#B91C1C' : '#6B7280'
+            return (
+              <div key={p.id} style={{ background: '#fff', borderRadius: '12px', border: '1px solid rgba(14,77,146,0.1)', borderLeft: '4px solid ' + borderColor, padding: '12px 14px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                  <div>
+                    <div style={{ fontFamily: 'monospace', fontSize: '12px', fontWeight: 700, color: '#0B1F3A' }}>{p.id}</div>
+                    <div style={{ fontSize: '11px', color: '#6B8BAE', marginTop: '2px' }}>{p.client} · {p.date}</div>
+                  </div>
+                  <StatusBadge status={p.status} />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                  <span style={{ fontSize: '11px', color: '#6B8BAE' }}>Entrega: {p.delivery} · {p.items} items</span>
+                  <span style={{ fontFamily: "'Fraunces', serif", fontSize: '14px', fontWeight: 900, color: '#0B1F3A' }}>{p.amount}</span>
+                </div>
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  <button onClick={() => setSelectedOC(p)} style={{ flex: 1, padding: '6px', background: '#0B1F3A', border: 'none', borderRadius: '6px', fontSize: '11px', color: '#00C2A8', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Ver detalle</button>
+                  {canAct && (
+                    <>
+                      <button onClick={() => setSelectedOC(p)} style={{ padding: '6px 10px', background: '#D1FAE5', border: 'none', borderRadius: '6px', fontSize: '11px', color: '#065F46', cursor: 'pointer', fontWeight: 600 }}>✓</button>
+                      <button onClick={() => setSelectedOC(p)} style={{ padding: '6px 10px', background: '#FEE2E2', border: 'none', borderRadius: '6px', fontSize: '11px', color: '#B91C1C', cursor: 'pointer', fontWeight: 600 }}>✕</button>
+                    </>
+                  )}
+                  <button onClick={() => setView('trazabilidad')} style={{ padding: '6px 10px', background: '#EEF5FF', border: 'none', borderRadius: '6px', fontSize: '11px', color: '#0E4D92', cursor: 'pointer', fontWeight: 600 }}>⟳</button>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      ) : (
       <div style={{ background: '#fff', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '12px', overflow: 'hidden', marginBottom: '10px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
@@ -341,7 +376,7 @@ export default function OCView({ setView }) {
               <th style={{ padding: '9px 12px', width: '36px' }}>
                 <input type="checkbox" checked={selected.length === filtered.length && filtered.length > 0} onChange={toggleAll} style={{ cursor: 'pointer', accentColor: '#0E4D92' }} />
               </th>
-              {['N° Orden','Socio Comercial','Emisión','Entrega','Items','Monto','Estado','Acciones'].map(h => (
+              {['N° Orden','Socio Comercial','Emisión','Entrega','Items','Monto','Estado','Acciones ↓'].map(h => (
                 <th key={h} style={{ padding: '9px 12px', textAlign: 'left', fontSize: '10px', color: '#6B8BAE', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.3px', whiteSpace: 'nowrap' }}>{h}</th>
               ))}
             </tr>
@@ -375,6 +410,26 @@ export default function OCView({ setView }) {
                         <button onClick={() => { setSelectedOC(p) }} style={{ padding: '4px 8px', background: '#FEE2E2', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#B91C1C', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>✕</button>
                       </>}
                       <button onClick={() => setView('trazabilidad')} style={{ padding: '4px 8px', background: '#EEF5FF', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#0E4D92', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>⟳</button>
+                      <button
+                        onClick={() => {
+                          const rows = [['N° Orden','Cadena','Emision','Entrega','Items','Monto','Estado'],[p.id,p.client,p.date,p.delivery,p.items,p.amount,p.status]]
+                          const csv = rows.map(r => r.join(',')).join('\n')
+                          const blob = new Blob([csv], { type: 'text/csv' })
+                          const url = URL.createObjectURL(blob)
+                          const a = document.createElement('a')
+                          a.href = url
+                          a.download = p.id + '.csv'
+                          a.click()
+                          URL.revokeObjectURL(url)
+                        }}
+                        title="Descargar esta OC"
+                        style={{ padding: '4px 8px', background: '#F8FBFF', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '6px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                          <polyline points="7 10 12 15 17 10"/>
+                          <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -383,6 +438,8 @@ export default function OCView({ setView }) {
           </tbody>
         </table>
       </div>
+
+      )}
 
       {/* Paginación */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

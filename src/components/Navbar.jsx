@@ -20,7 +20,7 @@ export default function Navbar() {
       }}>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <img src="/logo.png" alt="NEXO" style={{ height: '40px', width: '40px', borderRadius: '10px', objectFit: 'contain' }} />
+          <img src="/logo.png" alt="NEXO" style={{ height: '48px', width: '48px', borderRadius: '12px', objectFit: 'contain' }} />
           <div>
             <div style={{ fontFamily: "'Fraunces', serif", fontSize: '18px', fontWeight: 900, color: '#fff', letterSpacing: '-0.5px', lineHeight: 1 }}>NEXO</div>
             <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.4)', letterSpacing: '1.5px', textTransform: 'uppercase' }}>O2P Platform</div>

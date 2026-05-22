@@ -165,7 +165,7 @@ export default function AyudaView() {
           <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.55)' }}>Para incidentes críticos llama directamente — disponible 24/7.</div>
         </div>
         <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
-          <a href="tel:+51931067775" style={{ padding: '9px 18px', background: '#00C2A8', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#060C16', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <a href="tel:+51931067775" style={{ padding: '9px 18px', background: '#00F5A0', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#060C16', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
             📞 (+51) 931 067 775
           </a>
           <a href="https://wa.me/51931067775" target="_blank" rel="noreferrer" style={{ padding: '9px 18px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', fontSize: '12px', color: '#fff', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>

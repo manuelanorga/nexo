@@ -70,7 +70,7 @@ export default function Topbar({ role, view, setView, onMenuClick }) {
   const { searchQuery, setSearchQuery } = useApp()
   const isProv = role === 'prov'
   const accentBg = isProv ? '#0B1F3A' : '#064E3B'
-  const accentText = isProv ? '#00C2A8' : '#4ADE80'
+  const accentText = isProv ? '#00F5A0' : '#4ADE80'
   const noSearch = ['dashboard', 'nueva-oc', 'ayuda']
   const showSearch = !noSearch.includes(view)
   const [menuOpen, setMenuOpen] = useState(false)

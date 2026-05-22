@@ -201,7 +201,7 @@ export default function ReciboView() {
                   <td style={{ padding: '9px 12px' }}><StatusBadge status={r.status} /></td>
                   <td style={{ padding: '9px 12px' }}>
                     <div style={{ display: 'flex', gap: '4px' }}>
-                      <button onClick={() => setSelectedAR(r)} style={{ padding: '4px 10px', background: '#0B1F3A', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#00C2A8', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Ver</button>
+                      <button onClick={() => setSelectedAR(r)} style={{ padding: '4px 10px', background: '#0B1F3A', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Ver</button>
                       {r.status === 'observacion' && (
                         <button style={{ padding: '4px 8px', background: '#FEE2E2', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#B91C1C', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>↩ Dev.</button>
                       )}

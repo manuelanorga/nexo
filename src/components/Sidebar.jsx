@@ -61,7 +61,7 @@ function SidebarContent({ role, setRole, view, setView, navigate, onClose, onTou
             flex: 1, padding: '7px 0', fontSize: '11px', fontWeight: 700,
             border: 'none', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
             background: role === r ? (r === 'prov' ? '#0B1F3A' : '#064E3B') : 'transparent',
-            color: role === r ? (r === 'prov' ? '#00C2A8' : '#4ADE80') : '#6B8BAE',
+            color: role === r ? (r === 'prov' ? '#00F5A0' : '#4ADE80') : '#6B8BAE',
           }}>
             {r === 'prov' ? 'Proveedor' : 'Retail'}
           </button>
@@ -123,7 +123,7 @@ function SidebarContent({ role, setRole, view, setView, navigate, onClose, onTou
           <button onClick={onTour} style={{
             width: '100%', padding: '6px', background: 'transparent',
             border: '1px solid rgba(14,77,146,0.1)', borderRadius: '6px',
-            fontSize: '11px', color: '#00C2A8', cursor: 'pointer',
+            fontSize: '11px', color: '#00F5A0', cursor: 'pointer',
             fontFamily: "'DM Sans', sans-serif"
           }}>⚡ Ver tour de NEXO</button>
         )}

@@ -79,7 +79,7 @@ export default function Navbar({ lang, setLang, dark, setDark, tx }) {
             onClick={() => navigate('/login')}
             onMouseEnter={() => setHovLogin(true)}
             onMouseLeave={() => setHovLogin(false)}
-            style={{ padding: '7px 16px', background: 'transparent', border: dark ? `1px solid rgba(255,255,255,${hovLogin ? '0.3' : '0.12'})` : `1px solid rgba(14,77,146,${hovLogin ? '0.3' : '0.12'})`, borderRadius: '100px', color: hovLogin ? '#00C2A8' : (dark ? 'rgba(255,255,255,0.75)' : '#0B1F3A'), fontSize: '12px', fontWeight: 500, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'all .2s' }}>
+            style={{ padding: '7px 16px', background: 'transparent', border: dark ? `1px solid rgba(255,255,255,${hovLogin ? '0.3' : '0.12'})` : `1px solid rgba(14,77,146,${hovLogin ? '0.3' : '0.12'})`, borderRadius: '100px', color: hovLogin ? '#00F5A0' : (dark ? 'rgba(255,255,255,0.75)' : '#0B1F3A'), fontSize: '12px', fontWeight: 500, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'all .2s' }}>
             Iniciar sesión
           </button>
 
@@ -89,7 +89,7 @@ export default function Navbar({ lang, setLang, dark, setDark, tx }) {
             onClick={() => navigate('/dashboard')}
             onMouseEnter={() => setHovDemo(true)}
             onMouseLeave={() => setHovDemo(false)}
-            style={{ padding: '7px 18px', background: hovDemo ? '#00A891' : '#00C2A8', border: 'none', borderRadius: '100px', color: '#060C16', fontSize: '12px', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'background .2s' }}>
+            style={{ padding: '7px 18px', background: hovDemo ? '#00A891' : '#00F5A0', border: 'none', borderRadius: '100px', color: '#060C16', fontSize: '12px', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'background .2s' }}>
             Ver demo &rarr;
           </button>
         </div>

@@ -127,13 +127,13 @@ export default function Landing() {
         <div style={{ position: 'absolute', inset: 0, opacity: dark ? 0.4 : 0.15, backgroundImage: 'linear-gradient(rgba(0,194,168,0.05) 1px, transparent 1px), linear-gradient(90deg,rgba(0,194,168,0.05) 1px, transparent 1px)', backgroundSize: '48px 48px', pointerEvents: 'none' }} />
 
         <div style={{ position: 'relative', zIndex: 2, maxWidth: '860px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: '100px', border: '1px solid rgba(0,194,168,0.3)', background: 'rgba(0,194,168,0.08)', fontSize: '12px', color: '#00C2A8', marginBottom: '32px', fontWeight: 500 }}>
-            <span className="dot-pulse" style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00C2A8', display: 'inline-block' }} />
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: '100px', border: '1px solid rgba(0,194,168,0.3)', background: 'rgba(0,194,168,0.08)', fontSize: '12px', color: '#00F5A0', marginBottom: '32px', fontWeight: 500 }}>
+            <span className="dot-pulse" style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00F5A0', display: 'inline-block' }} />
             {tx.badge}
           </div>
 
           <h1 style={{ fontFamily: "'Fraunces', serif", fontSize: 'clamp(40px, 6vw, 76px)', fontWeight: 900, lineHeight: 1.05, letterSpacing: '-2px', margin: '0 0 24px' }}>
-            {tx.h1a}<br /><span style={{ color: '#00C2A8' }}>{tx.h1b}</span>
+            {tx.h1a}<br /><span style={{ color: '#00F5A0' }}>{tx.h1b}</span>
           </h1>
 
           <p style={{ fontSize: 'clamp(15px,2vw,18px)', color: fg2, lineHeight: 1.7, maxWidth: '560px', margin: '0 auto 40px', fontWeight: 300 }}>
@@ -146,13 +146,13 @@ export default function Landing() {
               onClick={() => navigate('/dashboard')}
               onMouseEnter={() => setHovCta1(true)}
               onMouseLeave={() => setHovCta1(false)}
-              style={{ padding: '14px 32px', background: hovCta1 ? '#00A891' : '#00C2A8', border: 'none', borderRadius: '12px', color: '#060C16', fontSize: '15px', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'background .2s', position: 'relative', overflow: 'hidden' }}>
+              style={{ padding: '14px 32px', background: hovCta1 ? '#00A891' : '#00F5A0', border: 'none', borderRadius: '12px', color: '#060C16', fontSize: '15px', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'background .2s', position: 'relative', overflow: 'hidden' }}>
               {tx.cta1}
             </button>
             <button
               onMouseEnter={() => setHovCta2(true)}
               onMouseLeave={() => setHovCta2(false)}
-              style={{ padding: '14px 32px', background: 'transparent', border: `1px solid ${hovCta2 ? 'rgba(0,194,168,0.6)' : 'rgba(255,255,255,0.15)'}`, borderRadius: '12px', color: hovCta2 ? '#00C2A8' : fg, fontSize: '15px', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'all .2s' }}>
+              style={{ padding: '14px 32px', background: 'transparent', border: `1px solid ${hovCta2 ? 'rgba(0,194,168,0.6)' : 'rgba(255,255,255,0.15)'}`, borderRadius: '12px', color: hovCta2 ? '#00F5A0' : fg, fontSize: '15px', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'all .2s' }}>
               {tx.cta2}
             </button>
           </div>
@@ -169,9 +169,9 @@ export default function Landing() {
             </div>
             <div style={{ background: dark ? '#0D1929' : '#F0F7FF', borderRadius: '0 0 10px 10px', padding: '16px', display: 'flex', gap: '12px', minHeight: '220px' }}>
               <div style={{ width: '120px', background: dark ? '#0B1F3A' : '#fff', borderRadius: '10px', padding: '12px', flexShrink: 0, border: `1px solid ${cardBorder}` }}>
-                <div style={{ fontFamily: "'Fraunces', serif", fontSize: '14px', fontWeight: 900, color: dark ? '#fff' : '#0B1F3A', marginBottom: '14px' }}>NEX<span style={{ color: '#00C2A8' }}>O</span></div>
+                <div style={{ fontFamily: "'Fraunces', serif", fontSize: '14px', fontWeight: 900, color: dark ? '#fff' : '#0B1F3A', marginBottom: '14px' }}>NEX<span style={{ color: '#00F5A0' }}>O</span></div>
                 {['Dashboard','Catálogo','Órd. Compra','Despacho','Financiero','Reportes'].map((item, i) => (
-                  <div key={item} style={{ padding: '5px 8px', borderRadius: '6px', fontSize: '10px', marginBottom: '2px', background: i === 0 ? (dark ? 'rgba(0,194,168,0.1)' : '#EEF5FF') : 'transparent', color: i === 0 ? '#00C2A8' : fg2, fontWeight: i === 0 ? 600 : 400, borderLeft: i === 0 ? '2px solid #00C2A8' : '2px solid transparent' }}>{item}</div>
+                  <div key={item} style={{ padding: '5px 8px', borderRadius: '6px', fontSize: '10px', marginBottom: '2px', background: i === 0 ? (dark ? 'rgba(0,194,168,0.1)' : '#EEF5FF') : 'transparent', color: i === 0 ? '#00F5A0' : fg2, fontWeight: i === 0 ? 600 : 400, borderLeft: i === 0 ? '2px solid #00F5A0' : '2px solid transparent' }}>{item}</div>
                 ))}
               </div>
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -213,7 +213,7 @@ export default function Landing() {
         <div className="flow-bar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0', overflowX: 'auto' }}>
           {tx.flowItems.map(([e,l], i, arr) => (
             <div key={l} style={{ display: 'flex', alignItems: 'center' }}>
-              <div style={{ padding: '7px 14px', background: 'rgba(0,194,168,0.08)', border: '1px solid rgba(0,194,168,0.2)', borderRadius: '100px', fontSize: '12px', color: '#00C2A8', whiteSpace: 'nowrap', fontWeight: 500 }}>{e} {l}</div>
+              <div style={{ padding: '7px 14px', background: 'rgba(0,194,168,0.08)', border: '1px solid rgba(0,194,168,0.2)', borderRadius: '100px', fontSize: '12px', color: '#00F5A0', whiteSpace: 'nowrap', fontWeight: 500 }}>{e} {l}</div>
               {i < arr.length - 1 && <span style={{ padding: '0 8px', color: fg2, fontSize: '12px' }}>→</span>}
             </div>
           ))}
@@ -232,7 +232,7 @@ export default function Landing() {
 
       {/* FEATURES */}
       <section className="section-pad" style={{ padding: '80px 24px', maxWidth: '1100px', margin: '0 auto' }}>
-        <div style={{ fontSize: '11px', color: '#00C2A8', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 500 }}>{tx.why}</div>
+        <div style={{ fontSize: '11px', color: '#00F5A0', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 500 }}>{tx.why}</div>
         <h2 style={{ fontFamily: "'Fraunces', serif", fontSize: 'clamp(28px,4vw,48px)', fontWeight: 900, letterSpacing: '-1.5px', marginBottom: '48px', lineHeight: 1.1, whiteSpace: 'pre-line' }}>{tx.whyTitle}</h2>
         <div className="features-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '14px' }}>
           {tx.features.map(([title, desc, tag]) => (
@@ -241,7 +241,7 @@ export default function Landing() {
               onMouseLeave={e => { e.currentTarget.style.borderColor = cardBorder; e.currentTarget.style.transform = 'translateY(0)' }}>
               <div style={{ fontFamily: "'Fraunces', serif", fontSize: '17px', fontWeight: 700, marginBottom: '8px', color: fg }}>{title}</div>
               <div style={{ fontSize: '13px', color: fg2, lineHeight: 1.7, marginBottom: '14px' }}>{desc}</div>
-              <span style={{ fontSize: '11px', padding: '3px 10px', background: 'rgba(0,194,168,0.1)', borderRadius: '100px', color: '#00C2A8' }}>{tag}</span>
+              <span style={{ fontSize: '11px', padding: '3px 10px', background: 'rgba(0,194,168,0.1)', borderRadius: '100px', color: '#00F5A0' }}>{tag}</span>
             </div>
           ))}
         </div>
@@ -250,11 +250,11 @@ export default function Landing() {
       {/* ROLES */}
       <section className="section-pad" style={{ padding: '80px 24px', background: sectionBg, borderTop: `1px solid ${sectionBorder}`, borderBottom: `1px solid ${sectionBorder}` }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div style={{ fontSize: '11px', color: '#00C2A8', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 500 }}>{tx.model}</div>
+          <div style={{ fontSize: '11px', color: '#00F5A0', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 500 }}>{tx.model}</div>
           <h2 style={{ fontFamily: "'Fraunces', serif", fontSize: 'clamp(28px,4vw,48px)', fontWeight: 900, letterSpacing: '-1.5px', marginBottom: '48px', lineHeight: 1.1, whiteSpace: 'pre-line' }}>{tx.modelTitle}</h2>
           <div className="roles-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
             {[
-              { badge: tx.provBadge, bc: '#00C2A8', bb: 'rgba(0,194,168,0.1)', bbr: 'rgba(0,194,168,0.3)', title: tx.provTitle, sub: tx.provSub, bg2: 'linear-gradient(135deg,#0B1F3A,#0E2D52)', border: 'rgba(0,194,168,0.15)', dot: '#00C2A8', items: tx.provItems },
+              { badge: tx.provBadge, bc: '#00F5A0', bb: 'rgba(0,194,168,0.1)', bbr: 'rgba(0,194,168,0.3)', title: tx.provTitle, sub: tx.provSub, bg2: 'linear-gradient(135deg,#0B1F3A,#0E2D52)', border: 'rgba(0,194,168,0.15)', dot: '#00F5A0', items: tx.provItems },
               { badge: tx.retBadge, bc: '#4ADE80', bb: 'rgba(74,222,128,0.1)', bbr: 'rgba(74,222,128,0.3)', title: tx.retTitle, sub: tx.retSub, bg2: 'linear-gradient(135deg,#052E16,#064E3B)', border: 'rgba(74,222,128,0.15)', dot: '#4ADE80', items: tx.retItems },
             ].map(r => (
               <div key={r.title} style={{ borderRadius: '20px', padding: '36px', background: r.bg2, border: `1px solid ${r.border}` }}>
@@ -276,11 +276,11 @@ export default function Landing() {
 
       {/* COMPARATIVA */}
       <section className="section-pad" style={{ padding: '80px 24px', maxWidth: '1100px', margin: '0 auto' }}>
-        <div style={{ fontSize: '11px', color: '#00C2A8', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 500 }}>
+        <div style={{ fontSize: '11px', color: '#00F5A0', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 500 }}>
           {lang === 'es' ? 'Por qué cambiar' : 'Why switch'}
         </div>
         <h2 style={{ fontFamily: "'Fraunces', serif", fontSize: 'clamp(28px,4vw,48px)', fontWeight: 900, letterSpacing: '-1.5px', marginBottom: '48px', lineHeight: 1.1 }}>
-          {lang === 'es' ? <>NEXO vs la <span style={{ color: '#00C2A8' }}>plataforma anterior.</span></> : <>NEXO vs your <span style={{ color: '#00C2A8' }}>previous platform.</span></>}
+          {lang === 'es' ? <>NEXO vs la <span style={{ color: '#00F5A0' }}>plataforma anterior.</span></> : <>NEXO vs your <span style={{ color: '#00F5A0' }}>previous platform.</span></>}
         </h2>
 
         <div style={{ background: card, border: `1px solid ${cardBorder}`, borderRadius: '16px', overflow: 'hidden' }}>
@@ -296,8 +296,8 @@ export default function Landing() {
               <div style={{ width: '32px', height: '3px', background: 'rgba(255,255,255,0.15)', borderRadius: '2px', margin: '0 auto' }} />
             </div>
             <div style={{ padding: '16px 24px', textAlign: 'center', background: 'rgba(0,194,168,0.05)', borderLeft: '1px solid rgba(0,194,168,0.15)' }}>
-              <div style={{ fontSize: '11px', color: '#00C2A8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px', fontWeight: 700 }}>NEXO</div>
-              <div style={{ width: '32px', height: '3px', background: '#00C2A8', borderRadius: '2px', margin: '0 auto' }} />
+              <div style={{ fontSize: '11px', color: '#00F5A0', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px', fontWeight: 700 }}>NEXO</div>
+              <div style={{ width: '32px', height: '3px', background: '#00F5A0', borderRadius: '2px', margin: '0 auto' }} />
             </div>
           </div>
 
@@ -379,7 +379,7 @@ export default function Landing() {
           <button
             className="btn-primary"
             onClick={() => navigate('/dashboard')}
-            style={{ padding: '16px 36px', background: '#00C2A8', border: 'none', borderRadius: '12px', color: '#060C16', fontSize: '16px', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
+            style={{ padding: '16px 36px', background: '#00F5A0', border: 'none', borderRadius: '12px', color: '#060C16', fontSize: '16px', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
             {tx.ctaBtn}
           </button>
         </div>
@@ -388,7 +388,7 @@ export default function Landing() {
       {/* FOOTER */}
       <footer style={{ borderTop: `1px solid ${sectionBorder}`, padding: '24px 24px' }}>
         <div className="footer-inner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '1100px', margin: '0 auto', flexWrap: 'wrap', gap: '12px' }}>
-          <div style={{ fontFamily: "'Fraunces', serif", fontSize: '16px', fontWeight: 900, color: fg }}>NEX<span style={{ color: '#00C2A8' }}>O</span></div>
+          <div style={{ fontFamily: "'Fraunces', serif", fontSize: '16px', fontWeight: 900, color: fg }}>NEX<span style={{ color: '#00F5A0' }}>O</span></div>
           <div style={{ display: 'flex', gap: '24px' }}>
             {[tx.privacy, tx.terms].map(l => (
               <a key={l} href="#" style={{ fontSize: '12px', color: fg2, textDecoration: 'none' }}>{l}</a>

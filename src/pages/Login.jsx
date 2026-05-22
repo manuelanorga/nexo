@@ -53,13 +53,13 @@ function O2PDiagram() {
 
       {/* Center label */}
       <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', textAlign: 'center' }}>
-        <div style={{ fontFamily: "'Fraunces', serif", fontSize: '20px', fontWeight: 900, color: '#fff', lineHeight: 1 }}>NEX<span style={{ color: '#00C2A8' }}>O</span></div>
+        <div style={{ fontFamily: "'Fraunces', serif", fontSize: '20px', fontWeight: 900, color: '#fff', lineHeight: 1 }}>NEX<span style={{ color: '#00F5A0' }}>O</span></div>
         <div style={{ fontSize: '8px', color: 'rgba(0,194,168,0.5)', letterSpacing: '2.5px', textTransform: 'uppercase', marginTop: '2px' }}>O2P</div>
       </div>
 
       {/* Nodes */}
       {[
-        { x: 180, y: 54,  border: 'rgba(0,194,168,0.5)', stroke: '#00C2A8', label: ['Orden de','Compra'],
+        { x: 180, y: 54,  border: 'rgba(0,194,168,0.5)', stroke: '#00F5A0', label: ['Orden de','Compra'],
           icon: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></> },
         { x: 289, y: 117, border: 'rgba(14,77,146,0.5)', stroke: '#378ADD', label: ['Aviso','Despacho'],
           icon: <><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></> },
@@ -69,7 +69,7 @@ function O2PDiagram() {
           icon: <><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></> },
         { x: 71,  y: 243, border: 'rgba(14,77,146,0.5)', stroke: '#378ADD', label: ['Facturación',''],
           icon: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="9" y1="9" x2="8" y2="9"/></> },
-        { x: 71,  y: 117, border: 'rgba(0,194,168,0.5)', stroke: '#00C2A8', label: ['Cobro',''],
+        { x: 71,  y: 117, border: 'rgba(0,194,168,0.5)', stroke: '#00F5A0', label: ['Cobro',''],
           icon: <><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></> },
       ].map((n, i) => (
         <div key={i} className="o2p-node" style={{ left: n.x, top: n.y }}>
@@ -132,7 +132,7 @@ export default function Login() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', overflow: 'hidden', width: '360px' }}>
           {[['241', 'OCs activas'], ['96.4%', 'Fill rate'], ['< 2s', 'Validación']].map(([v, l]) => (
             <div key={l} style={{ background: '#060C16', padding: '12px', textAlign: 'center' }}>
-              <div style={{ fontFamily: "'Fraunces', serif", fontSize: '18px', fontWeight: 900, color: '#00C2A8' }}>{v}</div>
+              <div style={{ fontFamily: "'Fraunces', serif", fontSize: '18px', fontWeight: 900, color: '#00F5A0' }}>{v}</div>
               <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.3)', marginTop: '2px', textTransform: 'uppercase', letterSpacing: '.5px' }}>{l}</div>
             </div>
           ))}
@@ -153,7 +153,7 @@ export default function Login() {
           <div style={{ background: 'rgba(0,194,168,0.05)', border: '1px solid rgba(0,194,168,0.12)', borderRadius: '10px', padding: '12px', marginBottom: '22px' }}>
             <div style={{ fontSize: '10px', color: 'rgba(0,194,168,0.6)', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '8px' }}>Acceso demo</div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
-              <button onClick={demoAccess} style={{ padding: '8px', background: 'rgba(11,31,58,0.8)', border: '1px solid rgba(0,194,168,0.15)', borderRadius: '7px', fontSize: '11px', color: '#00C2A8', fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
+              <button onClick={demoAccess} style={{ padding: '8px', background: 'rgba(11,31,58,0.8)', border: '1px solid rgba(0,194,168,0.15)', borderRadius: '7px', fontSize: '11px', color: '#00F5A0', fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
                 Proveedor (Arca)
               </button>
               <button onClick={demoAccess} style={{ padding: '8px', background: 'rgba(6,78,59,0.8)', border: '1px solid rgba(74,222,128,0.15)', borderRadius: '7px', fontSize: '11px', color: '#4ADE80', fontWeight: 600, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
@@ -193,17 +193,17 @@ export default function Login() {
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
             <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-              <input type="checkbox" checked={form.remember} onChange={e => setForm(f => ({ ...f, remember: e.target.checked }))} style={{ accentColor: '#00C2A8', cursor: 'pointer' }} />
+              <input type="checkbox" checked={form.remember} onChange={e => setForm(f => ({ ...f, remember: e.target.checked }))} style={{ accentColor: '#00F5A0', cursor: 'pointer' }} />
               <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)' }}>Recordarme</span>
             </label>
-            <button style={{ background: 'none', border: 'none', fontSize: '12px', color: '#00C2A8', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>¿Olvidaste tu contraseña?</button>
+            <button style={{ background: 'none', border: 'none', fontSize: '12px', color: '#00F5A0', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>¿Olvidaste tu contraseña?</button>
           </div>
 
           {error && (
             <div style={{ background: 'rgba(229,82,82,0.08)', border: '1px solid rgba(229,82,82,0.25)', borderRadius: '8px', padding: '10px 14px', fontSize: '12px', color: '#FCA5A5', marginBottom: '14px' }}>⚠ {error}</div>
           )}
 
-          <button onClick={handleSubmit} disabled={loading} style={{ width: '100%', height: '46px', background: loading ? 'rgba(0,194,168,0.5)' : '#00C2A8', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: 700, color: '#060C16', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'all .2s' }}>
+          <button onClick={handleSubmit} disabled={loading} style={{ width: '100%', height: '46px', background: loading ? 'rgba(0,194,168,0.5)' : '#00F5A0', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: 700, color: '#060C16', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'all .2s' }}>
             {loading ? 'Ingresando...' : 'Ingresar a NEXO →'}
           </button>
 

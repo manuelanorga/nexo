@@ -67,7 +67,7 @@ export default function Dashboard() {
       default: return (
         <div style={{ textAlign: 'center', paddingTop: '80px' }}>
           <div style={{ fontFamily: "'Fraunces', serif", fontSize: '26px', fontWeight: 900, color: '#0B1F3A', marginBottom: '8px' }}>
-            <span style={{ color: '#00C2A8' }}>{view}</span>
+            <span style={{ color: '#00F5A0' }}>{view}</span>
           </div>
           <div style={{ color: '#6B8BAE', fontSize: '13px' }}>En construccion...</div>
         </div>

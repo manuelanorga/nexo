@@ -148,7 +148,7 @@ function Timeline({ oc, isMobile }) {
           <div style={{ background: '#EEF5FF', border: '1px solid #93C5FD', borderRadius: '8px', padding: '8px 12px', fontSize: '11px', color: '#1E40AF', marginBottom: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span>Próximo paso: <strong>{nextAction.label}</strong></span>
             {oc.status === 'received' && (
-              <button style={{ padding: '4px 10px', background: '#0B1F3A', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#00C2A8', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>
+              <button style={{ padding: '4px 10px', background: '#0B1F3A', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>
                 Emitir factura →
               </button>
             )}

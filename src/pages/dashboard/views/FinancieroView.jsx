@@ -183,7 +183,7 @@ function FacturaModal({ doc, onClose, onEnviar }) {
             <button style={{ padding: '8px 14px', background: '#fff', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Descargar PDF</button>
             <button style={{ padding: '8px 14px', background: '#fff', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Descargar Excel</button>
             {!enviado && doc.status === 'pending' && (
-              <button onClick={() => { setEnviado(true); onEnviar(doc.id) }} style={{ padding: '8px 18px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00C2A8', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
+              <button onClick={() => { setEnviado(true); onEnviar(doc.id) }} style={{ padding: '8px 18px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
                 Enviar a {doc.cadena} →
               </button>
             )}
@@ -284,7 +284,7 @@ export default function FinancieroView() {
                 <td style={{ padding: '9px 12px' }}><StatusBadge status={f.status} /></td>
                 <td style={{ padding: '9px 12px' }}>
                   <div style={{ display: 'flex', gap: '4px' }}>
-                    <button onClick={() => setSelectedDoc(f)} style={{ padding: '4px 10px', background: '#0B1F3A', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#00C2A8', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Ver</button>
+                    <button onClick={() => setSelectedDoc(f)} style={{ padding: '4px 10px', background: '#0B1F3A', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Ver</button>
                     <button style={{ padding: '4px 8px', background: '#EEF5FF', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#0E4D92', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>PDF</button>
                     {f.status === 'pending' && (
                       <button onClick={() => { setSelectedDoc(f) }} style={{ padding: '4px 8px', background: '#EAF3DE', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#166534', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>Enviar</button>

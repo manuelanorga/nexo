@@ -70,7 +70,7 @@ function DescargarModal({ reporte, onClose }) {
         </div>
         <div style={{ padding: '14px 24px', borderTop: '1px solid rgba(14,77,146,0.08)', display: 'flex', gap: '8px', justifyContent: 'flex-end', background: '#F8FBFF' }}>
           <button onClick={onClose} style={{ padding: '8px 16px', background: '#fff', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Cancelar</button>
-          <button onClick={handleDescargar} style={{ padding: '8px 20px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00C2A8', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Descargar ahora</button>
+          <button onClick={handleDescargar} style={{ padding: '8px 20px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Descargar ahora</button>
         </div>
       </div>
     </div>
@@ -117,7 +117,7 @@ function NuevoReporteModal({ onClose, onCrear }) {
         </div>
         <div style={{ padding: '14px 24px', borderTop: '1px solid rgba(14,77,146,0.08)', display: 'flex', gap: '8px', justifyContent: 'flex-end', background: '#F8FBFF' }}>
           <button onClick={onClose} style={{ padding: '8px 16px', background: '#fff', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Cancelar</button>
-          <button onClick={() => { onCrear(form); onClose() }} style={{ padding: '8px 20px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00C2A8', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Generar reporte →</button>
+          <button onClick={() => { onCrear(form); onClose() }} style={{ padding: '8px 20px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Generar reporte →</button>
         </div>
       </div>
     </div>
@@ -184,7 +184,7 @@ export default function ReportesView() {
             }}>{cat}</div>
           ))}
         </div>
-        <button onClick={() => setShowNuevo(true)} style={{ padding: '7px 16px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00C2A8', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif", flexShrink: 0 }}>
+        <button onClick={() => setShowNuevo(true)} style={{ padding: '7px 16px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif", flexShrink: 0 }}>
           + Nuevo reporte
         </button>
       </div>
@@ -217,7 +217,7 @@ export default function ReportesView() {
                     <span style={{ fontSize: '11px', fontWeight: 600, color: '#166534', background: '#EAF3DE', padding: '3px 10px', borderRadius: '100px' }}>✓ Siempre disponible</span>
                   </td>
                   <td style={{ padding: '9px 12px' }}>
-                    <button onClick={() => setSelectedReporte(r)} style={{ padding: '4px 12px', background: '#0B1F3A', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#00C2A8', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Descargar</button>
+                    <button onClick={() => setSelectedReporte(r)} style={{ padding: '4px 12px', background: '#0B1F3A', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Descargar</button>
                   </td>
                 </tr>
               )

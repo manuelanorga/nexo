@@ -231,7 +231,7 @@ function OCModal({ oc, onClose, setView, onConfirm, onReject }) {
               <button style={{ padding: '7px 14px', background: '#fff', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Descargar PDF</button>
               <button style={{ padding: '7px 14px', background: '#fff', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Descargar EDI</button>
             </div>
-            <button onClick={() => { onClose(); setView('trazabilidad') }} style={{ padding: '7px 16px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00C2A8', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
+            <button onClick={() => { onClose(); setView('trazabilidad') }} style={{ padding: '7px 16px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
               Ver trazabilidad →
             </button>
           </div>
@@ -329,8 +329,8 @@ export default function OCView({ setView }) {
         </div>
         <div style={{ display: 'flex', gap: '6px' }}>
           <button disabled={!canActSelected} onClick={() => canActSelected && alert('Confirmando ' + selected.length + ' OCs seleccionadas')} style={{ padding: '6px 12px', background: canActSelected ? '#D1FAE5' : '#F0F7FF', border: 'none', borderRadius: '8px', fontSize: '11px', color: canActSelected ? '#065F46' : '#9DB8D9', cursor: canActSelected ? 'pointer' : 'default', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>✓ Confirmar selección</button>
-          <button disabled={selected.length === 0} style={{ padding: '6px 12px', background: selected.length > 0 ? '#0B1F3A' : '#F0F7FF', border: 'none', borderRadius: '8px', fontSize: '11px', color: selected.length > 0 ? '#00C2A8' : '#9DB8D9', cursor: selected.length > 0 ? 'pointer' : 'default', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>PDF Consolidado</button>
-          <button disabled={selected.length === 0} style={{ padding: '6px 12px', background: selected.length > 0 ? '#0B1F3A' : '#F0F7FF', border: 'none', borderRadius: '8px', fontSize: '11px', color: selected.length > 0 ? '#00C2A8' : '#9DB8D9', cursor: selected.length > 0 ? 'pointer' : 'default', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>Generar Listado</button>
+          <button disabled={selected.length === 0} style={{ padding: '6px 12px', background: selected.length > 0 ? '#0B1F3A' : '#F0F7FF', border: 'none', borderRadius: '8px', fontSize: '11px', color: selected.length > 0 ? '#00F5A0' : '#9DB8D9', cursor: selected.length > 0 ? 'pointer' : 'default', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>PDF Consolidado</button>
+          <button disabled={selected.length === 0} style={{ padding: '6px 12px', background: selected.length > 0 ? '#0B1F3A' : '#F0F7FF', border: 'none', borderRadius: '8px', fontSize: '11px', color: selected.length > 0 ? '#00F5A0' : '#9DB8D9', cursor: selected.length > 0 ? 'pointer' : 'default', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>Generar Listado</button>
           <button style={{ padding: '6px 12px', background: '#fff', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '8px', fontSize: '11px', color: '#0B1F3A', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Descargar Consulta</button>
         </div>
       </div>
@@ -355,7 +355,7 @@ export default function OCView({ setView }) {
                   <span style={{ fontFamily: "'Fraunces', serif", fontSize: '14px', fontWeight: 900, color: '#0B1F3A' }}>{p.amount}</span>
                 </div>
                 <div style={{ display: 'flex', gap: '6px' }}>
-                  <button onClick={() => setSelectedOC(p)} style={{ flex: 1, padding: '6px', background: '#0B1F3A', border: 'none', borderRadius: '6px', fontSize: '11px', color: '#00C2A8', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Ver detalle</button>
+                  <button onClick={() => setSelectedOC(p)} style={{ flex: 1, padding: '6px', background: '#0B1F3A', border: 'none', borderRadius: '6px', fontSize: '11px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Ver detalle</button>
                   {canAct && (
                     <>
                       <button onClick={() => setSelectedOC(p)} style={{ padding: '6px 10px', background: '#D1FAE5', border: 'none', borderRadius: '6px', fontSize: '11px', color: '#065F46', cursor: 'pointer', fontWeight: 600 }}>✓</button>
@@ -404,7 +404,7 @@ export default function OCView({ setView }) {
                   <td style={{ padding: '9px 12px' }}><StatusBadge status={p.status} /></td>
                   <td style={{ padding: '9px 12px' }}>
                     <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
-                      <button onClick={() => setSelectedOC(p)} style={{ padding: '4px 10px', background: '#0B1F3A', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#00C2A8', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Ver</button>
+                      <button onClick={() => setSelectedOC(p)} style={{ padding: '4px 10px', background: '#0B1F3A', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Ver</button>
                       {canAct && <>
                         <button onClick={() => { setSelectedOC(p) }} style={{ padding: '4px 8px', background: '#D1FAE5', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#065F46', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>✓</button>
                         <button onClick={() => { setSelectedOC(p) }} style={{ padding: '4px 8px', background: '#FEE2E2', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#B91C1C', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>✕</button>
@@ -446,7 +446,7 @@ export default function OCView({ setView }) {
         <div style={{ fontSize: '11px', color: '#6B8BAE' }}>Mostrando {filtered.length} de {TOTAL} órdenes</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           {['««','‹',1,2,3,'...',49,'›','»»'].map((p, i) => (
-            <button key={i} onClick={() => typeof p === 'number' && setPage(p)} style={{ width: typeof p === 'number' ? '32px' : 'auto', padding: typeof p === 'number' ? '0' : '0 8px', height: '32px', borderRadius: '8px', border: '1px solid rgba(14,77,146,0.1)', background: p === page ? '#0B1F3A' : '#fff', color: p === page ? '#00C2A8' : '#6B8BAE', fontSize: '12px', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", fontWeight: p === page ? 700 : 400 }}>
+            <button key={i} onClick={() => typeof p === 'number' && setPage(p)} style={{ width: typeof p === 'number' ? '32px' : 'auto', padding: typeof p === 'number' ? '0' : '0 8px', height: '32px', borderRadius: '8px', border: '1px solid rgba(14,77,146,0.1)', background: p === page ? '#0B1F3A' : '#fff', color: p === page ? '#00F5A0' : '#6B8BAE', fontSize: '12px', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", fontWeight: p === page ? 700 : 400 }}>
               {p}
             </button>
           ))}

@@ -236,7 +236,7 @@ export default function DevoluciónView() {
                 <td style={{ padding: '9px 12px' }}><StatusBadge status={d.status} /></td>
                 <td style={{ padding: '9px 12px' }}>
                   <div style={{ display: 'flex', gap: '4px' }}>
-                    <button onClick={() => setSelectedDev(d)} style={{ padding: '4px 10px', background: '#0B1F3A', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#00C2A8', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Ver</button>
+                    <button onClick={() => setSelectedDev(d)} style={{ padding: '4px 10px', background: '#0B1F3A', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Ver</button>
                     {d.status === 'pending' && (
                       <>
                         <button onClick={() => { handleAprobar(d.id); }} style={{ padding: '4px 8px', background: '#D1FAE5', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#065F46', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>✓</button>

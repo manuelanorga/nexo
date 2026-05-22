@@ -15,6 +15,8 @@ export default function Navbar({ lang, setLang, dark, setDark, tx }) {
           100%{box-shadow:0 0 15px rgba(0,194,168,0.3)}
         }
         .btn-demo { animation: shimmerBtn 2.5s ease-in-out infinite; }
+        @keyframes playPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+        .play-icon { animation: playPulse 1.8s ease-in-out infinite; }
       `}</style>
       <nav style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -89,8 +91,13 @@ export default function Navbar({ lang, setLang, dark, setDark, tx }) {
             onClick={() => navigate('/dashboard')}
             onMouseEnter={() => setHovDemo(true)}
             onMouseLeave={() => setHovDemo(false)}
-            style={{ padding: '7px 18px', background: hovDemo ? '#00A891' : '#00F5A0', border: 'none', borderRadius: '100px', color: '#060C16', fontSize: '12px', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'background .2s' }}>
-            Ver demo &rarr;
+            style={{ padding: '7px 10px 7px 20px', background: hovDemo ? '#00A891' : '#00F5A0', border: 'none', borderRadius: '100px', color: '#060C16', fontSize: '12px', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'background .2s', display:'flex', alignItems:'center', gap:'8px' }}>
+            Ver demo
+            <span style={{ width:'28px', height:'28px', borderRadius:'50%', background:'rgba(6,12,22,0.15)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+              <svg className="play-icon" width="11" height="11" viewBox="0 0 24 24" fill="#060C16">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+            </span>
           </button>
         </div>
       </nav>

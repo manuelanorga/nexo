@@ -7,14 +7,14 @@ export const purchaseOrders = [
 ]
 
 export const catalogData = [
-  { ean: '07702459082090', code: 'IK-15L-12', name: 'Inca Kola 1.5L', presentation: 'Pack x12', weight: '18.5 kg', volume: '18L', priceWong: 'S/62.40', priceTottus: 'S/61.80', status: 'active' },
-  { ean: '07702459082014', code: 'CC-05L-24', name: 'Coca-Cola 500ml', presentation: 'Pack x24', weight: '13.2 kg', volume: '12L', priceWong: 'S/48.00', priceTottus: 'S/47.50', status: 'active' },
-  { ean: '07702459082021', code: 'CC-15L-12', name: 'Coca-Cola 1.5L', presentation: 'Pack x12', weight: '19.0 kg', volume: '18L', priceWong: 'S/58.80', priceTottus: 'S/58.20', status: 'active' },
-  { ean: '07702459082038', code: 'CCZ-05L-24', name: 'Coca-Cola Zero 500ml', presentation: 'Pack x24', weight: '12.8 kg', volume: '12L', priceWong: 'S/48.00', priceTottus: 'S/47.50', status: 'active' },
-  { ean: '07702459082045', code: 'SP-05L-24', name: 'Sprite 500ml', presentation: 'Pack x24', weight: '13.0 kg', volume: '12L', priceWong: 'S/46.80', priceTottus: 'S/46.20', status: 'active' },
-  { ean: '07702459082052', code: 'FT-15L-12', name: 'Fanta Naranja 1.5L', presentation: 'Pack x12', weight: '18.8 kg', volume: '18L', priceWong: 'S/57.60', priceTottus: 'S/57.00', status: 'active' },
-  { ean: '07702459082069', code: 'IK-25L-6', name: 'Inca Kola 2.5L', presentation: 'Pack x6', weight: '15.6 kg', volume: '15L', priceWong: 'S/42.00', priceTottus: 'S/41.40', status: 'active' },
-  { ean: '07702459082076', code: 'SCH-350-24', name: 'Schweppes Tónica 350ml', presentation: 'Pack x24', weight: '9.6 kg', volume: '8.4L', priceWong: 'S/52.80', priceTottus: 'S/52.20', status: 'discontinued' },
+  { ean: '07702459082090', code: 'IK-15L-12', name: 'Inca Kola 1.5L', presentation: 'Pack x12', weight: '18.5 kg', volume: '18L', basePrice: 'S/60.00', brand: 'Inca Kola', category: 'Bebidas gaseosas', iva: '18', status: 'active' },
+  { ean: '07702459082014', code: 'CC-05L-24', name: 'Coca-Cola 500ml', presentation: 'Pack x24', weight: '13.2 kg', volume: '12L', basePrice: 'S/45.00', brand: 'Coca-Cola', category: 'Bebidas gaseosas', iva: '18', status: 'active' },
+  { ean: '07702459082021', code: 'CC-15L-12', name: 'Coca-Cola 1.5L', presentation: 'Pack x12', weight: '19.0 kg', volume: '18L', basePrice: 'S/56.00', brand: 'Coca-Cola', category: 'Bebidas gaseosas', iva: '18', status: 'active' },
+  { ean: '07702459082038', code: 'CCZ-05L-24', name: 'Coca-Cola Zero 500ml', presentation: 'Pack x24', weight: '12.8 kg', volume: '12L', basePrice: 'S/45.00', brand: 'Coca-Cola', category: 'Bebidas sin azucar', iva: '18', status: 'active' },
+  { ean: '07702459082045', code: 'SP-05L-24', name: 'Sprite 500ml', presentation: 'Pack x24', weight: '13.0 kg', volume: '12L', basePrice: 'S/44.00', brand: 'Sprite', category: 'Bebidas gaseosas', iva: '18', status: 'active' },
+  { ean: '07702459082052', code: 'FT-15L-12', name: 'Fanta Naranja 1.5L', presentation: 'Pack x12', weight: '18.8 kg', volume: '18L', basePrice: 'S/55.00', brand: 'Fanta', category: 'Bebidas gaseosas', iva: '18', status: 'active' },
+  { ean: '07702459082069', code: 'IK-25L-6', name: 'Inca Kola 2.5L', presentation: 'Pack x6', weight: '15.6 kg', volume: '15L', basePrice: 'S/39.00', brand: 'Inca Kola', category: 'Bebidas gaseosas', iva: '18', status: 'active' },
+  { ean: '07702459082076', code: 'SCH-350-24', name: 'Schweppes Tonica 350ml', presentation: 'Pack x24', weight: '9.6 kg', volume: '8.4L', basePrice: 'S/50.00', brand: 'Schweppes', category: 'Otros', iva: '18', status: 'discontinued' },
 ]
 
 export const traceSteps = [

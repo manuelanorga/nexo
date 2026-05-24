@@ -3,6 +3,8 @@ import { useIsMobile } from '../../../hooks/useMediaQuery'
 import { purchaseOrders } from '../../../data/mockData'
 import Badge from '../../../components/Badge'
 import { useApp } from '../../../context/AppContext'
+import { generarOCPDF } from '../../../utils/generarOCpdf'
+import { QRCodeSVG as QRCode } from 'qrcode.react'
 
 const allStatuses = [
   { key: 'all', label: 'Todas', color: '#6B8BAE', bg: '#F0F7FF' },
@@ -244,6 +246,31 @@ function OCModal({ oc, onClose, setView, onConfirm, onReject }) {
 const ITEMS_PER_PAGE = 5
 const TOTAL = 241
 
+
+function QRModal({ oc, onClose }) {
+  const url = `https://nexo-one-woad.vercel.app/dashboard?oc=${oc.id}`
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 2000, background: 'rgba(11,31,58,0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={onClose}>
+      <div style={{ background: '#fff', borderRadius: '16px', padding: '28px', maxWidth: '320px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.2)' }} onClick={e => e.stopPropagation()}>
+        <div style={{ fontFamily: "'Fraunces', serif", fontSize: '17px', fontWeight: 900, color: '#0B1F3A', marginBottom: '4px' }}>Código QR</div>
+        <div style={{ fontFamily: 'monospace', fontSize: '11px', color: '#0E4D92', marginBottom: '16px' }}>{oc.id}</div>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '14px', padding: '12px', background: '#F8FBFF', borderRadius: '10px', border: '1px solid rgba(14,77,146,0.1)' }}>
+          <QRCode value={url} size={160} level="M" fgColor="#0B1F3A" bgColor="#F8FBFF" />
+        </div>
+        <div style={{ fontSize: '12px', color: '#6B8BAE', marginBottom: '14px' }}>Escanea el código QR o copia el link directo.</div>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button onClick={() => { navigator.clipboard.writeText(url); onClose() }} style={{ flex: 1, padding: '8px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>
+            Copiar link
+          </button>
+          <button onClick={onClose} style={{ flex: 1, padding: '8px', background: '#F8FBFF', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '8px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function OCView({ setView }) {
   const [selectedOC, setSelectedOC] = useState(null)
   const [selected, setSelected] = useState([])
@@ -256,6 +283,7 @@ export default function OCView({ setView }) {
   const { selectedOCId, setSelectedOCId, searchQuery } = useApp()
   const isMobile = useIsMobile()
   const [showAllFilters, setShowAllFilters] = useState(false)
+  const [qrOC, setQrOC] = useState(null)
 
   useEffect(() => {
     if (selectedOCId) {
@@ -303,6 +331,7 @@ export default function OCView({ setView }) {
 
   return (
     <div>
+      {qrOC && <QRModal oc={qrOC} onClose={() => setQrOC(null)} />}
       {selectedOC && <OCModal oc={selectedOC} onClose={() => setSelectedOC(null)} setView={setView} onConfirm={handleConfirm} onReject={handleReject} />}
 
       {/* Stats bar */}
@@ -438,24 +467,13 @@ export default function OCView({ setView }) {
                         <button onClick={() => { setSelectedOC(p) }} style={{ padding: '4px 8px', background: '#FEE2E2', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#B91C1C', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>✕</button>
                       </>}
                       <button onClick={() => setView('trazabilidad')} style={{ padding: '4px 8px', background: '#EEF5FF', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#0E4D92', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>⟳</button>
-                      <button
-                        onClick={() => {
-                          const rows = [['N° Orden','Cadena','Emisión','Entrega','Items','Monto','Estado'],[p.id,p.client,p.date,p.delivery,p.items,p.amount,p.status]]
-                          const csv = rows.map(r => r.join(',')).join('\n')
-                          const blob = new Blob([csv], { type: 'text/csv' })
-                          const url = URL.createObjectURL(blob)
-                          const a = document.createElement('a')
-                          a.href = url
-                          a.download = p.id + '.csv'
-                          a.click()
-                          URL.revokeObjectURL(url)
-                        }}
-                        title="Descargar esta OC"
+                      <button onClick={() => generarOCPDF(p)} title="Descargar PDF"
+                        style={{ padding: '4px 8px', background: '#EEF5FF', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#0E4D92', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>PDF</button>
+                      <button onClick={() => setQrOC(p)} title="Ver QR"
                         style={{ padding: '4px 8px', background: '#F8FBFF', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '6px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                          <polyline points="7 10 12 15 17 10"/>
-                          <line x1="12" y1="15" x2="12" y2="3"/>
+                          <rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/>
+                          <rect x="3" y="16" width="5" height="5"/><path d="M16 16h2v2h-2zM18 18h2v2h-2z"/>
                         </svg>
                       </button>
                     </div>

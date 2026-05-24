@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import Navbar from '../../components/Navbar'
+import { useIsMobile } from '../../hooks/useMediaQuery'
 
 function LiveBadge() {
   const [time, setTime] = useState(new Date())
@@ -110,6 +111,7 @@ export default function Landing() {
   const [dark, setDark] = useState(true)
   const [hovCta1, setHovCta1] = useState(false)
   const [hovCta2, setHovCta2] = useState(false)
+  const isMobile = useIsMobile()
   const tx = t[lang]
 
   const bg = dark ? '#060C16' : '#F8FAFF'
@@ -144,6 +146,8 @@ export default function Landing() {
           .hide-mobile { display: none !important; }
           .hero-section { padding: 100px 20px 60px !important; }
           .section-pad { padding: 60px 20px !important; }
+          .mockup-sidebar { display: none !important; }
+          .mockup-kpis { grid-template-columns: 1fr 1fr !important; }
         }
       `}</style>
 
@@ -154,14 +158,14 @@ export default function Landing() {
         <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translate(-50%,-50%)', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,194,168,0.10) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', inset: 0, opacity: dark ? 0.4 : 0.15, backgroundImage: 'linear-gradient(rgba(0,194,168,0.05) 1px, transparent 1px), linear-gradient(90deg,rgba(0,194,168,0.05) 1px, transparent 1px)', backgroundSize: '48px 48px', pointerEvents: 'none' }} />
 
-        <div style={{ position: 'relative', zIndex: 2, maxWidth: '860px' }}>
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: '860px', width: '100%', boxSizing: 'border-box' }}>
           <LiveBadge />
 
           <h1 style={{ fontFamily: "'Fraunces', serif", fontSize: 'clamp(40px, 6vw, 76px)', fontWeight: 900, lineHeight: 1.05, letterSpacing: '-2px', margin: '0 0 24px' }}>
             {tx.h1a}<br /><span style={{ color: '#00F5A0' }}>{tx.h1b}</span>
           </h1>
 
-          <p style={{ fontSize: 'clamp(15px,2vw,18px)', color: fg2, lineHeight: 1.7, maxWidth: '560px', margin: '0 auto 40px', fontWeight: 300 }}>
+          <p style={{ fontSize: 'clamp(15px,2vw,18px)', color: fg2, lineHeight: 1.7, maxWidth: '560px', width: '100%', boxSizing: 'border-box', margin: '0 auto 40px', fontWeight: 300 }}>
             {tx.sub}
           </p>
 
@@ -193,14 +197,14 @@ export default function Landing() {
               </div>
             </div>
             <div style={{ background: dark ? '#0D1929' : '#F0F7FF', borderRadius: '0 0 10px 10px', padding: '16px', display: 'flex', gap: '12px', minHeight: '220px' }}>
-              <div style={{ width: '120px', background: dark ? '#0B1F3A' : '#fff', borderRadius: '10px', padding: '12px', flexShrink: 0, border: `1px solid ${cardBorder}` }}>
+              <div className="mockup-sidebar" style={{ width: '120px', background: dark ? '#0B1F3A' : '#fff', borderRadius: '10px', padding: '12px', flexShrink: 0, border: `1px solid ${cardBorder}` }}>
                 <div style={{ fontFamily: "'Fraunces', serif", fontSize: '14px', fontWeight: 900, color: dark ? '#fff' : '#0B1F3A', marginBottom: '14px' }}>NEX<span style={{ color: '#00F5A0' }}>O</span></div>
                 {['Dashboard','Catálogo','Órd. Compra','Despacho','Financiero','Reportes'].map((item, i) => (
                   <div key={item} style={{ padding: '5px 8px', borderRadius: '6px', fontSize: '10px', marginBottom: '2px', background: i === 0 ? (dark ? 'rgba(0,194,168,0.1)' : '#EEF5FF') : 'transparent', color: i === 0 ? '#00F5A0' : fg2, fontWeight: i === 0 ? 600 : 400, borderLeft: i === 0 ? '2px solid #00F5A0' : '2px solid transparent' }}>{item}</div>
                 ))}
               </div>
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px' }}>
+                <div className="mockup-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px' }}>
                   {[['OC Activas','38','#0E4D92'],['En Tránsito','14','#F59E0B'],['SKUs Activos','50','#16A34A'],['Pend. Pago','S/143K','#E05252']].map(([l,v,c]) => (
                     <div key={l} style={{ background: dark ? 'rgba(255,255,255,0.05)' : '#fff', borderRadius: '8px', padding: '10px 12px', border: `1px solid ${cardBorder}` }}>
                       <div style={{ fontSize: '9px', color: fg2, marginBottom: '3px', textTransform: 'uppercase' }}>{l}</div>
@@ -308,7 +312,7 @@ export default function Landing() {
           {lang === 'es' ? <>NEXO vs la <span style={{ color: '#00F5A0' }}>plataforma anterior.</span></> : <>NEXO vs your <span style={{ color: '#00F5A0' }}>previous platform.</span></>}
         </h2>
 
-        <div style={{ background: card, border: `1px solid ${cardBorder}`, borderRadius: '16px', overflow: 'hidden' }}>
+        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', borderRadius: '16px', margin: '0 -2px' }}><div style={{ background: card, border: `1px solid ${cardBorder}`, borderRadius: '16px', overflow: 'hidden', minWidth: '560px' }}>
           {/* Header */}
           <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr', background: dark ? 'rgba(255,255,255,0.03)' : 'rgba(14,77,146,0.03)', borderBottom: `1px solid ${cardBorder}` }}>
             <div style={{ padding: '16px 24px', fontSize: '12px', color: fg2, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
@@ -392,7 +396,7 @@ export default function Landing() {
               </div>
             </div>
           ))}
-        </div>
+        </div></div>
       </section>
 
       {/* CTA */}

@@ -53,7 +53,7 @@ export default function AdminDashboard({ accent, accentBg, text, text2, text3, b
           <div style={{ fontSize: '14px', fontWeight: 500, color: text }}>Tenants activos</div>
           <div style={{ fontSize: '11px', color: text3, marginTop: '1px' }}>Estado en tiempo real · últimos 5 min</div>
         </div>
-        <button style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', padding: '6px 14px', borderRadius: '8px', border: `1px solid rgba(0,194,168,0.25)`, background: accentBg, color: accent, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>
+        <button style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', padding: '6px 14px', borderRadius: '8px', border: `1px solid rgba(0,194,168,0.25)`, background: accentBg, color: accent, cursor: 'pointer', fontFamily: "'Inter', sans-serif", fontWeight: 500 }}>
           + Nuevo tenant
         </button>
       </div>

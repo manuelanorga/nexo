@@ -50,9 +50,9 @@ export default function AdminPanel() {
   const accentBg = 'rgba(0,194,168,0.08)'
 
   return (
-    <div style={{ display: 'flex', height: '100vh', background: bg, fontFamily: "'DM Sans', sans-serif", color: text, overflow: 'hidden' }}>
+    <div style={{ display: 'flex', height: '100vh', background: bg, fontFamily: "'Inter', sans-serif", color: text, overflow: 'hidden' }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,700&display=swap');
         * { box-sizing: border-box; }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 2px; }
@@ -147,7 +147,7 @@ export default function AdminPanel() {
               Operativo · 99.97% uptime
             </div>
             <button onClick={() => navigate('/dashboard')}
-              style={{ fontSize: '12px', padding: '5px 12px', borderRadius: '8px', border: `1px solid ${border}`, background: white, color: text2, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'all .15s' }}
+              style={{ fontSize: '12px', padding: '5px 12px', borderRadius: '8px', border: `1px solid ${border}`, background: white, color: text2, cursor: 'pointer', fontFamily: "'Inter', sans-serif", transition: 'all .15s' }}
               onMouseEnter={e => { e.currentTarget.style.background = sidebar; e.currentTarget.style.color = text }}
               onMouseLeave={e => { e.currentTarget.style.background = white; e.currentTarget.style.color = text2 }}
             >Ver plataforma →</button>

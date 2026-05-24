@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useIsMobile } from '../../../hooks/useMediaQuery'
 import { useApp } from '../../../context/AppContext'
 
 const initialDevoluciónes = [
@@ -173,6 +174,7 @@ export default function DevoluciónView() {
   const { searchQuery } = useApp()
   const [data, setData] = useState(initialDevoluciónes)
   const [selectedDev, setSelectedDev] = useState(null)
+  const isMobile = useIsMobile()
 
   const filtered = useMemo(() => {
     if (!searchQuery) return data
@@ -212,6 +214,34 @@ export default function DevoluciónView() {
         </div>
       )}
 
+      {isMobile ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {filtered.map(d => (
+            <div key={d.id} style={{ background: '#fff', borderRadius: '12px', border: '1px solid rgba(14,77,146,0.1)', borderLeft: d.status === 'pending' ? '4px solid #F59E0B' : d.status === 'approved' ? '4px solid #166534' : '4px solid #B91C1C', padding: '12px 14px', background: d.status === 'pending' ? '#FFFDF0' : '#fff' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                <div>
+                  <div style={{ fontFamily: 'monospace', fontSize: '12px', fontWeight: 700, color: '#0B1F3A' }}>{d.id}</div>
+                  <div style={{ fontFamily: 'monospace', fontSize: '10px', color: '#0E4D92', marginTop: '2px' }}>{d.oc}</div>
+                </div>
+                <StatusBadge status={d.status} />
+              </div>
+              <div style={{ fontSize: '12px', fontWeight: 600, color: '#0B1F3A', marginBottom: '2px' }}>{d.cadena}</div>
+              <div style={{ fontSize: '11px', color: '#6B8BAE', marginBottom: '6px' }}>{d.motivo}</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                <span style={{ fontSize: '11px', color: '#6B8BAE' }}>{d.fecha}</span>
+                <span style={{ fontFamily: "'Fraunces', serif", fontSize: '16px', fontWeight: 900, color: '#0B1F3A' }}>{d.monto}</span>
+              </div>
+              <div style={{ display: 'flex', gap: '6px' }}>
+                <button onClick={() => setSelectedDev(d)} style={{ flex: 1, padding: '8px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Ver detalle</button>
+                {d.status === 'pending' && <>
+                  <button onClick={() => handleAprobar(d.id)} style={{ padding: '8px 12px', background: '#D1FAE5', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#065F46', cursor: 'pointer', fontWeight: 600 }}>✓</button>
+                  <button onClick={() => handleRechazar(d.id, 'Rechazado')} style={{ padding: '8px 12px', background: '#FEE2E2', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#B91C1C', cursor: 'pointer', fontWeight: 600 }}>✕</button>
+                </>}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
       <div style={{ background: '#fff', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '12px', overflow: 'hidden' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
@@ -250,8 +280,9 @@ export default function DevoluciónView() {
           </tbody>
         </table>
       </div>
+      )}
       <div style={{ fontSize: '11px', color: '#6B8BAE', textAlign: 'right', marginTop: '8px' }}>
-        Mostrando {filtered.length} de {data.length} devoluciónes
+        Mostrando {filtered.length} de {data.length} devoluciones
       </div>
     </div>
   )

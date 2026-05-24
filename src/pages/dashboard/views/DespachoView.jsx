@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useIsMobile } from '../../../hooks/useMediaQuery'
 import Badge from '../../../components/Badge'
 import { useApp } from '../../../context/AppContext'
 
@@ -194,6 +195,7 @@ export default function DespachoView() {
   const { searchQuery } = useApp()
   const [selectedASN, setSelectedASN] = useState(null)
   const [showNuevo, setShowNuevo] = useState(false)
+  const isMobile = useIsMobile()
 
   const filtered = useMemo(() => {
     if (!searchQuery) return despachos
@@ -224,6 +226,34 @@ export default function DespachoView() {
         <button onClick={() => setShowNuevo(true)} style={{ padding: '7px 16px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>+ Crear ASN</button>
       </div>
 
+      {isMobile ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {filtered.map(d => {
+            const borderColor = d.status === 'dispatched' ? '#92400E' : d.status === 'received' ? '#166534' : '#1D4ED8'
+            return (
+              <div key={d.id} style={{ background: '#fff', borderRadius: '12px', border: '1px solid rgba(14,77,146,0.1)', borderLeft: '4px solid ' + borderColor, padding: '12px 14px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                  <div>
+                    <div style={{ fontFamily: 'monospace', fontSize: '12px', fontWeight: 700, color: '#0B1F3A' }}>{d.id}</div>
+                    <div style={{ fontFamily: 'monospace', fontSize: '10px', color: '#0E4D92', marginTop: '2px' }}>{d.oc}</div>
+                  </div>
+                  <StatusBadge status={d.status} />
+                </div>
+                <div style={{ fontSize: '12px', fontWeight: 600, color: '#0B1F3A', marginBottom: '2px' }}>{d.destino}</div>
+                <div style={{ fontSize: '10px', color: '#6B8BAE', marginBottom: '8px' }}>{d.direccion}</div>
+                <div style={{ display: 'flex', gap: '12px', fontSize: '11px', color: '#6B8BAE', marginBottom: '10px', flexWrap: 'wrap' }}>
+                  <span>🚛 {d.transportista}</span>
+                  <span>📦 {d.bultos} bultos</span>
+                  <span>📅 Llega: {d.llegada}</span>
+                </div>
+                <button onClick={() => setSelectedASN(d)} style={{ width: '100%', padding: '8px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>
+                  Ver detalle
+                </button>
+              </div>
+            )
+          })}
+        </div>
+      ) : (
       <div style={{ background: '#fff', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '12px', overflow: 'hidden' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
@@ -257,7 +287,7 @@ export default function DespachoView() {
             ))}
           </tbody>
         </table>
-      </div>
+      </div>)}
       <div style={{ fontSize: '11px', color: '#6B8BAE', textAlign: 'right', marginTop: '8px' }}>
         Mostrando {filtered.length} de {despachos.length} avisos de despacho
       </div>

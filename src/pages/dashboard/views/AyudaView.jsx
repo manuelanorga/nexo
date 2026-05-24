@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useIsMobile } from '../../../hooks/useMediaQuery'
 
 const guias = [
   {
@@ -59,6 +60,7 @@ const faqs = [
 export default function AyudaView() {
   const [activeGuia, setActiveGuia] = useState(null)
   const [activeFaq, setActiveFaq] = useState(null)
+  const isMobile = useIsMobile()
 
   return (
     <div>
@@ -131,16 +133,35 @@ export default function AyudaView() {
         Niveles de soporte
       </div>
       <div style={{ background: '#fff', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '12px', overflow: 'hidden', marginBottom: '16px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr 1fr', background: '#F8FBFF', borderBottom: '1px solid rgba(14,77,146,0.08)' }}>
-          {['Nivel','Tiempo de respuesta','Canal','Horario'].map(h => (
-            <div key={h} style={{ padding: '10px 14px', fontSize: '10px', fontWeight: 600, color: '#6B8BAE', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{h}</div>
-          ))}
-        </div>
+        {!isMobile && (
+          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr 1fr', background: '#F8FBFF', borderBottom: '1px solid rgba(14,77,146,0.08)' }}>
+            {['Nivel','Tiempo de respuesta','Canal','Horario'].map(h => (
+              <div key={h} style={{ padding: '10px 14px', fontSize: '10px', fontWeight: 600, color: '#6B8BAE', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{h}</div>
+            ))}
+          </div>
+        )}
         {[
           { nivel: 'Leve', desc: 'Consultas generales', dot: '#639922', slaColor: '#3B6D11', slaBg: '#EAF3DE', sla: 'menos de 4h', canal: 'WhatsApp · Email', horario: 'Lun–Vie 8–18h' },
           { nivel: 'Moderado', desc: 'Errores en datos', dot: '#BA7517', slaColor: '#854F0B', slaBg: '#FAEEDA', sla: 'menos de 2h', canal: 'WhatsApp · Llamada', horario: 'Lun–Vie 8–20h' },
           { nivel: 'Crítico', desc: 'Plataforma caída', dot: '#E24B4A', slaColor: '#A32D2D', slaBg: '#FCEBEB', sla: 'menos de 30min', canal: 'Llamada directa', horario: '24/7' },
-        ].map((s, i, arr) => (
+        ].map((s, i, arr) => isMobile ? (
+          <div key={s.nivel} style={{ padding: '14px', borderBottom: i < arr.length - 1 ? '1px solid rgba(14,77,146,0.06)' : 'none' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: s.dot, flexShrink: 0 }} />
+                <div>
+                  <div style={{ fontSize: '13px', fontWeight: 600, color: '#0B1F3A' }}>{s.nivel}</div>
+                  <div style={{ fontSize: '11px', color: '#6B8BAE' }}>{s.desc}</div>
+                </div>
+              </div>
+              <span style={{ fontSize: '12px', fontWeight: 700, color: s.slaColor, background: s.slaBg, padding: '4px 12px', borderRadius: '100px', flexShrink: 0 }}>{s.sla}</span>
+            </div>
+            <div style={{ display: 'flex', gap: '16px', paddingLeft: '16px' }}>
+              <span style={{ fontSize: '11px', color: '#6B8BAE' }}>📱 {s.canal}</span>
+              <span style={{ fontSize: '11px', color: '#6B8BAE' }}>🕐 {s.horario}</span>
+            </div>
+          </div>
+        ) : (
           <div key={s.nivel} style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr 1fr', borderBottom: i < arr.length - 1 ? '1px solid rgba(14,77,146,0.06)' : 'none', alignItems: 'center' }}>
             <div style={{ padding: '14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: s.dot, flexShrink: 0 }} />

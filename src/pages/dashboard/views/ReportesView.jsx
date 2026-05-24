@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useIsMobile } from '../../../hooks/useMediaQuery'
 import * as XLSX from 'xlsx'
 import { useApp } from '../../../context/AppContext'
 
@@ -138,6 +139,7 @@ export default function ReportesView() {
   const [catFilter, setCatFilter] = useState('Todas')
   const [selectedReporte, setSelectedReporte] = useState(null)
   const [showNuevo, setShowNuevo] = useState(false)
+  const isMobile = useIsMobile()
 
   const filtered = useMemo(() => {
     let result = reportes
@@ -189,6 +191,29 @@ export default function ReportesView() {
         </button>
       </div>
 
+      {isMobile ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {filtered.map(r => {
+            const cfg = catColors[r.cat] || { color: '#0E4D92', bg: '#EEF5FF' }
+            return (
+              <div key={r.id} style={{ background: '#fff', borderRadius: '12px', border: '1px solid rgba(14,77,146,0.1)', padding: '12px 14px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                  <span style={{ padding: '3px 10px', borderRadius: '100px', fontSize: '10px', fontWeight: 600, background: cfg.bg, color: cfg.color }}>{r.cat}</span>
+                  <span style={{ fontSize: '11px', color: '#166534', fontWeight: 600, background: '#EAF3DE', padding: '2px 8px', borderRadius: '100px' }}>✓ Siempre disponible</span>
+                </div>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: '#0B1F3A', marginBottom: '4px' }}>{r.name}</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                  <span style={{ fontSize: '11px', color: '#6B8BAE', fontFamily: 'monospace' }}>{r.gen}</span>
+                  <span style={{ fontSize: '11px', color: '#6B8BAE' }}>{r.registros} registros</span>
+                </div>
+                <button onClick={() => setSelectedReporte(r)} style={{ width: '100%', padding: '8px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>
+                  Descargar
+                </button>
+              </div>
+            )
+          })}
+        </div>
+      ) : (
       <div style={{ background: '#fff', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '12px', overflow: 'hidden', marginBottom: '12px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
@@ -226,6 +251,7 @@ export default function ReportesView() {
         </table>
       </div>
 
+      )}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ fontSize: '12px', color: '#166534', display: 'flex', alignItems: 'center', gap: '6px' }}>
           ✓ En NEXO los reportes no expiran — siempre disponibles, descarga directa sin correos.

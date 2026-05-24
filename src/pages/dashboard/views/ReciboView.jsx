@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useIsMobile } from '../../../hooks/useMediaQuery'
 import { useApp } from '../../../context/AppContext'
 
 const recibos = [
@@ -142,6 +143,7 @@ function ARModal({ ar, onClose }) {
 export default function ReciboView() {
   const { searchQuery } = useApp()
   const [selectedAR, setSelectedAR] = useState(null)
+  const isMobile = useIsMobile()
 
   const filtered = useMemo(() => {
     if (!searchQuery) return recibos
@@ -165,6 +167,41 @@ export default function ReciboView() {
         </div>
       )}
 
+      {isMobile ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {filtered.map(r => {
+            const diff = r.pedido - r.recibido
+            const borderColor = r.status === 'observacion' ? '#92400E' : '#166534'
+            return (
+              <div key={r.id} style={{ background: '#fff', borderRadius: '12px', border: '1px solid rgba(14,77,146,0.1)', borderLeft: '4px solid ' + borderColor, padding: '12px 14px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                  <div>
+                    <div style={{ fontFamily: 'monospace', fontSize: '12px', fontWeight: 700, color: '#0B1F3A' }}>{r.id}</div>
+                    <div style={{ fontFamily: 'monospace', fontSize: '10px', color: '#0E4D92', marginTop: '2px' }}>{r.asn}</div>
+                  </div>
+                  <StatusBadge status={r.status} />
+                </div>
+                <div style={{ fontSize: '12px', fontWeight: 600, color: '#0B1F3A', marginBottom: '2px' }}>{r.cadena}</div>
+                <div style={{ fontSize: '10px', color: '#6B8BAE', marginBottom: '8px' }}>{r.responsable} · {r.cargo}</div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '10px' }}>
+                  {[['Pedido', r.pedido, '#0B1F3A'], ['Recibido', r.recibido, '#0B1F3A'], ['Diferencia', diff === 0 ? '—' : '-' + diff, diff === 0 ? '#166534' : '#B91C1C']].map(([l,v,c]) => (
+                    <div key={l} style={{ background: '#F8FBFF', borderRadius: '8px', padding: '8px', textAlign: 'center' }}>
+                      <div style={{ fontSize: '9px', color: '#6B8BAE', textTransform: 'uppercase', marginBottom: '2px' }}>{l}</div>
+                      <div style={{ fontSize: '14px', fontWeight: 700, color: c }}>{v}</div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  <button onClick={() => setSelectedAR(r)} style={{ flex: 1, padding: '8px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Ver detalle</button>
+                  {r.status === 'observacion' && (
+                    <button style={{ padding: '8px 12px', background: '#FEE2E2', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#B91C1C', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>↩ Dev.</button>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      ) : (
       <div style={{ background: '#fff', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '12px', overflow: 'hidden' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
@@ -212,7 +249,7 @@ export default function ReciboView() {
             })}
           </tbody>
         </table>
-      </div>
+      </div>)}
       <div style={{ fontSize: '11px', color: '#6B8BAE', textAlign: 'right', marginTop: '8px' }}>
         Mostrando {filtered.length} de {recibos.length} avisos de recibo
       </div>

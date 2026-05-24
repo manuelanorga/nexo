@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useIsMobile } from '../../../hooks/useMediaQuery'
 import { catalogData } from '../../../data/mockData'
 
 const initialProductos = [
@@ -63,6 +64,7 @@ export default function NuevaOCView({ setView }) {
   const [productos, setProductos] = useState(initialProductos)
   const [showAgregar, setShowAgregar] = useState(false)
   const [enviado, setEnviado] = useState(false)
+  const isMobile = useIsMobile()
   const [form, setForm] = useState({
     sitio: 'CD Wong Ate', fechaMin: '2026-05-25', fechaMax: '2026-05-28', nota: ''
   })
@@ -148,6 +150,32 @@ export default function NuevaOCView({ setView }) {
           </button>
         </div>
 
+        {isMobile ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
+            {productos.map(p => (
+              <div key={p.ean} style={{ background: '#F8FBFF', borderRadius: '10px', border: '1px solid rgba(14,77,146,0.08)', padding: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                  <div>
+                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#0B1F3A', marginBottom: '2px' }}>{p.nombre}</div>
+                    <div style={{ fontSize: '10px', color: '#6B8BAE' }}>{p.presentacion}</div>
+                  </div>
+                  <button onClick={() => quitar(p.ean)} style={{ padding: '4px 10px', background: '#FEE2E2', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#B91C1C', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", flexShrink: 0 }}>Quitar</button>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <button onClick={() => updateCantidad(p.ean, p.cantidad - 1)} style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid rgba(14,77,146,0.15)', background: '#fff', cursor: 'pointer', fontSize: '16px', color: '#6B8BAE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
+                    <input type="number" value={p.cantidad} onChange={e => updateCantidad(p.ean, e.target.value)} style={{ width: '52px', height: '32px', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', textAlign: 'center', fontSize: '13px', fontFamily: "'DM Sans', sans-serif", color: '#0B1F3A', outline: 'none', background: '#fff' }} />
+                    <button onClick={() => updateCantidad(p.ean, p.cantidad + 1)} style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid rgba(14,77,146,0.15)', background: '#fff', cursor: 'pointer', fontSize: '16px', color: '#6B8BAE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: '10px', color: '#6B8BAE', marginBottom: '2px' }}>S/{p.precio.toFixed(2)} c/u</div>
+                    <div style={{ fontFamily: 'monospace', fontSize: '15px', fontWeight: 700, color: '#0B1F3A' }}>S/{(p.cantidad * p.precio).toLocaleString('es-PE', { minimumFractionDigits: 2 })}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
         <div style={{ border: '1px solid rgba(14,77,146,0.08)', borderRadius: '10px', overflow: 'hidden', marginBottom: '16px' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
@@ -182,12 +210,15 @@ export default function NuevaOCView({ setView }) {
             </tbody>
           </table>
         </div>
+        )}
 
         {/* Totales */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-          <div style={{ fontSize: '11px', color: '#6B8BAE', maxWidth: '400px', lineHeight: 1.6 }}>
-            💡 Los precios corresponden a tu lista de precios negociada con Arca Continental. La OC será validada automáticamente al enviarse.
-          </div>
+          {!isMobile && (
+            <div style={{ fontSize: '11px', color: '#6B8BAE', maxWidth: '400px', lineHeight: 1.6 }}>
+              💡 Los precios corresponden a tu lista de precios negociada con Arca Continental.
+            </div>
+          )}
           <div style={{ minWidth: '240px' }}>
             {[
               ['Subtotal sin IGV', 'S/' + subtotal.toLocaleString('es-PE', { minimumFractionDigits: 2 })],

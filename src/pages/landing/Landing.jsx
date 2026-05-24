@@ -2,6 +2,33 @@ import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import Navbar from '../../components/Navbar'
 
+function LiveBadge() {
+  const [time, setTime] = useState(new Date())
+
+  useEffect(() => {
+    const interval = setInterval(() => setTime(new Date()), 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const hours = time.getHours().toString().padStart(2, '0')
+  const mins = time.getMinutes().toString().padStart(2, '0')
+  const secs = time.getSeconds().toString().padStart(2, '0')
+
+  return (
+    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '7px 18px', borderRadius: '100px', border: '1px solid rgba(0,245,160,0.2)', background: 'rgba(0,245,160,0.05)', fontSize: '12px', color: 'rgba(255,255,255,0.7)', marginBottom: '32px', fontWeight: 400, letterSpacing: '0.3px' }}>
+      <span style={{ position: 'relative', width: '8px', height: '8px', flexShrink: 0 }}>
+        <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#00F5A0', animation: 'dotPulse 1.5s ease-in-out infinite' }} />
+        <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#00F5A0' }} />
+      </span>
+      <span style={{ color: '#00F5A0', fontWeight: 600 }}>Sistema activo</span>
+      <span style={{ color: 'rgba(255,255,255,0.2)' }}>·</span>
+      <span>Lima, Perú</span>
+      <span style={{ color: 'rgba(255,255,255,0.2)' }}>·</span>
+      <span style={{ fontFamily: 'monospace', fontSize: '12px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px' }}>{hours}:{mins}:{secs}</span>
+    </div>
+  )
+}
+
 const t = {
   es: {
     badge: 'Plataforma O2P para Latinoamérica',
@@ -24,7 +51,7 @@ const t = {
     model: 'Modelo de red',
     modelTitle: 'Un ecosistema.\nDos experiencias.',
     provBadge: 'Proveedor', retBadge: 'Retail',
-    provTitle: 'Arca Continental', retTitle: 'Wong · Tottus · Metro',
+    provTitle: 'Arca Continental', retTitle: 'Retail · Mayoristas · Institucional',
     provSub: 'Vista completa de operaciones', retSub: 'Vista enfocada en sus pedidos',
     provItems: ['Catálogo + listas de precios por cadena', 'OCs entrantes de todos los retails', 'Gestión de despachos y recepciones', 'Documentos financieros y facturación', 'Reportes analíticos sin expiración', 'Trazabilidad completa por documento'],
     retItems: ['Creación de órdenes de compra', 'Estado en tiempo real de sus pedidos', 'Confirmación de recepciones', 'Gestión de devoluciones', 'Facturas y estado de pagos', 'Centro de ayuda integrado'],
@@ -60,7 +87,7 @@ const t = {
     model: 'Network model',
     modelTitle: 'One ecosystem.\nTwo experiences.',
     provBadge: 'Supplier', retBadge: 'Retail',
-    provTitle: 'Arca Continental', retTitle: 'Wong · Tottus · Metro',
+    provTitle: 'Arca Continental', retTitle: 'Retail · Mayoristas · Institucional',
     provSub: 'Full operations view', retSub: 'Focused on their orders',
     provItems: ['Catalog + price lists per chain', 'Incoming POs from all retailers', 'Dispatch and receipt management', 'Financial documents and invoicing', 'Analytics reports without expiry', 'Full traceability per document'],
     retItems: ['Purchase order creation', 'Real-time status of their orders', 'Receipt confirmation', 'Returns management', 'Invoices and payment status', 'Integrated help center'],
@@ -102,6 +129,7 @@ export default function Landing() {
           100% { box-shadow: 0 0 20px rgba(0,194,168,0.3), 0 0 0px rgba(0,194,168,0); }
         }
         @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+        @keyframes dotPulse { 0%{transform:scale(1);opacity:1} 100%{transform:scale(2.5);opacity:0} }
         @keyframes pulse { 0%,100%{opacity:.6} 50%{opacity:1} }
         .btn-primary { animation: shimmer 3s ease-in-out infinite; }
         .mockup-float { animation: float 4s ease-in-out infinite; }
@@ -127,10 +155,7 @@ export default function Landing() {
         <div style={{ position: 'absolute', inset: 0, opacity: dark ? 0.4 : 0.15, backgroundImage: 'linear-gradient(rgba(0,194,168,0.05) 1px, transparent 1px), linear-gradient(90deg,rgba(0,194,168,0.05) 1px, transparent 1px)', backgroundSize: '48px 48px', pointerEvents: 'none' }} />
 
         <div style={{ position: 'relative', zIndex: 2, maxWidth: '860px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: '100px', border: '1px solid rgba(0,194,168,0.3)', background: 'rgba(0,194,168,0.08)', fontSize: '12px', color: '#00F5A0', marginBottom: '32px', fontWeight: 500 }}>
-            <span className="dot-pulse" style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00F5A0', display: 'inline-block' }} />
-            {tx.badge}
-          </div>
+          <LiveBadge />
 
           <h1 style={{ fontFamily: "'Fraunces', serif", fontSize: 'clamp(40px, 6vw, 76px)', fontWeight: 900, lineHeight: 1.05, letterSpacing: '-2px', margin: '0 0 24px' }}>
             {tx.h1a}<br /><span style={{ color: '#00F5A0' }}>{tx.h1b}</span>

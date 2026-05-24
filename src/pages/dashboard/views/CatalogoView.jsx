@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useIsMobile } from '../../../hooks/useMediaQuery'
 import * as XLSX from 'xlsx'
 import { catalogData } from '../../../data/mockData'
 import Badge from '../../../components/Badge'
@@ -121,6 +122,7 @@ export default function CatálogoView() {
   const [includePrices, setIncludePrices] = useState(true)
   const [includeStatus, setIncludeStatus] = useState(true)
   const [data, setData] = useState(catalogData)
+  const isMobile = useIsMobile()
 
   const filtered = useMemo(() => {
     if (!searchQuery) return data
@@ -217,6 +219,35 @@ export default function CatálogoView() {
         <button onClick={() => setShowNew(true)} style={{ padding: '7px 16px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>+ Nuevo SKU</button>
       </div>
 
+      {isMobile ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '10px' }}>
+          {filtered.map(p => {
+            const statusColor = p.status === 'active' ? '#166534' : p.status === 'discontinued' ? '#92400E' : '#B91C1C'
+            const statusBg = p.status === 'active' ? '#EAF3DE' : p.status === 'discontinued' ? '#FEF3C7' : '#FEE2E2'
+            const statusLabel = p.status === 'active' ? 'Activo' : p.status === 'discontinued' ? 'Descontinuado' : 'Inactivo'
+            return (
+              <div key={p.ean} style={{ background: '#fff', borderRadius: '12px', border: '1px solid rgba(14,77,146,0.1)', borderLeft: '4px solid ' + statusColor, padding: '12px 14px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                  <div>
+                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#0B1F3A', marginBottom: '2px' }}>{p.name}</div>
+                    <div style={{ fontFamily: 'monospace', fontSize: '10px', color: '#6B8BAE' }}>{p.ean}</div>
+                  </div>
+                  <span style={{ fontSize: '10px', fontWeight: 600, color: statusColor, background: statusBg, padding: '3px 10px', borderRadius: '100px' }}>{statusLabel}</span>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '10px' }}>
+                  {[['Precio base', p.basePrice, '#0B1F3A'], ['Peso', p.weight, '#6B8BAE'], ['Presentación', p.presentation, '#6B8BAE']].map(([l,v,c]) => (
+                    <div key={l} style={{ background: '#F8FBFF', borderRadius: '8px', padding: '7px', textAlign: 'center' }}>
+                      <div style={{ fontSize: '9px', color: '#6B8BAE', textTransform: 'uppercase', marginBottom: '2px' }}>{l}</div>
+                      <div style={{ fontSize: '11px', fontWeight: 600, color: c }}>{v}</div>
+                    </div>
+                  ))}
+                </div>
+                <button onClick={() => setEditProduct(p)} style={{ width: '100%', padding: '8px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Editar</button>
+              </div>
+            )
+          })}
+        </div>
+      ) : (
       <div style={{ background: '#fff', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '12px', overflow: 'hidden' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
@@ -247,6 +278,7 @@ export default function CatálogoView() {
           </tbody>
         </table>
       </div>
+      )}
       <div style={{ fontSize: '11px', color: '#6B8BAE', textAlign: 'right', marginTop: '8px' }}>
         Mostrando {filtered.length} de {data.length} productos
       </div>

@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useIsMobile } from '../../../hooks/useMediaQuery'
 import { useApp } from '../../../context/AppContext'
 
 const initialFacturas = [
@@ -206,6 +207,7 @@ export default function FinancieroView() {
   const { searchQuery } = useApp()
   const [data, setData] = useState(initialFacturas)
   const [selectedDoc, setSelectedDoc] = useState(null)
+  const isMobile = useIsMobile()
   const [tipoFilter, setTipoFilter] = useState('all')
 
   const filtered = useMemo(() => {
@@ -258,6 +260,34 @@ export default function FinancieroView() {
         ))}
       </div>
 
+      {isMobile ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {filtered.map(f => (
+            <div key={f.id} style={{ background: '#fff', borderRadius: '12px', border: '1px solid rgba(14,77,146,0.1)', borderLeft: f.diasVence && f.diasVence <= 5 && f.status === 'pending' ? '4px solid #E05252' : f.tipo === 'NC' ? '4px solid #B91C1C' : '4px solid #0E4D92', padding: '12px 14px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <TipoBadge tipo={f.tipo} />
+                  <span style={{ fontFamily: 'monospace', fontSize: '12px', fontWeight: 700, color: '#0B1F3A' }}>{f.id}</span>
+                </div>
+                <StatusBadge status={f.status} />
+              </div>
+              <div style={{ fontSize: '12px', fontWeight: 600, color: '#0B1F3A', marginBottom: '2px' }}>{f.cadena}</div>
+              <div style={{ fontSize: '10px', color: '#6B8BAE', marginBottom: '8px', fontFamily: 'monospace' }}>OC: {f.oc}</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                <div style={{ fontSize: '11px', color: '#6B8BAE' }}>
+                  {f.vence !== '—' && <span>Vence: {f.vence} </span>}
+                  {f.diasVence && <DiasVence dias={f.diasVence} />}
+                </div>
+                <span style={{ fontFamily: "'Fraunces', serif", fontSize: '18px', fontWeight: 900, color: f.tipo === 'NC' ? '#B91C1C' : '#0B1F3A' }}>{f.monto}</span>
+              </div>
+              <div style={{ display: 'flex', gap: '6px' }}>
+                <button onClick={() => setSelectedDoc(f)} style={{ flex: 1, padding: '8px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Ver</button>
+                {f.status === 'pending' && <button onClick={() => setSelectedDoc(f)} style={{ padding: '8px 12px', background: '#EAF3DE', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#166534', cursor: 'pointer', fontWeight: 600 }}>Enviar</button>}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
       <div style={{ background: '#fff', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '12px', overflow: 'hidden' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
@@ -296,6 +326,7 @@ export default function FinancieroView() {
           </tbody>
         </table>
       </div>
+      )}
       <div style={{ fontSize: '11px', color: '#6B8BAE', textAlign: 'right', marginTop: '8px' }}>
         Mostrando {filtered.length} de {data.length} documentos · Descarga directa sin links que expiran
       </div>

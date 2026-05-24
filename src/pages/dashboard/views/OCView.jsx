@@ -255,6 +255,7 @@ export default function OCView({ setView }) {
   const [orders, setOrders] = useState(extendedOrders)
   const { selectedOCId, setSelectedOCId, searchQuery } = useApp()
   const isMobile = useIsMobile()
+  const [showAllFilters, setShowAllFilters] = useState(false)
 
   useEffect(() => {
     if (selectedOCId) {
@@ -305,7 +306,33 @@ export default function OCView({ setView }) {
       {selectedOC && <OCModal oc={selectedOC} onClose={() => setSelectedOC(null)} setView={setView} onConfirm={handleConfirm} onReject={handleReject} />}
 
       {/* Stats bar */}
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '14px', flexWrap: 'wrap' }}>
+      {isMobile ? (
+        <div style={{ marginBottom: '14px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+            {allStatuses.slice(0, 4).map(s => (
+              <div key={s.key} onClick={() => setActiveStatus(s.key)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '7px 10px', borderRadius: '8px', cursor: 'pointer', border: activeStatus === s.key ? '1.5px solid ' + s.color : '1px solid rgba(14,77,146,0.1)', background: activeStatus === s.key ? s.bg : '#fff', transition: 'all .15s' }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: s.color, flexShrink: 0 }} />
+                <span style={{ fontSize: '11px', fontWeight: activeStatus === s.key ? 700 : 400, color: activeStatus === s.key ? s.color : '#6B8BAE', whiteSpace: 'nowrap' }}>{s.label} ({counts[s.key] || 0})</span>
+              </div>
+            ))}
+          </div>
+          {showAllFilters && (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginTop: '6px' }}>
+              {allStatuses.slice(4).map(s => (
+                <div key={s.key} onClick={() => setActiveStatus(s.key)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '7px 10px', borderRadius: '8px', cursor: 'pointer', border: activeStatus === s.key ? '1.5px solid ' + s.color : '1px solid rgba(14,77,146,0.1)', background: activeStatus === s.key ? s.bg : '#fff', transition: 'all .15s' }}>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: s.color, flexShrink: 0 }} />
+                  <span style={{ fontSize: '11px', fontWeight: activeStatus === s.key ? 700 : 400, color: activeStatus === s.key ? s.color : '#6B8BAE', whiteSpace: 'nowrap' }}>{s.label} ({counts[s.key] || 0})</span>
+                </div>
+              ))}
+            </div>
+          )}
+          <button onClick={() => setShowAllFilters(!showAllFilters)} style={{ width: '100%', marginTop: '6px', padding: '7px', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '8px', background: '#F8FBFF', color: '#6B8BAE', fontSize: '11px', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{ transition: 'transform .2s', transform: showAllFilters ? 'rotate(180deg)' : 'rotate(0deg)' }}><polyline points="6 9 12 15 18 9"/></svg>
+            {showAllFilters ? 'Ver menos' : 'Ver más estados'}
+          </button>
+        </div>
+      ) : (
+      <div style={{ display: 'flex', gap: '6px', marginBottom: '14px', overflowX: 'auto', paddingBottom: '6px', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         {allStatuses.map(s => (
           <div key={s.key} onClick={() => setActiveStatus(s.key)} style={{
             display: 'flex', alignItems: 'center', gap: '6px',
@@ -321,6 +348,7 @@ export default function OCView({ setView }) {
           </div>
         ))}
       </div>
+      )}
 
       {/* Toolbar */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', flexWrap: 'wrap', gap: '8px' }}>

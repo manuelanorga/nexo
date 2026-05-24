@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react'
 import * as XLSX from 'xlsx'
-import { priceLists, catalogData } from '../../../data/mockData'
+import { priceLists } from '../../../data/mockData'
 import Badge from '../../../components/Badge'
 import { useApp } from '../../../context/AppContext'
+import { useIsMobile } from '../../../hooks/useMediaQuery'
 
 const priceDetails = {
   'Retail-Wong': [
@@ -38,15 +39,11 @@ const priceDetails = {
 function EditPreciosModal({ lista, onClose, onSave }) {
   const items = priceDetails[lista.code] || []
   const [rows, setRows] = useState(items.map(i => ({ ...i })))
-
-  const updateRow = (idx, field, val) => {
-    setRows(prev => prev.map((r, i) => i === idx ? { ...r, [field]: val } : r))
-  }
+  const updateRow = (idx, field, val) => setRows(prev => prev.map((r, i) => i === idx ? { ...r, [field]: val } : r))
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(11,31,58,0.55)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={onClose}>
       <div style={{ background: '#fff', borderRadius: '16px', width: '100%', maxWidth: '720px', maxHeight: '90vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 24px 80px rgba(0,0,0,0.2)' }} onClick={e => e.stopPropagation()}>
-
         <div style={{ padding: '18px 24px', borderBottom: '1px solid rgba(14,77,146,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
             <div style={{ fontFamily: "'Fraunces', serif", fontSize: '17px', fontWeight: 900, color: '#0B1F3A' }}>Editar lista de precios</div>
@@ -54,14 +51,12 @@ function EditPreciosModal({ lista, onClose, onSave }) {
           </div>
           <button onClick={onClose} style={{ width: '30px', height: '30px', borderRadius: '8px', border: '1px solid rgba(14,77,146,0.1)', background: '#F8FBFF', cursor: 'pointer', color: '#6B8BAE', fontSize: '14px' }}>✕</button>
         </div>
-
         <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
           {lista.code === 'Retail-Metro' && (
             <div style={{ background: '#FFFBEB', border: '1px solid #FCD34D', borderRadius: '8px', padding: '10px 14px', fontSize: '12px', color: '#92400E', marginBottom: '14px' }}>
-              ⚠ Esta lista tiene precios sin configurar. Completa todos los precios para activarla.
+              ⚠ Esta lista tiene precios sin configurar.
             </div>
           )}
-
           <div style={{ overflow: 'hidden', border: '1px solid rgba(14,77,146,0.08)', borderRadius: '10px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
@@ -74,31 +69,16 @@ function EditPreciosModal({ lista, onClose, onSave }) {
               <tbody>
                 {rows.map((row, idx) => (
                   <tr key={row.ean} style={{ borderBottom: '1px solid rgba(14,77,146,0.05)' }}>
-                    <td style={{ padding: '8px 12px' }}>
-                      <span style={{ fontFamily: 'monospace', fontSize: '10px', background: '#F0F7FF', color: '#6B8BAE', padding: '2px 6px', borderRadius: '4px' }}>{row.ean}</span>
-                    </td>
+                    <td style={{ padding: '8px 12px' }}><span style={{ fontFamily: 'monospace', fontSize: '10px', background: '#F0F7FF', color: '#6B8BAE', padding: '2px 6px', borderRadius: '4px' }}>{row.ean}</span></td>
                     <td style={{ padding: '8px 12px', fontSize: '12px', fontWeight: 600, color: '#0B1F3A' }}>{row.name}</td>
                     <td style={{ padding: '8px 12px', fontFamily: 'monospace', fontSize: '11px', color: '#9DB8D9' }}>{row.basePrice}</td>
                     <td style={{ padding: '8px 12px' }}>
-                      <input
-                        value={row.price}
-                        onChange={e => updateRow(idx, 'price', e.target.value)}
-                        placeholder="Ej: S/62.40"
-                        style={{
-                          width: '90px', height: '30px', border: row.price ? '1px solid rgba(14,77,146,0.15)' : '1px solid #FCA5A5',
-                          borderRadius: '6px', padding: '0 8px', fontSize: '11px',
-                          fontFamily: 'monospace', color: '#0B1F3A', outline: 'none',
-                          background: row.price ? '#fff' : '#FFF5F5'
-                        }}
-                      />
+                      <input value={row.price} onChange={e => updateRow(idx, 'price', e.target.value)} placeholder="Ej: S/62.40"
+                        style={{ width: '90px', height: '30px', border: row.price ? '1px solid rgba(14,77,146,0.15)' : '1px solid #FCA5A5', borderRadius: '6px', padding: '0 8px', fontSize: '11px', fontFamily: 'monospace', color: '#0B1F3A', outline: 'none', background: row.price ? '#fff' : '#FFF5F5' }} />
                     </td>
                     <td style={{ padding: '8px 12px' }}>
-                      <input
-                        value={row.promo}
-                        onChange={e => updateRow(idx, 'promo', e.target.value)}
-                        placeholder="Opcional"
-                        style={{ width: '90px', height: '30px', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '6px', padding: '0 8px', fontSize: '11px', fontFamily: 'monospace', color: '#0B1F3A', outline: 'none', background: '#fff' }}
-                      />
+                      <input value={row.promo} onChange={e => updateRow(idx, 'promo', e.target.value)} placeholder="Opcional"
+                        style={{ width: '90px', height: '30px', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '6px', padding: '0 8px', fontSize: '11px', fontFamily: 'monospace', color: '#0B1F3A', outline: 'none', background: '#fff' }} />
                     </td>
                     <td style={{ padding: '8px 12px' }}>
                       {!row.price && <span style={{ fontSize: '10px', color: '#E05252', fontWeight: 600 }}>Sin precio</span>}
@@ -109,17 +89,10 @@ function EditPreciosModal({ lista, onClose, onSave }) {
               </tbody>
             </table>
           </div>
-
-          <div style={{ background: '#F0F7FF', borderRadius: '8px', padding: '10px 14px', fontSize: '11px', color: '#6B8BAE', marginTop: '14px' }}>
-            💡 El precio cadena es lo que {lista.chain} pagará por cada producto. Debe ser mayor o igual al precio base.
-          </div>
         </div>
-
         <div style={{ padding: '14px 24px', borderTop: '1px solid rgba(14,77,146,0.08)', display: 'flex', gap: '8px', justifyContent: 'flex-end', background: '#F8FBFF' }}>
           <button onClick={onClose} style={{ padding: '8px 16px', background: '#fff', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Cancelar</button>
-          <button onClick={() => { onSave(rows); onClose() }} style={{ padding: '8px 20px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
-            Guardar cambios
-          </button>
+          <button onClick={() => { onSave(rows); onClose() }} style={{ padding: '8px 20px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Guardar cambios</button>
         </div>
       </div>
     </div>
@@ -128,7 +101,13 @@ function EditPreciosModal({ lista, onClose, onSave }) {
 
 function NuevaListaModal({ onClose, onSave }) {
   const [form, setForm] = useState({ code: '', chain: '', type: 'Retail' })
-
+  const field = (label, key, placeholder) => (
+    <div style={{ marginBottom: '14px' }}>
+      <label style={{ fontSize: '10px', fontWeight: 600, color: '#6B8BAE', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'block', marginBottom: '5px' }}>{label}</label>
+      <input value={form[key]} onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))} placeholder={placeholder}
+        style={{ width: '100%', height: '34px', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', padding: '0 12px', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", color: '#0B1F3A', outline: 'none' }} />
+    </div>
+  )
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(11,31,58,0.55)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={onClose}>
       <div style={{ background: '#fff', borderRadius: '16px', width: '100%', maxWidth: '420px', boxShadow: '0 24px 80px rgba(0,0,0,0.2)', overflow: 'hidden' }} onClick={e => e.stopPropagation()}>
@@ -137,34 +116,21 @@ function NuevaListaModal({ onClose, onSave }) {
           <button onClick={onClose} style={{ width: '30px', height: '30px', borderRadius: '8px', border: '1px solid rgba(14,77,146,0.1)', background: '#F8FBFF', cursor: 'pointer', color: '#6B8BAE', fontSize: '14px' }}>✕</button>
         </div>
         <div style={{ padding: '20px 24px' }}>
-          {[['Código de lista', 'code', 'Ej: Retail-Makro'], ['Cadena comercial', 'chain', 'Ej: Makro']].map(([label, key, placeholder]) => (
-            <div key={key} style={{ marginBottom: '14px' }}>
-              <label style={{ fontSize: '10px', fontWeight: 600, color: '#6B8BAE', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'block', marginBottom: '5px' }}>{label}</label>
-              <input
-                value={form[key]}
-                onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
-                placeholder={placeholder}
-                style={{ width: '100%', height: '34px', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', padding: '0 12px', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", color: '#0B1F3A', outline: 'none' }}
-              />
-            </div>
-          ))}
+          {field('Código de lista', 'code', 'Ej: Retail-Makro')}
+          {field('Cadena comercial', 'chain', 'Ej: Makro')}
           <div style={{ marginBottom: '14px' }}>
             <label style={{ fontSize: '10px', fontWeight: 600, color: '#6B8BAE', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'block', marginBottom: '5px' }}>Tipo</label>
             <select value={form.type} onChange={e => setForm(f => ({ ...f, type: e.target.value }))} style={{ width: '100%', height: '34px', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', padding: '0 12px', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", color: '#0B1F3A', outline: 'none', background: '#fff' }}>
-              <option>Retail</option>
-              <option>Institucional</option>
-              <option>Mayorista</option>
+              <option>Retail</option><option>Institucional</option><option>Mayorista</option>
             </select>
           </div>
           <div style={{ background: '#F0F7FF', borderRadius: '8px', padding: '10px 14px', fontSize: '11px', color: '#6B8BAE' }}>
-            💡 Después de crear la lista podrás agregar los productos y sus precios desde el botón Editar.
+            💡 Después de crear la lista podrás agregar productos y precios desde Editar.
           </div>
         </div>
         <div style={{ padding: '14px 24px', borderTop: '1px solid rgba(14,77,146,0.08)', display: 'flex', gap: '8px', justifyContent: 'flex-end', background: '#F8FBFF' }}>
           <button onClick={onClose} style={{ padding: '8px 16px', background: '#fff', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Cancelar</button>
-          <button onClick={() => { onSave(form); onClose() }} style={{ padding: '8px 20px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
-            Crear lista
-          </button>
+          <button onClick={() => { onSave(form); onClose() }} style={{ padding: '8px 20px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Crear lista</button>
         </div>
       </div>
     </div>
@@ -173,6 +139,7 @@ function NuevaListaModal({ onClose, onSave }) {
 
 export default function PreciosView() {
   const { searchQuery } = useApp()
+  const isMobile = useIsMobile()
   const [data, setData] = useState(priceLists)
   const [editLista, setEditLista] = useState(null)
   const [showNueva, setShowNueva] = useState(false)
@@ -180,21 +147,12 @@ export default function PreciosView() {
   const filtered = useMemo(() => {
     if (!searchQuery) return data
     const q = searchQuery.toLowerCase()
-    return data.filter(p =>
-      p.code.toLowerCase().includes(q) ||
-      p.chain.toLowerCase().includes(q)
-    )
+    return data.filter(p => p.code.toLowerCase().includes(q) || p.chain.toLowerCase().includes(q))
   }, [searchQuery, data])
 
   const handleDescargar = (lista) => {
     const items = priceDetails[lista.code] || []
-    const rows = items.map(i => ({
-      'EAN Producto': i.ean,
-      'Producto': i.name,
-      'Precio Base': i.basePrice,
-      'Precio Cadena': i.price,
-      'Precio Promo': i.promo,
-    }))
+    const rows = items.map(i => ({ 'EAN': i.ean, 'Producto': i.name, 'Precio Base': i.basePrice, 'Precio Cadena': i.price, 'Precio Promo': i.promo }))
     const ws = XLSX.utils.json_to_sheet(rows)
     const wb = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(wb, ws, lista.code)
@@ -203,12 +161,7 @@ export default function PreciosView() {
   }
 
   const handleCrear = (form) => {
-    setData(prev => [...prev, {
-      code: form.code, chain: form.chain,
-      points: 0, products: 0,
-      updated: new Date().toLocaleDateString('es-PE'),
-      status: 'pending'
-    }])
+    setData(prev => [...prev, { code: form.code, chain: form.chain, points: 0, products: 0, updated: new Date().toLocaleDateString('es-PE'), status: 'pending' }])
   }
 
   return (
@@ -220,38 +173,67 @@ export default function PreciosView() {
         <button onClick={() => setShowNueva(true)} style={{ padding: '7px 16px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>+ Nueva lista</button>
       </div>
 
-      <div style={{ background: '#fff', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '12px', overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ background: '#F8FBFF', borderBottom: '1px solid rgba(14,77,146,0.08)' }}>
-              {['Código lista','Cadena','Puntos de venta','Productos','Última actualización','Estado','Acciones'].map(h => (
-                <th key={h} style={{ padding: '9px 12px', textAlign: 'left', fontSize: '10px', color: '#6B8BAE', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.3px', whiteSpace: 'nowrap' }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map(p => (
-              <tr key={p.code} style={{ borderBottom: '1px solid rgba(14,77,146,0.05)', transition: 'background .15s' }}
-                onMouseEnter={e => e.currentTarget.style.background = '#F8FBFF'}
-                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-              >
-                <td style={{ padding: '9px 12px', fontFamily: 'monospace', fontSize: '11px', fontWeight: 700, color: '#0B1F3A' }}>{p.code}</td>
-                <td style={{ padding: '9px 12px', fontSize: '12px', fontWeight: 600, color: '#0B1F3A' }}>{p.chain}</td>
-                <td style={{ padding: '9px 12px', fontSize: '12px', color: '#0B1F3A', textAlign: 'center' }}>{p.points}</td>
-                <td style={{ padding: '9px 12px', fontSize: '12px', fontWeight: 600, color: '#0B1F3A', textAlign: 'center' }}>{p.products}</td>
-                <td style={{ padding: '9px 12px', fontSize: '11px', color: '#6B8BAE' }}>{p.updated}</td>
-                <td style={{ padding: '9px 12px' }}><Badge status={p.status} /></td>
-                <td style={{ padding: '9px 12px' }}>
-                  <div style={{ display: 'flex', gap: '6px' }}>
-                    <button onClick={() => setEditLista(p)} style={{ padding: '4px 10px', background: '#EEF5FF', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#0E4D92', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>Editar</button>
-                    <button onClick={() => handleDescargar(p)} style={{ padding: '4px 10px', background: '#F8FBFF', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '6px', fontSize: '10px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Descargar</button>
+      {isMobile ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {filtered.map(p => (
+            <div key={p.code} style={{ background: '#fff', borderRadius: '12px', border: '1px solid rgba(14,77,146,0.1)', padding: '12px 14px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                <div>
+                  <div style={{ fontFamily: 'monospace', fontSize: '12px', fontWeight: 700, color: '#0B1F3A' }}>{p.code}</div>
+                  <div style={{ fontSize: '13px', fontWeight: 600, color: '#0B1F3A', marginTop: '2px' }}>{p.chain}</div>
+                </div>
+                <Badge status={p.status} />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '10px' }}>
+                {[['Puntos de venta', p.points], ['Productos', p.products]].map(([l,v]) => (
+                  <div key={l} style={{ background: '#F8FBFF', borderRadius: '8px', padding: '8px', textAlign: 'center' }}>
+                    <div style={{ fontSize: '9px', color: '#6B8BAE', textTransform: 'uppercase', marginBottom: '2px' }}>{l}</div>
+                    <div style={{ fontSize: '16px', fontWeight: 700, color: '#0B1F3A' }}>{v}</div>
                   </div>
-                </td>
+                ))}
+              </div>
+              <div style={{ fontSize: '10px', color: '#6B8BAE', marginBottom: '10px' }}>Actualizado: {p.updated}</div>
+              <div style={{ display: 'flex', gap: '6px' }}>
+                <button onClick={() => setEditLista(p)} style={{ flex: 1, padding: '8px', background: '#EEF5FF', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#0E4D92', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>Editar</button>
+                <button onClick={() => handleDescargar(p)} style={{ flex: 1, padding: '8px', background: '#F8FBFF', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '8px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Descargar</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div style={{ background: '#fff', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '12px', overflow: 'hidden' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ background: '#F8FBFF', borderBottom: '1px solid rgba(14,77,146,0.08)' }}>
+                {['Código lista','Cadena','Puntos de venta','Productos','Última actualización','Estado','Acciones'].map(h => (
+                  <th key={h} style={{ padding: '9px 12px', textAlign: 'left', fontSize: '10px', color: '#6B8BAE', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.3px', whiteSpace: 'nowrap' }}>{h}</th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {filtered.map(p => (
+                <tr key={p.code} style={{ borderBottom: '1px solid rgba(14,77,146,0.05)', transition: 'background .15s' }}
+                  onMouseEnter={e => e.currentTarget.style.background = '#F8FBFF'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                >
+                  <td style={{ padding: '9px 12px', fontFamily: 'monospace', fontSize: '11px', fontWeight: 700, color: '#0B1F3A' }}>{p.code}</td>
+                  <td style={{ padding: '9px 12px', fontSize: '12px', fontWeight: 600, color: '#0B1F3A' }}>{p.chain}</td>
+                  <td style={{ padding: '9px 12px', fontSize: '12px', color: '#0B1F3A', textAlign: 'center' }}>{p.points}</td>
+                  <td style={{ padding: '9px 12px', fontSize: '12px', fontWeight: 600, color: '#0B1F3A', textAlign: 'center' }}>{p.products}</td>
+                  <td style={{ padding: '9px 12px', fontSize: '11px', color: '#6B8BAE' }}>{p.updated}</td>
+                  <td style={{ padding: '9px 12px' }}><Badge status={p.status} /></td>
+                  <td style={{ padding: '9px 12px' }}>
+                    <div style={{ display: 'flex', gap: '4px' }}>
+                      <button onClick={() => setEditLista(p)} style={{ padding: '4px 10px', background: '#EEF5FF', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#0E4D92', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>Editar</button>
+                      <button onClick={() => handleDescargar(p)} style={{ padding: '4px 10px', background: '#F8FBFF', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '6px', fontSize: '10px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Descargar</button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }

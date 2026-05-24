@@ -140,9 +140,70 @@ function ARModal({ ar, onClose }) {
   )
 }
 
+function IniciarDevolucionModal({ ar, onClose }) {
+  const [motivo, setMotivo] = useState('Producto dañado en tránsito')
+  const [obs, setObs] = useState('')
+  const [exito, setExito] = useState(false)
+
+  const handleConfirmar = () => setExito(true)
+
+  if (exito) return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(11,31,58,0.55)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+      <div style={{ background: '#fff', borderRadius: '16px', padding: '40px', maxWidth: '400px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.2)' }}>
+        <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#EAF3DE', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', margin: '0 auto 16px' }}>✓</div>
+        <div style={{ fontFamily: "'Fraunces', serif", fontSize: '20px', fontWeight: 900, color: '#0B1F3A', marginBottom: '8px' }}>Devolución iniciada</div>
+        <div style={{ fontSize: '13px', color: '#6B8BAE', marginBottom: '6px' }}>Arca Continental recibirá la solicitud y la revisará en menos de 24 horas.</div>
+        <div style={{ fontFamily: 'monospace', fontSize: '11px', color: '#0E4D92', background: '#EEF5FF', padding: '6px 14px', borderRadius: '100px', display: 'inline-block', marginBottom: '20px' }}>DEV-2025-00{Math.floor(Math.random()*900)+100}</div>
+        <button onClick={onClose} style={{ width: '100%', padding: '10px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '13px', color: '#00F5A0', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Cerrar</button>
+      </div>
+    </div>
+  )
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(11,31,58,0.55)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={onClose}>
+      <div style={{ background: '#fff', borderRadius: '16px', width: '100%', maxWidth: '480px', boxShadow: '0 24px 80px rgba(0,0,0,0.2)', overflow: 'hidden' }} onClick={e => e.stopPropagation()}>
+        <div style={{ padding: '18px 24px', borderBottom: '1px solid rgba(14,77,146,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <div style={{ fontFamily: "'Fraunces', serif", fontSize: '17px', fontWeight: 900, color: '#0B1F3A' }}>Iniciar devolución</div>
+            <div style={{ fontSize: '11px', color: '#6B8BAE', marginTop: '2px' }}>{ar.id} · {ar.cadena}</div>
+          </div>
+          <button onClick={onClose} style={{ width: '30px', height: '30px', borderRadius: '8px', border: '1px solid rgba(14,77,146,0.1)', background: '#F8FBFF', cursor: 'pointer', color: '#6B8BAE', fontSize: '14px' }}>✕</button>
+        </div>
+        <div style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <div style={{ background: '#FEF3C7', border: '1px solid #FCD34D', borderRadius: '8px', padding: '10px 14px', fontSize: '12px', color: '#92400E' }}>
+            ⚠ Diferencia detectada: <strong>{ar.pedido - ar.recibido} bulto(s)</strong> no recibidos en {ar.cadena}
+          </div>
+          <div>
+            <label style={{ fontSize: '10px', fontWeight: 600, color: '#6B8BAE', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'block', marginBottom: '5px' }}>Motivo de devolución</label>
+            <select value={motivo} onChange={e => setMotivo(e.target.value)} style={{ width: '100%', height: '36px', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', padding: '0 12px', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", color: '#0B1F3A', outline: 'none', background: '#fff' }}>
+              <option>Producto dañado en tránsito</option>
+              <option>Producto vencido</option>
+              <option>Error en despacho</option>
+              <option>Cantidad incorrecta</option>
+              <option>Producto no solicitado</option>
+            </select>
+          </div>
+          <div>
+            <label style={{ fontSize: '10px', fontWeight: 600, color: '#6B8BAE', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'block', marginBottom: '5px' }}>Observación adicional (opcional)</label>
+            <textarea value={obs} onChange={e => setObs(e.target.value)} placeholder="Ej: El bulto llegó con el embalaje roto, producto derramado..." style={{ width: '100%', height: '72px', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', padding: '8px 12px', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", color: '#0B1F3A', outline: 'none', resize: 'none', boxSizing: 'border-box' }} />
+          </div>
+          <div style={{ background: '#F0F7FF', borderRadius: '8px', padding: '10px 14px', fontSize: '11px', color: '#6B8BAE', lineHeight: 1.6 }}>
+            💡 Arca Continental revisará la solicitud en menos de 24 horas. Si es aprobada, se generará una nota de crédito automáticamente.
+          </div>
+        </div>
+        <div style={{ padding: '14px 24px', borderTop: '1px solid rgba(14,77,146,0.08)', display: 'flex', gap: '8px', justifyContent: 'flex-end', background: '#F8FBFF' }}>
+          <button onClick={onClose} style={{ padding: '8px 16px', background: '#fff', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Cancelar</button>
+          <button onClick={handleConfirmar} style={{ padding: '8px 20px', background: '#B91C1C', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#fff', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Iniciar devolución →</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function ReciboView() {
   const { searchQuery } = useApp()
   const [selectedAR, setSelectedAR] = useState(null)
+  const [devAR, setDevAR] = useState(null)
   const isMobile = useIsMobile()
 
   const filtered = useMemo(() => {
@@ -159,6 +220,7 @@ export default function ReciboView() {
 
   return (
     <div>
+      {devAR && <IniciarDevolucionModal ar={devAR} onClose={() => setDevAR(null)} />}
       {selectedAR && <ARModal ar={selectedAR} onClose={() => setSelectedAR(null)} />}
 
       {conObs > 0 && (
@@ -194,7 +256,7 @@ export default function ReciboView() {
                 <div style={{ display: 'flex', gap: '6px' }}>
                   <button onClick={() => setSelectedAR(r)} style={{ flex: 1, padding: '8px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Ver detalle</button>
                   {r.status === 'observacion' && (
-                    <button style={{ padding: '8px 12px', background: '#FEE2E2', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#B91C1C', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>↩ Dev.</button>
+                    <button onClick={() => setDevAR(r)} style={{ padding: '8px 12px', background: '#FEE2E2', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#B91C1C', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>↩ Dev.</button>
                   )}
                 </div>
               </div>
@@ -240,7 +302,7 @@ export default function ReciboView() {
                     <div style={{ display: 'flex', gap: '4px' }}>
                       <button onClick={() => setSelectedAR(r)} style={{ padding: '4px 10px', background: '#0B1F3A', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Ver</button>
                       {r.status === 'observacion' && (
-                        <button style={{ padding: '4px 8px', background: '#FEE2E2', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#B91C1C', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>↩ Dev.</button>
+                        <button onClick={() => setDevAR(r)} style={{ padding: '4px 8px', background: '#FEE2E2', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#B91C1C', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>↩ Dev.</button>
                       )}
                     </div>
                   </td>

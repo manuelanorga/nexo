@@ -271,7 +271,7 @@ function QRModal({ oc, onClose }) {
   )
 }
 
-export default function OCView({ setView }) {
+export default function OCView({ setView, role = 'prov' }) {
   const [selectedOC, setSelectedOC] = useState(null)
   const [selected, setSelected] = useState([])
   const [page, setPage] = useState(1)
@@ -413,11 +413,14 @@ export default function OCView({ setView }) {
                 </div>
                 <div style={{ display: 'flex', gap: '6px' }}>
                   <button onClick={() => setSelectedOC(p)} style={{ flex: 1, padding: '6px', background: '#0B1F3A', border: 'none', borderRadius: '6px', fontSize: '11px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Ver detalle</button>
-                  {canAct && (
+                  {role === 'prov' && canAct && (
                     <>
                       <button onClick={() => setSelectedOC(p)} style={{ padding: '6px 10px', background: '#D1FAE5', border: 'none', borderRadius: '6px', fontSize: '11px', color: '#065F46', cursor: 'pointer', fontWeight: 600 }}>✓</button>
                       <button onClick={() => setSelectedOC(p)} style={{ padding: '6px 10px', background: '#FEE2E2', border: 'none', borderRadius: '6px', fontSize: '11px', color: '#B91C1C', cursor: 'pointer', fontWeight: 600 }}>✕</button>
                     </>
+                  )}
+                  {role === 'ret' && canAct && (
+                    <button onClick={() => setSelectedOC(p)} style={{ padding: '6px 10px', background: '#FEE2E2', border: 'none', borderRadius: '6px', fontSize: '11px', color: '#B91C1C', cursor: 'pointer', fontWeight: 600 }}>Cancelar</button>
                   )}
                   <button onClick={() => setView('trazabilidad')} style={{ padding: '6px 10px', background: '#EEF5FF', border: 'none', borderRadius: '6px', fontSize: '11px', color: '#0E4D92', cursor: 'pointer', fontWeight: 600 }}>⟳</button>
                   <button onClick={() => generarOCPDF(p)} style={{ padding: '6px 10px', background: '#EEF5FF', border: 'none', borderRadius: '6px', fontSize: '11px', color: '#0E4D92', cursor: 'pointer', fontWeight: 700 }}>PDF</button>
@@ -440,7 +443,7 @@ export default function OCView({ setView }) {
               <th style={{ padding: '9px 12px', width: '36px' }}>
                 <input type="checkbox" checked={selected.length === filtered.length && filtered.length > 0} onChange={toggleAll} style={{ cursor: 'pointer', accentColor: '#0E4D92' }} />
               </th>
-              {['N° Orden','Socio Comercial','Emisión','Entrega','Items','Monto','Estado','Acciones ↓'].map(h => (
+              {['','N° Orden','Socio Comercial','Emisión','Entrega','Monto','Estado','PDF','QR',''].map(h => (
                 <th key={h} style={{ padding: '9px 12px', textAlign: 'left', fontSize: '10px', color: '#6B8BAE', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.3px', whiteSpace: 'nowrap' }}>{h}</th>
               ))}
             </tr>
@@ -453,8 +456,8 @@ export default function OCView({ setView }) {
                   onMouseEnter={e => { if (!selected.includes(p.id)) e.currentTarget.style.background = '#F8FBFF' }}
                   onMouseLeave={e => { if (!selected.includes(p.id)) e.currentTarget.style.background = 'transparent' }}
                 >
-                  <td style={{ padding: '9px 12px' }}>
-                    <input type="checkbox" checked={selected.includes(p.id)} onChange={() => toggleSelect(p.id)} style={{ cursor: 'pointer', accentColor: '#0E4D92' }} />
+                  <td style={{ padding: '9px 10px', width: '36px' }}>
+                    <input type="checkbox" checked={selected.includes(p.id)} onChange={() => toggleSelect(p.id)} style={{ cursor: 'pointer', accentColor: '#0E4D92', width: '14px', height: '14px' }} />
                   </td>
                   <td style={{ padding: '9px 12px', fontFamily: 'monospace', fontSize: '11px', fontWeight: 700, color: '#0B1F3A' }}>{p.id}</td>
                   <td style={{ padding: '9px 12px' }}>
@@ -463,25 +466,42 @@ export default function OCView({ setView }) {
                   </td>
                   <td style={{ padding: '9px 12px', fontSize: '11px', color: '#6B8BAE' }}>{p.date}</td>
                   <td style={{ padding: '9px 12px', fontSize: '11px', color: '#6B8BAE' }}>{p.delivery}</td>
-                  <td style={{ padding: '9px 12px', fontSize: '12px', color: '#0B1F3A', textAlign: 'center' }}>{p.items}</td>
-                  <td style={{ padding: '9px 12px', fontSize: '12px', fontWeight: 700, color: '#0B1F3A' }}>{p.amount}</td>
-                  <td style={{ padding: '9px 12px' }}><StatusBadge status={p.status} /></td>
+                  <td style={{ padding: '9px 12px', fontFamily: 'monospace', fontSize: '12px', fontWeight: 700, color: '#0B1F3A' }}>{p.amount}</td>
                   <td style={{ padding: '9px 12px' }}>
-                    <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
-                      <button onClick={() => setSelectedOC(p)} style={{ padding: '4px 10px', background: '#0B1F3A', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#00F5A0', cursor: 'pointer', fontWeight: 700, fontFamily: "'DM Sans', sans-serif" }}>Ver</button>
-                      {canAct && <>
-                        <button onClick={() => { setSelectedOC(p) }} style={{ padding: '4px 8px', background: '#D1FAE5', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#065F46', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>✓</button>
-                        <button onClick={() => { setSelectedOC(p) }} style={{ padding: '4px 8px', background: '#FEE2E2', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#B91C1C', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>✕</button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <StatusBadge status={p.status} />
+                      <button onClick={() => setSelectedOC(p)} title="Ver detalle" style={{ width: '22px', height: '22px', border: 'none', background: 'transparent', cursor: 'pointer', color: '#6B8BAE', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, flexShrink: 0 }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/></svg>
+                      </button>
+                    </div>
+                  </td>
+                  <td style={{ padding: '9px 6px', textAlign: 'center', width: '44px' }}>
+                    <button onClick={() => generarOCPDF(p)} title="Descargar PDF" style={{ width: '30px', height: '30px', border: '1px solid rgba(14,77,146,0.1)', background: '#F8FBFF', borderRadius: '6px', cursor: 'pointer', color: '#0E4D92', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+                    </button>
+                  </td>
+                  <td style={{ padding: '9px 6px', textAlign: 'center', width: '44px' }}>
+                    <button onClick={() => setQrOC(p)} title="Código QR" style={{ width: '30px', height: '30px', border: '1px solid rgba(14,77,146,0.1)', background: '#F8FBFF', borderRadius: '6px', cursor: 'pointer', color: '#0E4D92', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="3" height="3" rx="1"/><rect x="18" y="18" width="3" height="3" rx="1"/></svg>
+                    </button>
+                  </td>
+                  <td style={{ padding: '9px 6px', textAlign: 'center', width: '80px' }}>
+                    <div style={{ display: 'flex', gap: '4px', justifyContent: 'center' }}>
+                      {role === 'prov' && canAct && <>
+                        <button onClick={() => setSelectedOC(p)} title="Confirmar" style={{ width: '28px', height: '28px', border: 'none', background: '#D1FAE5', borderRadius: '6px', cursor: 'pointer', color: '#065F46', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </button>
+                        <button onClick={() => setSelectedOC(p)} title="Rechazar" style={{ width: '28px', height: '28px', border: 'none', background: '#FEE2E2', borderRadius: '6px', cursor: 'pointer', color: '#B91C1C', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        </button>
                       </>}
-                      <button onClick={() => setView('trazabilidad')} style={{ padding: '4px 8px', background: '#EEF5FF', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#0E4D92', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>⟳</button>
-                      <button onClick={() => generarOCPDF(p)} title="Descargar PDF"
-                        style={{ padding: '4px 8px', background: '#EEF5FF', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#0E4D92', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>PDF</button>
-                      <button onClick={() => setQrOC(p)} title="Ver QR"
-                        style={{ padding: '4px 8px', background: '#F8FBFF', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '6px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/>
-                          <rect x="3" y="16" width="5" height="5"/><path d="M16 16h2v2h-2zM18 18h2v2h-2z"/>
-                        </svg>
+                      {role === 'ret' && canAct && (
+                        <button onClick={() => setSelectedOC(p)} title="Cancelar OC" style={{ width: '28px', height: '28px', border: 'none', background: '#FEE2E2', borderRadius: '6px', cursor: 'pointer', color: '#B91C1C', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        </button>
+                      )}
+                      <button onClick={() => setView('trazabilidad')} title="Ver trazabilidad" style={{ width: '28px', height: '28px', border: '1px solid rgba(14,77,146,0.1)', background: '#EEF5FF', borderRadius: '6px', cursor: 'pointer', color: '#0E4D92', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
                       </button>
                     </div>
                   </td>

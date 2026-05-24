@@ -50,7 +50,7 @@ export default function Dashboard() {
   const renderView = () => {
     switch(view) {
       case 'dashboard':    return <DashboardView role={role} setView={setView} />
-      case 'oc':           return <OCView setView={setView} />
+      case 'oc':           return <OCView setView={setView} role={role} />
       case 'trazabilidad': return <TrazabilidadView />
       case 'catalogo':     return <CatalogoView />
       case 'precios':      return <PreciosView />
@@ -58,7 +58,7 @@ export default function Dashboard() {
       case 'financiero':   return <FinancieroView />
       case 'reportes':     return <ReportesView />
       case 'nueva-oc':     return <NuevaOCView />
-      case 'mis-ocs':      return <OCView setView={setView} />
+      case 'mis-ocs':      return <OCView setView={setView} role={role} />
       case 'recepciones':  return <ReciboView />
       case 'mis-facturas': return <FinancieroView />
       case 'ayuda':        return <AyudaView />

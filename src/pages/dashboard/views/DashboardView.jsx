@@ -81,7 +81,7 @@ export default function DashboardView({ role, setView }) {
         border: 'none', borderRadius: '10px', color: '#4ADE80',
         fontSize: '13px', fontWeight: 700, cursor: 'pointer',
         fontFamily: "'DM Sans', sans-serif", marginTop: '4px'
-      }}>+ Crear nueva orden de compra</button>
+      }} onClick={() => setView('nueva-oc')}>+ Crear nueva orden de compra</button>
     </div>
   )
 

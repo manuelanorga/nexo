@@ -288,8 +288,34 @@ function OCModal({ oc, onClose, setView, onConfirm, onReject }) {
 
           <div style={{ padding: '14px 24px', borderTop: '1px solid rgba(14,77,146,0.08)', display: 'flex', gap: '8px', justifyContent: 'space-between', background: '#F8FBFF', alignItems: 'center' }}>
             <div style={{ display: 'flex', gap: '8px' }}>
-              <button style={{ padding: '7px 14px', background: '#fff', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Descargar PDF</button>
-              <button style={{ padding: '7px 14px', background: '#fff', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Descargar EDI</button>
+              {['confirmed','dispatched','received','invoiced'].includes(oc.status) ? (
+                <button onClick={() => generarOCPDF(oc)} style={{ padding: '7px 14px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", fontWeight: 700 }}>Descargar PDF</button>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '3px' }}>
+                  <button disabled style={{ padding: '7px 14px', background: '#F8FBFF', border: '1px solid rgba(14,77,146,0.08)', borderRadius: '8px', fontSize: '12px', color: '#9DB8D9', cursor: 'not-allowed', fontFamily: "'DM Sans', sans-serif", display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9DB8D9" strokeWidth="2" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    PDF
+                  </button>
+                  <span style={{ fontSize: '10px', color: '#9DB8D9', paddingLeft: '2px' }}>Disponible al confirmar</span>
+                </div>
+              )}
+              {['confirmed','dispatched','received','invoiced'].includes(oc.status) && (
+                <button onClick={() => {
+                  const blob = new Blob([`ISA*00*          *00*          *ZZ*${oc.id}*ZZ*NEXO*260524*1432*U*00401*000000001*0*P*>
+ST*850*0001
+BEG*00*SA*${oc.id}**20260524
+CTT*1
+SE*4*0001
+IEA*1*000000001`], { type: 'text/plain' })
+                  const url = URL.createObjectURL(blob)
+                  const a = document.createElement('a')
+                  a.href = url
+                  a.download = oc.id + '.edi'
+                  a.click()
+                  URL.revokeObjectURL(url)
+                }} style={{ padding: '7px 14px', background: '#fff', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Descargar EDI</button>
+              )}
+
             </div>
             <button onClick={() => { onClose(); setView('trazabilidad') }} style={{ padding: '7px 16px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', fontWeight: 700, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
               Ver trazabilidad →

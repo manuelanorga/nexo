@@ -420,6 +420,13 @@ export default function OCView({ setView }) {
                     </>
                   )}
                   <button onClick={() => setView('trazabilidad')} style={{ padding: '6px 10px', background: '#EEF5FF', border: 'none', borderRadius: '6px', fontSize: '11px', color: '#0E4D92', cursor: 'pointer', fontWeight: 600 }}>⟳</button>
+                  <button onClick={() => generarOCPDF(p)} style={{ padding: '6px 10px', background: '#EEF5FF', border: 'none', borderRadius: '6px', fontSize: '11px', color: '#0E4D92', cursor: 'pointer', fontWeight: 700 }}>PDF</button>
+                  <button onClick={() => setQrOC(p)} style={{ padding: '6px 10px', background: '#F8FBFF', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '6px', fontSize: '11px', color: '#6B8BAE', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/>
+                      <rect x="3" y="16" width="5" height="5"/><path d="M16 16h2v2h-2zM18 18h2v2h-2z"/>
+                    </svg>
+                  </button>
                 </div>
               </div>
             )

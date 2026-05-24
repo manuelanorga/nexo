@@ -146,6 +146,7 @@ const productos = [
 ]
 
 function OCModal({ oc, onClose, setView, onConfirm, onReject }) {
+  const isMobile = window.innerWidth < 768
   const [showConfirm, setShowConfirm] = useState(false)
   const [showReject, setShowReject] = useState(false)
   const cfg = statusConfig[oc.status] || statusConfig.pending
@@ -188,6 +189,62 @@ function OCModal({ oc, onClose, setView, onConfirm, onReject }) {
             </div>
 
             <div style={{ fontSize: '11px', fontWeight: 600, color: '#6B8BAE', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '10px' }}>Productos — {oc.items} items</div>
+            {isMobile ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '4px' }}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0E4D92" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                  <span style={{ fontSize: '10px', fontWeight: 600, color: '#6B8BAE', textTransform: 'uppercase', letterSpacing: '.8px' }}>Productos — {productos.length} ítems</span>
+                </div>
+                {productos.map((p, idx) => {
+                  const getBrandColors = (nombre) => {
+                    const n = nombre.toLowerCase()
+                    if (n.includes('inca kola')) return ['#FFD700', '#000']
+                    if (n.includes('zero')) return ['#1a1a1a', '#E2001A']
+                    if (n.includes('coca-cola') || n.includes('coca cola')) return ['#E2001A', '#fff']
+                    if (n.includes('sprite')) return ['#00A550', '#fff']
+                    if (n.includes('fanta naranja')) return ['#FF6600', '#fff']
+                    if (n.includes('fanta')) return ['#FF6600', '#fff']
+                    if (n.includes('schweppes')) return ['#FFD700', '#0E4D92']
+                    if (n.includes('agua')) return ['#E0F4FF', '#0E4D92']
+                    if (n.includes('powerade')) return ['#003DA5', '#fff']
+                    if (n.includes('fuze')) return ['#6B2D8B', '#fff']
+                    return ['#EEF5FF', '#0E4D92']
+                  }
+                  const [bg, fg] = getBrandColors(p.nombre)
+                  const initials = p.nombre.split(' ').slice(0,2).map(w => w[0]).join('')
+                  return (
+                    <div key={p.ean} style={{ background: '#fff', borderRadius: '12px', border: '1px solid rgba(14,77,146,0.08)', padding: '12px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+                        <div style={{ width: '38px', height: '38px', borderRadius: '8px', background: bg, color: fg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 600, flexShrink: 0, letterSpacing: '.5px' }}>{initials}</div>
+                        <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'baseline', gap: '6px', flexWrap: 'wrap' }}>
+                          <span style={{ fontSize: '13px', fontWeight: 600, color: '#0B1F3A' }}>{p.nombre}</span>
+                          <span style={{ fontSize: '10px', color: '#0E4D92', background: '#EEF5FF', padding: '1px 7px', borderRadius: '100px', whiteSpace: 'nowrap' }}>{p.presentacion}</span>
+                        </div>
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '5px', marginBottom: '8px' }}>
+                        {[
+                          ['M 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z', '#0E4D92', 'Cant.', p.cantidad, '#0B1F3A'],
+                          ['M9 14.25l1.75 1.75L15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z', '#166534', 'Bonif.', p.bonificada || '—', '#166534'],
+                          ['M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z M7 7h.01', '#0E4D92', 'Precio', 'S/' + p.precio.toFixed(2), '#0B1F3A'],
+                        ].map(([path, iconColor, label, val, valColor]) => (
+                          <div key={label} style={{ background: '#F8FBFF', borderRadius: '8px', padding: '7px 8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><path d={path}/></svg>
+                            <div>
+                              <div style={{ fontSize: '8px', color: '#6B8BAE', textTransform: 'uppercase', letterSpacing: '.4px', marginBottom: '1px' }}>{label}</div>
+                              <div style={{ fontSize: '14px', fontWeight: 600, color: valColor, lineHeight: 1 }}>{val}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '8px', borderTop: '1px solid rgba(14,77,146,0.06)' }}>
+                        <span style={{ fontSize: '10px', color: '#6B8BAE' }}>Subtotal</span>
+                        <span style={{ fontSize: '16px', fontWeight: 700, color: '#0B1F3A' }}>S/{p.subtotal ? p.subtotal.toLocaleString() : (p.cantidad * p.precio).toLocaleString('es-PE', {minimumFractionDigits:2})}</span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            ) : (
             <div style={{ border: '1px solid rgba(14,77,146,0.08)', borderRadius: '10px', overflow: 'hidden', marginBottom: '16px' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
@@ -212,6 +269,7 @@ function OCModal({ oc, onClose, setView, onConfirm, onReject }) {
                 </tbody>
               </table>
             </div>
+            )}
 
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <div style={{ minWidth: '260px' }}>

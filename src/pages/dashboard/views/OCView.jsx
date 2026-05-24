@@ -288,7 +288,7 @@ function OCModal({ oc, onClose, setView, onConfirm, onReject }) {
 
           <div style={{ padding: '14px 24px', borderTop: '1px solid rgba(14,77,146,0.08)', display: 'flex', gap: '8px', justifyContent: 'space-between', background: '#F8FBFF', alignItems: 'center' }}>
             <div style={{ display: 'flex', gap: '8px' }}>
-              {['confirmed','dispatched','received','invoiced'].includes(oc.status) ? (
+              {['confirmed','dispatched','transit','received','invoiced'].includes(oc.status) ? (
                 <button onClick={() => generarOCPDF(oc)} style={{ padding: '7px 14px', background: '#0B1F3A', border: 'none', borderRadius: '8px', fontSize: '12px', color: '#00F5A0', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", fontWeight: 700 }}>Descargar PDF</button>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '3px' }}>
@@ -299,7 +299,7 @@ function OCModal({ oc, onClose, setView, onConfirm, onReject }) {
                   <span style={{ fontSize: '10px', color: '#9DB8D9', paddingLeft: '2px' }}>Disponible al confirmar</span>
                 </div>
               )}
-              {['confirmed','dispatched','received','invoiced'].includes(oc.status) && (
+              {['confirmed','dispatched','transit','received','invoiced'].includes(oc.status) && (
                 <button onClick={() => {
                   const blob = new Blob([`ISA*00*          *00*          *ZZ*${oc.id}*ZZ*NEXO*260524*1432*U*00401*000000001*0*P*>
 ST*850*0001

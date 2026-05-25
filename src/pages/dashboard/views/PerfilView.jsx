@@ -178,7 +178,7 @@ function TabBilling() {
       label: 'Starter',
       precio: 'S/ 1,900',
       period: '/ mes · Sin IGV',
-      badge: 'Plan actual',
+      badge: 'Starter',
       badgeBg: '#EEF5FF', badgeColor: '#0E4D92',
       desc: 'Todo lo que necesitas para digitalizar tus órdenes de compra con Arca.',
       accent: '#0E4D92',
@@ -189,7 +189,7 @@ function TabBilling() {
         { txt:'Volumen de OCs según operación' },
         { txt:'Trazabilidad básica (5 etapas)', tooltip:['OC Emitida','OC Confirmada','OC en Despacho','OC Recibida','OC Cerrada'] },
         { txt:'Portal Mobile y Desktop' },
-        { txt:'Conexión directa con tu sistema (API OC)' },
+        { txt:'API disponible (documentación incluida)' },
         { txt:'Soporte por email (48h)' },
       ],
       cta: null,
@@ -199,7 +199,7 @@ function TabBilling() {
       label: 'Professional',
       precio: 'S/ 2,900',
       period: '/ mes · Sin IGV',
-      badge: 'Recomendado',
+      badge: 'Plan actual',
       badgeBg: '#00F5A0', badgeColor: '#064E3B',
       desc: 'La plataforma O2P completa. Trazabilidad total, soporte prioritario y conexión SUNAT.',
       accent: '#00F5A0',
@@ -212,7 +212,7 @@ function TabBilling() {
         { txt:'Portal Mobile, Desktop y App (PWA)' },
         { txt:'Módulo Despacho + Recibo' },
         { txt:'Módulo Financiero + Reportes' },
-        { txt:'Conexión OSE/SUNAT (Nubefact)' },
+        { txt:'API avanzada + soporte de integración' },
         { txt:'Soporte prioritario (SLA 4h)' },
         { txt:'Actualizaciones automáticas' },
       ],
@@ -230,7 +230,7 @@ function TabBilling() {
       accentLight: '#FFF7ED',
       dark: false,
       features: [
-        { txt:'Integración ERP (SAP / Oracle / Odoo)' },
+        { txt:'Proyecto de integración ERP (SAP · Oracle · Odoo)' },
         { txt:'Módulo Factoring / Cobro inmediato' },
         { txt:'EDI con retail específico' },
         { txt:'Reportes analíticos avanzados' },
@@ -255,8 +255,8 @@ function TabBilling() {
           <button key={s.id} onClick={() => setSlider(i)}
             style={{ padding:'10px 24px', border:'none', background:'transparent', cursor:'pointer', fontFamily:"'DM Sans',sans-serif", fontSize:'13px', fontWeight: slider===i?600:400, color: slider===i?'#0B1F3A':'#94A3B8', borderBottom: slider===i?'2px solid #0B1F3A':'2px solid transparent', marginBottom:'-1px', transition:'all .2s', position:'relative' }}>
             {s.label}
-            {s.id === 'starter' && (
-              <span style={{ marginLeft:'6px', fontSize:'9px', fontWeight:600, padding:'2px 6px', borderRadius:'8px', background:'#EEF5FF', color:'#0E4D92', verticalAlign:'middle' }}>Activo</span>
+            {s.id === 'pro' && (
+              <span style={{ marginLeft:'6px', fontSize:'9px', fontWeight:600, padding:'2px 6px', borderRadius:'8px', background:'rgba(0,245,160,0.15)', color:'#065F46', verticalAlign:'middle' }}>Activo</span>
             )}
           </button>
         ))}
@@ -317,7 +317,7 @@ function TabBilling() {
             </button>
           ) : (
             <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-              <div style={{ fontSize:'12px', color:'#94A3B8' }}>Este es tu plan actual</div>
+              <div style={{ fontSize:'12px', color:'#94A3B8' }}>Plan anterior</div>
               <button onClick={() => setSlider(1)}
                 style={{ display:'flex', alignItems:'center', gap:'6px', padding:'9px 18px', border:'1px solid rgba(14,77,146,0.2)', borderRadius:'8px', background:'#EEF5FF', color:'#0E4D92', fontSize:'12px', fontWeight:600, cursor:'pointer', fontFamily:"'DM Sans',sans-serif", transition:'all .2s' }}
                 onMouseEnter={e => { e.currentTarget.style.background='#0B1F3A'; e.currentTarget.style.color='#fff'; e.currentTarget.style.borderColor='#0B1F3A' }}

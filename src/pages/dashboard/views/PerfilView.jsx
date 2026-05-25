@@ -95,7 +95,7 @@ function TabEmpresa() {
 const PLANES = {
   starter: {
     nombre: 'Starter',
-    precio: 'S/ 1,800',
+    precio: 'S/ 1,900',
     periodo: '/ mes',
     desc: 'Módulo core de OC con API básica incluida',
     color: '#0B1F3A',
@@ -114,7 +114,7 @@ const PLANES = {
   },
   pro: {
     nombre: 'Professional',
-    precio: 'S/ 3,200',
+    precio: 'S/ 2,900',
     periodo: '/ mes',
     desc: 'Plataforma completa O2P con soporte prioritario',
     color: '#0E4D92',
@@ -139,6 +139,35 @@ const ADDONS = [
   { icon:'🔗', nombre:'EDI Retail específico', desc:'Integración EDI dedicada con un retail.', precio:'S/ 2,800' },
 ]
 
+function FeatureItem({ txt, tooltip, accent, dark }) {
+  const [tip, setTip] = useState(false)
+
+  return (
+    <div style={{ display:'flex', alignItems:'center', gap:'8px', fontSize:'12px', color: dark?'rgba(255,255,255,0.75)':'#374151', position:'relative' }}>
+      <span style={{ color:accent, flexShrink:0, fontSize:'14px', fontWeight:700 }}>✓</span>
+      <div style={{ position:'relative', display:'inline-flex', alignItems:'center', gap:'4px' }}
+        onMouseEnter={() => tooltip && setTip(true)}
+        onMouseLeave={() => setTip(false)}
+      >
+        <span style={{ borderBottom: tooltip?`1px dashed ${dark?'rgba(255,255,255,0.35)':'rgba(14,77,146,0.35)'}`:' none', cursor: tooltip?'help':'default', lineHeight:1.6 }}>{txt}</span>
+        {tooltip && <span style={{ fontSize:'10px', color: dark?'rgba(255,255,255,0.4)':'#94A3B8', lineHeight:1 }}>ⓘ</span>}
+
+        {tip && (
+          <div style={{ position:'fixed', top:'50%', right:'24px', transform:'translateY(-50%)', width:'220px', background:'#0B1F3A', borderRadius:'10px', padding:'12px 14px', zIndex:999, boxShadow:'0 8px 32px rgba(0,0,0,0.3)', pointerEvents:'none', border:'1px solid rgba(0,245,160,0.15)' }}>
+            <div style={{ fontSize:'10px', fontWeight:700, color:'rgba(255,255,255,0.45)', textTransform:'uppercase', letterSpacing:'.8px', marginBottom:'10px' }}>Etapas incluidas</div>
+            {tooltip.map((stage, i) => (
+              <div key={i} style={{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'7px', fontSize:'11px', color:'rgba(255,255,255,0.8)', lineHeight:1.4 }}>
+                <div style={{ width:'18px', height:'18px', borderRadius:'50%', background:'rgba(0,245,160,0.12)', border:'1px solid rgba(0,245,160,0.25)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, fontSize:'9px', fontWeight:700, color:'#00F5A0' }}>{i+1}</div>
+                {stage}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 function TabBilling() {
   const [slider, setSlider] = useState(0) // 0=Starter, 1=Pro, 2=Addon
   const [showUpgrade, setShowUpgrade] = useState(false)
@@ -147,8 +176,8 @@ function TabBilling() {
     {
       id: 'starter',
       label: 'Starter',
-      precio: 'S/ 1,800',
-      period: '/ mes',
+      precio: 'S/ 1,900',
+      period: '/ mes · Sin IGV',
       badge: 'Plan actual',
       badgeBg: '#EEF5FF', badgeColor: '#0E4D92',
       desc: 'Todo lo que necesitas para digitalizar tus órdenes de compra con Arca.',
@@ -156,20 +185,20 @@ function TabBilling() {
       accentLight: '#EEF5FF',
       dark: false,
       features: [
-        'Módulo Órdenes de Compra',
-        'Hasta 500 OCs / mes',
-        'Trazabilidad básica (5 etapas)',
-        'Portal web + mobile',
-        'API básica OC (REST)',
-        'Soporte por email (48h)',
+        { txt:'Módulo Órdenes de Compra' },
+        { txt:'Hasta 500 OCs / mes' },
+        { txt:'Trazabilidad básica (5 etapas)', tooltip:['OC Emitida','OC Confirmada','OC en Despacho','OC Recibida','OC Cerrada'] },
+        { txt:'Portal Mobile y Desktop' },
+        { txt:'API básica OC (REST)' },
+        { txt:'Soporte por email (48h)' },
       ],
       cta: null,
     },
     {
       id: 'pro',
       label: 'Professional',
-      precio: 'S/ 3,200',
-      period: '/ mes',
+      precio: 'S/ 2,900',
+      period: '/ mes · Sin IGV',
       badge: 'Recomendado',
       badgeBg: '#00F5A0', badgeColor: '#064E3B',
       desc: 'La plataforma O2P completa. Trazabilidad total, soporte prioritario y conexión SUNAT.',
@@ -177,14 +206,15 @@ function TabBilling() {
       accentLight: 'rgba(0,245,160,0.15)',
       dark: true,
       features: [
-        'Todo el plan Starter',
-        'OCs ilimitadas',
-        'Trazabilidad completa (9 etapas)',
-        'Módulo Despacho + Recibo',
-        'Módulo Financiero + Reportes',
-        'Conexión OSE/SUNAT (Nubefact)',
-        'Soporte prioritario (SLA 4h)',
-        'Actualizaciones automáticas',
+        { txt:'Todo el plan Starter' },
+        { txt:'OCs ilimitadas' },
+        { txt:'Trazabilidad completa (9 etapas)', tooltip:['OC Emitida','OC Confirmada','ASN Generado (Despacho)','En tránsito','Recibido en almacén','Recepción aceptada / diferencias','Devolución gestionada','Factura validada SUNAT','Pago confirmado'] },
+        { txt:'Portal Mobile, Desktop y App (PWA)' },
+        { txt:'Módulo Despacho + Recibo' },
+        { txt:'Módulo Financiero + Reportes' },
+        { txt:'Conexión OSE/SUNAT (Nubefact)' },
+        { txt:'Soporte prioritario (SLA 4h)' },
+        { txt:'Actualizaciones automáticas' },
       ],
       cta: 'Mejorar a Professional →',
     },
@@ -200,12 +230,12 @@ function TabBilling() {
       accentLight: '#FFF7ED',
       dark: false,
       features: [
-        'Integración ERP (SAP / Oracle / Odoo)',
-        'Módulo Factoring / Cobro inmediato',
-        'EDI con retail específico',
-        'Reportes analíticos avanzados',
-        'Webhooks + API Keys Enterprise',
-        'Dashboard personalizado',
+        { txt:'Integración ERP (SAP / Oracle / Odoo)' },
+        { txt:'Módulo Factoring / Cobro inmediato' },
+        { txt:'EDI con retail específico' },
+        { txt:'Reportes analíticos avanzados' },
+        { txt:'Webhooks + API Keys Enterprise' },
+        { txt:'Dashboard personalizado' },
       ],
       cta: null,
     },
@@ -265,9 +295,7 @@ function TabBilling() {
         {/* Features */}
         <div style={{ padding:'24px 32px', background: step.dark?'rgba(11,31,58,0.97)':'#FAFBFF', display:'grid', gridTemplateColumns:'1fr 1fr', gap:'10px 24px' }}>
           {step.features.map((f,i) => (
-            <div key={i} style={{ display:'flex', alignItems:'center', gap:'8px', fontSize:'12px', color: step.dark?'rgba(255,255,255,0.75)':'#374151' }}>
-              <span style={{ color:step.accent, flexShrink:0, fontSize:'14px', fontWeight:700 }}>✓</span>{f}
-            </div>
+            <FeatureItem key={i} txt={f.txt} tooltip={f.tooltip} accent={step.accent} dark={step.dark}/>
           ))}
         </div>
 
@@ -361,7 +389,7 @@ function TabBilling() {
             <div style={{ background:'linear-gradient(135deg,#0B1F3A,#0E4D92)', padding:'24px', textAlign:'center' }}>
               <div style={{ fontSize:'11px', color:'rgba(255,255,255,0.5)', letterSpacing:'1px', textTransform:'uppercase', marginBottom:'6px' }}>Mejorar a</div>
               <div style={{ fontFamily:"'Fraunces',serif", fontSize:'28px', fontWeight:900, color:'#fff', marginBottom:'4px' }}>Professional</div>
-              <div style={{ fontFamily:"'Fraunces',serif", fontSize:'22px', fontWeight:900, color:'#00F5A0' }}>S/ 3,200 / mes</div>
+              <div style={{ fontFamily:"'Fraunces',serif", fontSize:'22px', fontWeight:900, color:'#00F5A0' }}>S/ 2,900 / mes · Sin IGV</div>
             </div>
             <div style={{ padding:'20px 24px' }}>
               <div style={{ fontSize:'12px', color:'#6B8BAE', marginBottom:'16px', textAlign:'center', lineHeight:1.5 }}>

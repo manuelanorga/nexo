@@ -186,7 +186,7 @@ function TabBilling() {
       dark: false,
       features: [
         { txt:'Módulo Órdenes de Compra' },
-        { txt:'Hasta 500 OCs / mes' },
+        { txt:'Volumen de OCs según operación' },
         { txt:'Trazabilidad básica (5 etapas)', tooltip:['OC Emitida','OC Confirmada','OC en Despacho','OC Recibida','OC Cerrada'] },
         { txt:'Portal Mobile y Desktop' },
         { txt:'Conexión directa con tu sistema (API OC)' },
@@ -242,10 +242,6 @@ function TabBilling() {
   ]
 
   const step = STEPS[slider]
-  const used = 312
-  const limit = 500
-  const pct = Math.round((used/limit)*100)
-
   return (
     <div style={{ fontFamily:"'DM Sans',sans-serif" }}>
       <style>{`
@@ -335,19 +331,8 @@ function TabBilling() {
         </div>
       </div>
 
-      {/* Uso + Método de pago */}
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'14px', marginBottom:'20px' }}>
-        <div style={{ background:'#F8FAFC', border:'1px solid rgba(14,77,146,0.08)', borderRadius:'10px', padding:'16px' }}>
-          <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'8px' }}>
-            <span style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A' }}>Uso del mes</span>
-            <span style={{ fontSize:'12px', color:'#6B8BAE' }}>{used} / {limit} OCs</span>
-          </div>
-          <div style={{ height:'6px', background:'#E2E8F0', borderRadius:'3px', overflow:'hidden' }}>
-            <div style={{ height:'100%', width:`${pct}%`, background: pct>80?'#F59E0B':'#0E4D92', borderRadius:'3px', transition:'width .4s' }}/>
-          </div>
-          <div style={{ fontSize:'10px', color: pct>80?'#F59E0B':'#94A3B8', marginTop:'4px' }}>{pct}% utilizado · {limit-used} OCs restantes</div>
-          <div style={{ fontSize:'10px', color:'#94A3B8', marginTop:'2px' }}>Ciclo: 01 May – 31 May 2025</div>
-        </div>
+      {/* Método de pago */}
+      <div style={{ marginBottom:'20px' }}>
         <div style={{ background:'#F8FAFC', border:'1px solid rgba(14,77,146,0.08)', borderRadius:'10px', padding:'16px' }}>
           <div style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A', marginBottom:'12px' }}>Método de pago</div>
           <div style={{ display:'flex', alignItems:'center', gap:'10px' }}>

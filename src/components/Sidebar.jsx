@@ -37,7 +37,7 @@ const users = {
   ret:  { initials: 'WG', name: 'Wong Supermercados', role: 'Retail' },
 }
 
-function SidebarContent({ role, setRole, view, setView, navigate, onClose, onTour }) {
+function SidebarContent({ role, setRole, view, setView, navigate, onClose, onTour, initialRole }) {
   const nav = navConfig[role]
   const user = users[role]
 
@@ -55,18 +55,20 @@ function SidebarContent({ role, setRole, view, setView, navigate, onClose, onTou
         )}
       </div>
 
-      <div style={{ margin: '10px', display: 'flex', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '8px', overflow: 'hidden' }}>
-        {['prov', 'ret'].map(r => (
-          <button key={r} onClick={() => { setRole(r); setView('dashboard'); onClose && onClose() }} style={{
-            flex: 1, padding: '7px 0', fontSize: '11px', fontWeight: 700,
-            border: 'none', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-            background: role === r ? (r === 'prov' ? '#0B1F3A' : '#064E3B') : 'transparent',
-            color: role === r ? (r === 'prov' ? '#00F5A0' : '#4ADE80') : '#6B8BAE',
-          }}>
-            {r === 'prov' ? 'Proveedor' : 'Retail'}
-          </button>
-        ))}
-      </div>
+      {!initialRole && (
+        <div style={{ margin: '10px', display: 'flex', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '8px', overflow: 'hidden' }}>
+          {['prov', 'ret'].map(r => (
+            <button key={r} onClick={() => { setRole(r); setView('dashboard'); onClose && onClose() }} style={{
+              flex: 1, padding: '7px 0', fontSize: '11px', fontWeight: 700,
+              border: 'none', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+              background: role === r ? (r === 'prov' ? '#0B1F3A' : '#064E3B') : 'transparent',
+              color: role === r ? (r === 'prov' ? '#00F5A0' : '#4ADE80') : '#6B8BAE',
+            }}>
+              {r === 'prov' ? 'Proveedor' : 'Retail'}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div style={{ flex: 1, overflowY: 'auto', padding: '6px 0' }}>
         {nav.map(group => (
@@ -132,7 +134,7 @@ function SidebarContent({ role, setRole, view, setView, navigate, onClose, onTou
   )
 }
 
-export default function Sidebar({ role, setRole, view, setView, open, setOpen, onTour }) {
+export default function Sidebar({ role, setRole, view, setView, open, setOpen, onTour, initialRole }) {
   const navigate = useNavigate()
   const isMobile = useIsMobile()
 
@@ -151,7 +153,7 @@ export default function Sidebar({ role, setRole, view, setView, open, setOpen, o
           transform: open ? 'translateX(0)' : 'translateX(-100%)',
           transition: 'transform .25s ease', boxShadow: '4px 0 20px rgba(0,0,0,0.15)'
         }}>
-          <SidebarContent role={role} setRole={setRole} view={view} setView={setView} navigate={navigate} onClose={() => setOpen(false)} onTour={onTour} />
+          <SidebarContent role={role} setRole={setRole} view={view} setView={setView} navigate={navigate} onClose={() => setOpen(false)} onTour={onTour} initialRole={initialRole} />
         </div>
       </>
     )
@@ -164,7 +166,7 @@ export default function Sidebar({ role, setRole, view, setView, open, setOpen, o
       display: 'flex', flexDirection: 'column', height: '100vh',
       position: 'sticky', top: 0
     }}>
-      <SidebarContent role={role} setRole={setRole} view={view} setView={setView} navigate={navigate} onTour={onTour} />
+      <SidebarContent role={role} setRole={setRole} view={view} setView={setView} navigate={navigate} onTour={onTour} initialRole={initialRole} />
     </aside>
   )
 }

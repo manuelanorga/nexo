@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { useApp } from '../context/AppContext'
 
@@ -66,6 +67,8 @@ function Kbd({ letter }) {
 }
 
 export default function Topbar({ role, view, setView, onMenuClick }) {
+  const navigate = useNavigate()
+  const [profileOpen, setProfileOpen] = useState(false)
   const isMobile = useIsMobile()
   const { searchQuery, setSearchQuery } = useApp()
   const isProv = role === 'prov'
@@ -136,13 +139,60 @@ export default function Topbar({ role, view, setView, onMenuClick }) {
         </div>
       )}
 
-      <span style={{
-        padding: '4px 10px', borderRadius: '100px', fontSize: '10px',
-        fontWeight: 700, letterSpacing: '0.5px',
-        background: accentBg, color: accentText, flexShrink: 0
-      }}>
-        {isProv ? 'Prov.' : 'Retail'}
-      </span>
+      <div style={{ position:'relative', flexShrink:0 }}>
+        <button onClick={() => setProfileOpen(!profileOpen)}
+          style={{ display:'flex', alignItems:'center', gap:'7px', padding:'6px 12px', borderRadius:'20px', border:`1px solid ${isProv?'rgba(14,77,146,0.15)':'rgba(22,163,74,0.15)'}`, background: accentBg, cursor:'pointer', fontFamily:"'DM Sans',sans-serif", transition:'all .15s' }}
+          onMouseEnter={e=>e.currentTarget.style.opacity='.8'}
+          onMouseLeave={e=>e.currentTarget.style.opacity='1'}
+        >
+          <div style={{ width:'20px', height:'20px', borderRadius:'50%', background: isProv?'#0B1F3A':'#064E3B', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'8px', fontWeight:700, color: isProv?'#00F5A0':'#4ADE80', flexShrink:0 }}>
+            {isProv?'AC':'WG'}
+          </div>
+          <span style={{ fontSize:'11px', fontWeight:700, color:accentText, letterSpacing:'.3px' }}>
+            {isProv ? 'Proveedor' : 'Retail'}
+          </span>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={accentText} strokeWidth="2.5" strokeLinecap="round" style={{ transform: profileOpen?'rotate(180deg)':'none', transition:'transform .2s' }}><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+
+        {profileOpen && (
+          <>
+            <div onClick={() => setProfileOpen(false)} style={{ position:'fixed', inset:0, zIndex:40 }}/>
+            <div style={{ position:'absolute', top:'calc(100% + 8px)', right:0, width:'200px', background:'#fff', border:'1px solid rgba(14,77,146,0.1)', borderRadius:'10px', boxShadow:'0 8px 24px rgba(14,77,146,0.12)', zIndex:50, overflow:'hidden', animation:'fadeUp .15s ease' }}>
+              <div style={{ padding:'12px 14px', borderBottom:'1px solid rgba(14,77,146,0.06)', background:'#F8FAFC' }}>
+                <div style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A' }}>{isProv?'Arca Continental':'Wong S.A.'}</div>
+                <div style={{ fontSize:'10px', color:'#94A3B8', marginTop:'1px' }}>{isProv?'Proveedor':'Retail'} · Plan Enterprise</div>
+              </div>
+              <div style={{ padding:'4px' }}>
+                <button onClick={() => { setView('perfil'); setProfileOpen(false) }}
+                  style={{ width:'100%', display:'flex', alignItems:'center', gap:'8px', padding:'8px 10px', borderRadius:'7px', border:'none', background:'transparent', color:'#4B5563', cursor:'pointer', fontFamily:"'DM Sans',sans-serif", fontSize:'12px', textAlign:'left', transition:'background .12s' }}
+                  onMouseEnter={e=>e.currentTarget.style.background='#F1F5F9'}
+                  onMouseLeave={e=>e.currentTarget.style.background='transparent'}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"/></svg>
+                  Mi Perfil
+                </button>
+                <button onClick={() => { setView('ayuda'); setProfileOpen(false) }}
+                  style={{ width:'100%', display:'flex', alignItems:'center', gap:'8px', padding:'8px 10px', borderRadius:'7px', border:'none', background:'transparent', color:'#4B5563', cursor:'pointer', fontFamily:"'DM Sans',sans-serif", fontSize:'12px', textAlign:'left', transition:'background .12s' }}
+                  onMouseEnter={e=>e.currentTarget.style.background='#F1F5F9'}
+                  onMouseLeave={e=>e.currentTarget.style.background='transparent'}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+                  Ayuda
+                </button>
+                <div style={{ height:'1px', background:'rgba(14,77,146,0.06)', margin:'4px 0' }}/>
+                <button onClick={() => navigate('/login', { replace:true, state:{} })}
+                  style={{ width:'100%', display:'flex', alignItems:'center', gap:'8px', padding:'8px 10px', borderRadius:'7px', border:'none', background:'transparent', color:'#DC2626', cursor:'pointer', fontFamily:"'DM Sans',sans-serif", fontSize:'12px', fontWeight:500, textAlign:'left', transition:'background .12s' }}
+                  onMouseEnter={e=>e.currentTarget.style.background='#FEF2F2'}
+                  onMouseLeave={e=>e.currentTarget.style.background='transparent'}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                  Cerrar sesión
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
 
       <div style={{ position: 'relative', flexShrink: 0 }}>
         <button

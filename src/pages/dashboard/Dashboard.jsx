@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
 import { useTour } from '../../hooks/useTour'
 import Sidebar from '../../components/Sidebar'
@@ -14,10 +15,14 @@ import ReportesView from './views/ReportesView'
 import NuevaOCView from './views/NuevaOCView'
 import AyudaView from './views/AyudaView'
 import DespachoView from './views/DespachoView'
+import PerfilView from './views/PerfilView'
 import ReciboView from './views/ReciboView'
 
 export default function Dashboard() {
-  const [role, setRole] = useState('prov')
+  const location = useLocation()
+  const cameFromLogin = !!location.state?.role
+  const initialRole = location.state?.role === 'retail' ? 'ret' : 'prov'
+  const [role, setRole] = useState(initialRole)
   const [view, setView] = useState('dashboard')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { setSearchQuery } = useApp()
@@ -62,6 +67,7 @@ export default function Dashboard() {
       case 'recepciones':  return <ReciboView />
       case 'mis-facturas': return <FinancieroView />
       case 'ayuda':        return <AyudaView />
+      case 'perfil':       return <PerfilView role={role} />
       case 'despacho':     return <DespachoView />
       case 'recibo':       return <ReciboView />
       default: return (
@@ -78,6 +84,7 @@ export default function Dashboard() {
   return (
     <div style={{ display: 'flex', height: '100vh', background: '#F0F7FF', fontFamily: "'DM Sans', sans-serif", overflow: 'hidden' }}>
       <Sidebar
+        initialRole={cameFromLogin ? initialRole : null}
         role={role} setRole={setRole}
         view={view} setView={setView}
         open={sidebarOpen} setOpen={setSidebarOpen}

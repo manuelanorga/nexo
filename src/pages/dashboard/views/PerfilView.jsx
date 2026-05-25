@@ -189,7 +189,7 @@ function TabBilling() {
         { txt:'Hasta 500 OCs / mes' },
         { txt:'Trazabilidad básica (5 etapas)', tooltip:['OC Emitida','OC Confirmada','OC en Despacho','OC Recibida','OC Cerrada'] },
         { txt:'Portal Mobile y Desktop' },
-        { txt:'API básica OC (REST)' },
+        { txt:'Conexión directa con tu sistema (API OC)' },
         { txt:'Soporte por email (48h)' },
       ],
       cta: null,

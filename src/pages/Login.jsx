@@ -164,8 +164,8 @@ export default function Login() {
 
         {/* Stats */}
         <div style={{ fontSize:'8px', color:'rgba(255,255,255,0.2)', letterSpacing:'1.5px', textTransform:'uppercase', textAlign:'center', marginBottom:'8px', fontWeight:500 }}>instamovil en números</div>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:'1px', background:'rgba(255,255,255,0.05)', borderRadius:'10px', overflow:'hidden', width:'320px', marginBottom:'16px' }}>
-          {[['10M+','Transacciones digitales'],['+ 12','Servicios integrados']].map(([v,l])=>(
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'1px', background:'rgba(255,255,255,0.05)', borderRadius:'10px', overflow:'hidden', width:'320px', marginBottom:'16px' }}>
+          {[['+10M','Transacciones mensuales promedio'],['+12','Servicios integrados'],['5','Soluciones digitales']].map(([v,l])=>(
             <div key={l} style={{ background:'#060C16', padding:'12px', textAlign:'center' }}>
               <div style={{ fontFamily:"'Fraunces',serif", fontSize:'17px', fontWeight:900, color:'#00F5A0' }}>{v}</div>
               <div style={{ fontSize:'8px', color:'rgba(255,255,255,0.25)', marginTop:'2px', textTransform:'uppercase', letterSpacing:'.5px' }}>{l}</div>

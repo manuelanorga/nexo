@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 const TABS = [
   { id: 'empresa',      label: 'Datos de la Empresa',   icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' },
@@ -224,30 +224,182 @@ function TabAPI() {
   )
 }
 
+const ROL_INFO = {
+  'Admin de Ventas':      { desc:'Acceso completo a todos los módulos', modules:['Catálogo','OCs','Despachos','Financiero','Reportes','API','Billing','Usuarios'], color:'#7C3AED', bg:'#F5F3FF' },
+  'Facturador / Contador':{ desc:'Emite y gestiona documentos fiscales', modules:['Ver OCs entrantes','Generar XML factura','Subir a SUNAT','Ver estado documentos'], color:'#0E4D92', bg:'#EEF5FF' },
+  'Tesorero':             { desc:'Gestiona pagos y factoring', modules:['Ver Órdenes de Pago','Cobro Inmediato','Factoring','Reportes financieros'], color:'#166534', bg:'#F0FDF4' },
+}
+
+function RolSelect({ value, onChange }) {
+  const [open, setOpen] = useState(false)
+  const [tooltip, setTooltip] = useState(null)
+  const [tooltipPos, setTooltipPos] = useState({ top:0, left:0 })
+  const btnRef = useRef(null)
+
+  const handleTooltipEnter = (rol, e) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    setTooltipPos({ top: rect.top, left: rect.right + 10 })
+    setTooltip(rol)
+  }
+
+  return (
+    <div style={{ position:'relative' }} ref={btnRef}>
+      <button onClick={() => setOpen(!open)}
+        style={{ display:'flex', alignItems:'center', gap:'6px', padding:'5px 10px', border:'1px solid rgba(14,77,146,0.12)', borderRadius:'6px', background:'#fff', fontFamily:"'DM Sans',sans-serif", fontSize:'11px', color:'#0B1F3A', cursor:'pointer', width:'100%', justifyContent:'space-between' }}>
+        <span>{value}</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" strokeWidth="2.5" strokeLinecap="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+
+      {open && (
+        <>
+          <div onClick={() => { setOpen(false); setTooltip(null) }} style={{ position:'fixed', inset:0, zIndex:40 }}/>
+          <div style={{ position:'absolute', top:'calc(100% + 4px)', left:0, width:'200px', background:'#fff', border:'1px solid rgba(14,77,146,0.1)', borderRadius:'8px', boxShadow:'0 8px 24px rgba(14,77,146,0.12)', zIndex:50, overflow:'visible' }}>
+            {Object.entries(ROL_INFO).map(([rol, info]) => (
+              <div key={rol}
+                onMouseEnter={e => handleTooltipEnter(rol, e)}
+                onMouseLeave={() => setTooltip(null)}
+              >
+                <button onClick={() => { onChange(rol); setOpen(false); setTooltip(null) }}
+                  style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'space-between', padding:'9px 12px', border:'none', background: value===rol ? info.bg : 'transparent', color: value===rol ? info.color : '#4B5563', fontSize:'12px', fontWeight: value===rol?600:400, cursor:'pointer', fontFamily:"'DM Sans',sans-serif", textAlign:'left', transition:'background .1s' }}
+                  onMouseEnter={e => { if(value!==rol) e.currentTarget.style.background='#F8FAFC' }}
+                  onMouseLeave={e => { if(value!==rol) e.currentTarget.style.background='transparent' }}
+                >
+                  {rol}
+                  <span style={{ fontSize:'10px', color:'#94A3B8' }}>ⓘ</span>
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {tooltip && ROL_INFO[tooltip] && (
+            <div style={{ position:'fixed', top:tooltipPos.top, left:tooltipPos.left, width:'220px', background:'#0B1F3A', borderRadius:'8px', padding:'12px', zIndex:200, boxShadow:'0 8px 24px rgba(0,0,0,0.25)', pointerEvents:'none' }}>
+              <div style={{ fontSize:'11px', fontWeight:600, color:'#fff', marginBottom:'4px' }}>{tooltip}</div>
+              <div style={{ fontSize:'10px', color:'rgba(255,255,255,0.5)', marginBottom:'8px', lineHeight:1.4 }}>{ROL_INFO[tooltip].desc}</div>
+              <div style={{ display:'flex', flexDirection:'column', gap:'4px' }}>
+                {ROL_INFO[tooltip].modules.map(m => (
+                  <div key={m} style={{ display:'flex', alignItems:'center', gap:'5px', fontSize:'10px', color:'rgba(255,255,255,0.75)' }}>
+                    <span style={{ color:'#00F5A0', flexShrink:0 }}>✓</span>{m}
+                  </div>
+                ))}
+              </div>
+              <div style={{ position:'absolute', left:'-5px', top:'14px', width:'10px', height:'10px', background:'#0B1F3A', transform:'rotate(45deg)' }}/>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  )
+}
+
+function InviteModal({ onClose }) {
+  const [form, setForm] = useState({ name:'', email:'', rol:'Facturador / Contador' })
+  const [sent, setSent] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  const handle = () => {
+    if (!form.name || !form.email) return
+    setLoading(true)
+    setTimeout(() => { setLoading(false); setSent(true) }, 1200)
+  }
+
+  return (
+    <>
+      <div onClick={onClose} style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.3)', zIndex:60, backdropFilter:'blur(2px)' }}/>
+      <div style={{ position:'fixed', top:'50%', left:'50%', transform:'translate(-50%,-50%)', width:'440px', background:'#fff', borderRadius:'14px', zIndex:70, boxShadow:'0 24px 64px rgba(0,0,0,0.15)', overflow:'hidden', animation:'fadeUp .2s ease' }}>
+
+        {!sent ? (
+          <>
+            <div style={{ padding:'20px 24px 16px', borderBottom:'1px solid rgba(14,77,146,0.08)', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+              <div>
+                <div style={{ fontSize:'15px', fontWeight:700, color:'#0B1F3A' }}>Invitar colaborador</div>
+                <div style={{ fontSize:'11px', color:'#6B8BAE', marginTop:'2px' }}>Recibirá un email con acceso a NEXO</div>
+              </div>
+              <button onClick={onClose} style={{ width:'28px', height:'28px', borderRadius:'50%', border:'1px solid rgba(14,77,146,0.1)', background:'#F8FAFC', cursor:'pointer', fontSize:'14px', color:'#6B8BAE', display:'flex', alignItems:'center', justifyContent:'center' }}>×</button>
+            </div>
+
+            <div style={{ padding:'20px 24px' }}>
+              <div style={{ marginBottom:'14px' }}>
+                <label style={{ fontSize:'11px', fontWeight:600, color:'#6B8BAE', textTransform:'uppercase', letterSpacing:'.5px', display:'block', marginBottom:'5px' }}>Nombre completo</label>
+                <input value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))} placeholder="Ej: María González"
+                  style={{ width:'100%', padding:'9px 12px', border:'1px solid rgba(14,77,146,0.12)', borderRadius:'8px', fontSize:'13px', color:'#0B1F3A', fontFamily:"'DM Sans',sans-serif", outline:'none', boxSizing:'border-box' }}
+                  onFocus={e=>e.target.style.borderColor='#0E4D92'} onBlur={e=>e.target.style.borderColor='rgba(14,77,146,0.12)'} />
+              </div>
+              <div style={{ marginBottom:'14px' }}>
+                <label style={{ fontSize:'11px', fontWeight:600, color:'#6B8BAE', textTransform:'uppercase', letterSpacing:'.5px', display:'block', marginBottom:'5px' }}>Correo electrónico</label>
+                <input value={form.email} onChange={e=>setForm(f=>({...f,email:e.target.value}))} placeholder="usuario@empresa.com.pe" type="email"
+                  style={{ width:'100%', padding:'9px 12px', border:'1px solid rgba(14,77,146,0.12)', borderRadius:'8px', fontSize:'13px', color:'#0B1F3A', fontFamily:"'DM Sans',sans-serif", outline:'none', boxSizing:'border-box' }}
+                  onFocus={e=>e.target.style.borderColor='#0E4D92'} onBlur={e=>e.target.style.borderColor='rgba(14,77,146,0.12)'} />
+              </div>
+              <div style={{ marginBottom:'20px' }}>
+                <label style={{ fontSize:'11px', fontWeight:600, color:'#6B8BAE', textTransform:'uppercase', letterSpacing:'.5px', display:'block', marginBottom:'5px' }}>Rol asignado</label>
+                <RolSelect value={form.rol} onChange={v=>setForm(f=>({...f,rol:v}))}/>
+                <div style={{ marginTop:'8px', padding:'8px 10px', background:ROL_INFO[form.rol].bg, borderRadius:'7px', border:`1px solid ${ROL_INFO[form.rol].color}20` }}>
+                  <div style={{ fontSize:'10px', fontWeight:600, color:ROL_INFO[form.rol].color, marginBottom:'4px' }}>Accesos del rol seleccionado</div>
+                  <div style={{ display:'flex', flexWrap:'wrap', gap:'4px' }}>
+                    {ROL_INFO[form.rol].modules.map(m => (
+                      <span key={m} style={{ fontSize:'9px', padding:'2px 7px', background:'rgba(255,255,255,0.7)', borderRadius:'10px', color:ROL_INFO[form.rol].color, fontWeight:500 }}>{m}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div style={{ display:'flex', gap:'8px' }}>
+                <button onClick={onClose} style={{ flex:1, padding:'10px', border:'1px solid rgba(14,77,146,0.1)', borderRadius:'8px', background:'#F8FAFC', color:'#6B8BAE', fontSize:'13px', cursor:'pointer', fontFamily:"'DM Sans',sans-serif" }}>Cancelar</button>
+                <button onClick={handle} disabled={!form.name||!form.email||loading}
+                  style={{ flex:2, padding:'10px', border:'none', borderRadius:'8px', background: (!form.name||!form.email)?'#E2E8F0':'#0B1F3A', color: (!form.name||!form.email)?'#94A3B8':'#fff', fontSize:'13px', fontWeight:600, cursor: (!form.name||!form.email)?'not-allowed':'pointer', fontFamily:"'DM Sans',sans-serif", display:'flex', alignItems:'center', justifyContent:'center', gap:'6px' }}>
+                  {loading
+                    ? <><span style={{ width:'12px', height:'12px', border:'2px solid rgba(255,255,255,0.3)', borderTopColor:'#fff', borderRadius:'50%', display:'inline-block', animation:'lspin .7s linear infinite' }}/> Enviando...</>
+                    : 'Enviar invitación →'
+                  }
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div style={{ padding:'40px 24px', textAlign:'center' }}>
+            <div style={{ width:'56px', height:'56px', borderRadius:'50%', background:'#F0FDF4', border:'1px solid #BBF7D0', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px', fontSize:'24px' }}>✓</div>
+            <div style={{ fontSize:'16px', fontWeight:700, color:'#0B1F3A', marginBottom:'6px' }}>¡Invitación enviada!</div>
+            <div style={{ fontSize:'12px', color:'#6B8BAE', marginBottom:'4px' }}><strong>{form.name}</strong> recibirá un email en</div>
+            <div style={{ fontSize:'13px', fontWeight:600, color:'#0E4D92', marginBottom:'20px' }}>{form.email}</div>
+            <div style={{ fontSize:'11px', color:'#94A3B8', marginBottom:'20px' }}>Rol asignado: <strong style={{ color:ROL_INFO[form.rol].color }}>{form.rol}</strong></div>
+            <button onClick={onClose} style={{ padding:'9px 24px', background:'#0B1F3A', border:'none', borderRadius:'8px', color:'#fff', fontSize:'13px', fontWeight:600, cursor:'pointer', fontFamily:"'DM Sans',sans-serif" }}>Listo</button>
+          </div>
+        )}
+      </div>
+    </>
+  )
+}
+
 function TabEquipo() {
   const [hovRow, setHovRow] = useState(null)
+  const [showInvite, setShowInvite] = useState(false)
+  const [team, setTeam] = useState(TEAM.map(u => ({...u})))
+
   return (
     <div>
+      <style>{`@keyframes lspin{to{transform:rotate(360deg)}} @keyframes fadeUp{from{opacity:0;transform:translate(-50%,-46%)}to{opacity:1;transform:translate(-50%,-50%)}}`}</style>
+      {showInvite && <InviteModal onClose={() => setShowInvite(false)}/>}
+
       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'16px', paddingBottom:'8px', borderBottom:'1px solid rgba(14,77,146,0.08)' }}>
         <div>
           <div style={{ fontSize:'13px', fontWeight:600, color:'#0B1F3A' }}>Colaboradores</div>
           <div style={{ fontSize:'11px', color:'#6B8BAE', marginTop:'2px' }}>Gestiona accesos sin compartir tu contraseña</div>
         </div>
-        <button style={{ display:'flex', alignItems:'center', gap:'5px', padding:'8px 14px', background:'#0B1F3A', border:'none', borderRadius:'8px', color:'#fff', fontSize:'12px', fontWeight:600, cursor:'pointer', fontFamily:"'DM Sans',sans-serif" }}>
+        <button onClick={() => setShowInvite(true)}
+          style={{ display:'flex', alignItems:'center', gap:'5px', padding:'8px 14px', background:'#0B1F3A', border:'none', borderRadius:'8px', color:'#fff', fontSize:'12px', fontWeight:600, cursor:'pointer', fontFamily:"'DM Sans',sans-serif" }}>
           + Invitar usuario
         </button>
       </div>
 
       <div style={{ border:'1px solid rgba(14,77,146,0.08)', borderRadius:'10px', overflow:'hidden', marginBottom:'20px' }}>
-        <div style={{ display:'grid', gridTemplateColumns:'1.8fr 1.5fr 1.2fr .8fr 120px', gap:'8px', padding:'8px 16px', background:'#F8FAFC', borderBottom:'1px solid rgba(14,77,146,0.06)' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'1.8fr 1.5fr 1.4fr .8fr 100px', gap:'8px', padding:'8px 16px', background:'#F8FAFC', borderBottom:'1px solid rgba(14,77,146,0.06)' }}>
           {['Nombre','Email','Rol','Estado',''].map(h => (
             <span key={h} style={{ fontSize:'9px', color:'#94A3B8', textTransform:'uppercase', letterSpacing:'.6px', fontWeight:600 }}>{h}</span>
           ))}
         </div>
-        {TEAM.map((u,i) => (
+        {team.map((u,i) => (
           <div key={u.email}
             onMouseEnter={()=>setHovRow(i)} onMouseLeave={()=>setHovRow(null)}
-            style={{ display:'grid', gridTemplateColumns:'1.8fr 1.5fr 1.2fr .8fr 120px', gap:'8px', padding:'11px 16px', borderBottom: i<TEAM.length-1?'1px solid rgba(14,77,146,0.05)':'none', alignItems:'center', background: hovRow===i?'#F8FAFC':'#fff', transition:'background .1s' }}>
+            style={{ display:'grid', gridTemplateColumns:'1.8fr 1.5fr 1.4fr .8fr 100px', gap:'8px', padding:'11px 16px', borderBottom: i<team.length-1?'1px solid rgba(14,77,146,0.05)':'none', alignItems:'center', background: hovRow===i?'#F8FAFC':'#fff', transition:'background .1s' }}>
             <div style={{ display:'flex', alignItems:'center', gap:'9px' }}>
               <div style={{ width:'28px', height:'28px', borderRadius:'50%', background:'#EEF5FF', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'10px', fontWeight:700, color:'#0E4D92', flexShrink:0 }}>
                 {u.name.split(' ').map(n=>n[0]).join('').slice(0,2)}
@@ -255,16 +407,11 @@ function TabEquipo() {
               <span style={{ fontSize:'12px', fontWeight:500, color:'#0B1F3A' }}>{u.name}</span>
             </div>
             <span style={{ fontSize:'11px', color:'#6B8BAE' }}>{u.email}</span>
-            <select defaultValue={u.rol} style={{ fontSize:'11px', color:'#0B1F3A', border:'1px solid rgba(14,77,146,0.12)', borderRadius:'6px', padding:'4px 8px', background:'#fff', fontFamily:"'DM Sans',sans-serif", outline:'none', cursor:'pointer' }}>
-              <option>Admin de Ventas</option>
-              <option>Facturador / Contador</option>
-              <option>Tesorero</option>
-            </select>
+            <RolSelect value={u.rol} onChange={v => setTeam(t => t.map((x,j) => j===i?{...x,rol:v}:x))}/>
             <span style={{ fontSize:'10px', fontWeight:600, padding:'3px 8px', borderRadius:'20px', background: u.status==='active'?'#F0FDF4':'#FFF7ED', color: u.status==='active'?'#166534':'#C2410C', display:'inline-block' }}>
               {u.status==='active'?'Activo':'Invitado'}
             </span>
             <div style={{ display:'flex', gap:'4px', justifyContent:'flex-end' }}>
-              <button style={{ fontSize:'10px', padding:'4px 8px', border:'1px solid rgba(14,77,146,0.12)', borderRadius:'6px', background:'#fff', color:'#0E4D92', cursor:'pointer', fontFamily:"'DM Sans',sans-serif" }}>Editar</button>
               <button style={{ fontSize:'10px', padding:'4px 8px', border:'1px solid #FEE2E2', borderRadius:'6px', background:'#FEF2F2', color:'#DC2626', cursor:'pointer', fontFamily:"'DM Sans',sans-serif" }}>×</button>
             </div>
           </div>

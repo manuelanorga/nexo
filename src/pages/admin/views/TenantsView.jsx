@@ -309,6 +309,12 @@ function TenantDetail({ tenant, onBack, accent, accentBg, text, text2, text3, bo
   const [showConectar, setShowConectar] = useState(false)
   const [impersonating, setImpersonating] = useState(null)
   const [connections, setConnections] = useState(tenant.connections)
+  const [comercial, setComercial] = useState({
+    monedas:    { PEN: true, USD: false },
+    pagos:      { contado: true, d15: true, d30: true, d60: false, d90: false },
+    montoMin:   500,
+    bonificaciones: true,
+  })
 
   const isProv = tenant.type === 'prov'
 
@@ -321,6 +327,7 @@ function TenantDetail({ tenant, onBack, accent, accentBg, text, text2, text3, bo
     { id:'info',        label:'Información',          show: true },
     { id:'usuarios',    label:'Usuarios',              show: true },
     { id:'conexiones',  label: isProv ? 'Retails conectados' : 'Proveedores conectados', show: true, badge: connections.length },
+    { id:'comercial',   label:'Config. comercial',    show: isProv },
     { id:'actividad',   label:'Actividad',             show: true },
   ]
 
@@ -521,6 +528,98 @@ function TenantDetail({ tenant, onBack, accent, accentBg, text, text2, text3, bo
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {/* Tab: Config. comercial */}
+      {tab === 'comercial' && isProv && (
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'16px' }}>
+
+          {/* Monedas */}
+          <div style={{ ...card, padding:'18px 20px' }}>
+            <div style={{ fontSize:'13px', fontWeight:600, color:text, marginBottom:'4px' }}>Monedas permitidas</div>
+            <div style={{ fontSize:'11px', color:text3, marginBottom:'16px' }}>El retail solo verá las monedas que habilites</div>
+            {[['PEN','🇵🇪 Soles (PEN)'],['USD','🇺🇸 Dólares (USD)']].map(([key,lbl]) => (
+              <div key={key} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'10px 0', borderBottom:`1px solid ${border}` }}>
+                <span style={{ fontSize:'13px', color:text }}>{lbl}</span>
+                <button onClick={() => setComercial(c => ({...c, monedas:{...c.monedas,[key]:!c.monedas[key]}}))}
+                  style={{ width:'40px', height:'22px', borderRadius:'11px', border:'none', background: comercial.monedas[key]?accent:'#E5E7EB', cursor:'pointer', position:'relative', transition:'background .2s', flexShrink:0 }}>
+                  <div style={{ width:'16px', height:'16px', borderRadius:'50%', background:'#fff', position:'absolute', top:'3px', transition:'left .2s', left: comercial.monedas[key]?'21px':'3px', boxShadow:'0 1px 3px rgba(0,0,0,0.2)' }}/>
+                </button>
+              </div>
+            ))}
+            <div style={{ marginTop:'12px', padding:'8px 10px', background:'#FFFBEB', borderRadius:'7px', border:'1px solid #FDE68A', fontSize:'10px', color:'#D97706' }}>
+              ⚠ El tipo de cambio siempre es el oficial SUNAT del día
+            </div>
+          </div>
+
+          {/* Condiciones de pago */}
+          <div style={{ ...card, padding:'18px 20px' }}>
+            <div style={{ fontSize:'13px', fontWeight:600, color:text, marginBottom:'4px' }}>Condiciones de pago</div>
+            <div style={{ fontSize:'11px', color:text3, marginBottom:'16px' }}>Plazos que el retail puede seleccionar al crear una OC</div>
+            {[['contado','Contado'],['d15','15 días'],['d30','30 días'],['d60','60 días'],['d90','90 días']].map(([key,lbl]) => (
+              <div key={key} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'8px 0', borderBottom:`1px solid ${border}` }}>
+                <span style={{ fontSize:'13px', color:text }}>{lbl}</span>
+                <button onClick={() => setComercial(c => ({...c, pagos:{...c.pagos,[key]:!c.pagos[key]}}))}
+                  style={{ width:'40px', height:'22px', borderRadius:'11px', border:'none', background: comercial.pagos[key]?accent:'#E5E7EB', cursor:'pointer', position:'relative', transition:'background .2s', flexShrink:0 }}>
+                  <div style={{ width:'16px', height:'16px', borderRadius:'50%', background:'#fff', position:'absolute', top:'3px', transition:'left .2s', left: comercial.pagos[key]?'21px':'3px', boxShadow:'0 1px 3px rgba(0,0,0,0.2)' }}/>
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Monto mínimo */}
+          <div style={{ ...card, padding:'18px 20px' }}>
+            <div style={{ fontSize:'13px', fontWeight:600, color:text, marginBottom:'4px' }}>Monto mínimo de OC</div>
+            <div style={{ fontSize:'11px', color:text3, marginBottom:'16px' }}>El retail no puede enviar una OC por debajo de este monto</div>
+            <div style={{ display:'flex', alignItems:'center', gap:'10px' }}>
+              <span style={{ fontSize:'14px', color:text2, fontWeight:600 }}>S/</span>
+              <input type="number" value={comercial.montoMin}
+                onChange={e => setComercial(c => ({...c, montoMin: parseInt(e.target.value)||0}))}
+                style={{ flex:1, padding:'8px 12px', border:`1px solid ${border}`, borderRadius:'8px', fontSize:'14px', fontFamily:"'Inter',sans-serif", color:text, outline:'none', fontWeight:600 }}/>
+            </div>
+            <div style={{ fontSize:'10px', color:text3, marginTop:'8px' }}>
+              Si la OC no alcanza el mínimo, el sistema bloquea el envío automáticamente
+            </div>
+          </div>
+
+          {/* Bonificaciones */}
+          <div style={{ ...card, padding:'18px 20px' }}>
+            <div style={{ fontSize:'13px', fontWeight:600, color:text, marginBottom:'4px' }}>Bonificaciones</div>
+            <div style={{ fontSize:'11px', color:text3, marginBottom:'16px' }}>Permite que el retail agregue unidades bonificadas en la OC</div>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'10px 0' }}>
+              <div>
+                <div style={{ fontSize:'13px', color:text, fontWeight:500 }}>Bonificaciones habilitadas</div>
+                <div style={{ fontSize:'10px', color:text3, marginTop:'2px' }}>El retail puede indicar unidades bonificadas por producto</div>
+              </div>
+              <button onClick={() => setComercial(c => ({...c, bonificaciones:!c.bonificaciones}))}
+                style={{ width:'40px', height:'22px', borderRadius:'11px', border:'none', background: comercial.bonificaciones?accent:'#E5E7EB', cursor:'pointer', position:'relative', transition:'background .2s', flexShrink:0 }}>
+                <div style={{ width:'16px', height:'16px', borderRadius:'50%', background:'#fff', position:'absolute', top:'3px', transition:'left .2s', left: comercial.bonificaciones?'21px':'3px', boxShadow:'0 1px 3px rgba(0,0,0,0.2)' }}/>
+              </button>
+            </div>
+
+            <div style={{ marginTop:'16px', paddingTop:'16px', borderTop:`1px solid ${border}` }}>
+              <div style={{ fontSize:'11px', fontWeight:600, color:text2, marginBottom:'8px' }}>Resumen de configuración activa</div>
+              <div style={{ display:'flex', flexWrap:'wrap', gap:'5px' }}>
+                {Object.entries(comercial.monedas).filter(([,v])=>v).map(([k]) => (
+                  <span key={k} style={{ fontSize:'10px', padding:'2px 8px', borderRadius:'10px', background:accentBg, color:accent, fontWeight:500 }}>{k}</span>
+                ))}
+                {Object.entries(comercial.pagos).filter(([,v])=>v).map(([k]) => (
+                  <span key={k} style={{ fontSize:'10px', padding:'2px 8px', borderRadius:'10px', background:'#F3F4F6', color:text2, fontWeight:500 }}>
+                    {k==='contado'?'Contado':k==='d15'?'15d':k==='d30'?'30d':k==='d60'?'60d':'90d'}
+                  </span>
+                ))}
+                <span style={{ fontSize:'10px', padding:'2px 8px', borderRadius:'10px', background:'#F3F4F6', color:text2 }}>Min S/{comercial.montoMin}</span>
+                {comercial.bonificaciones && <span style={{ fontSize:'10px', padding:'2px 8px', borderRadius:'10px', background:'#F0FDF4', color:'#16A34A' }}>Bonif. ✓</span>}
+              </div>
+            </div>
+
+            <div style={{ marginTop:'14px' }}>
+              <button style={{ width:'100%', padding:'10px', border:'none', borderRadius:'8px', background:text, color:'#fff', fontSize:'13px', fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif" }}>
+                Guardar configuración comercial
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

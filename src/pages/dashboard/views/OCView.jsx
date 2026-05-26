@@ -380,6 +380,12 @@ export default function OCView({ setView, role = 'prov' }) {
     }
   }, [selectedOCId])
 
+  const [socioFilter, setSocioFilter] = useState('todos')
+  const [montoMin, setMontoMin]       = useState('')
+  const [montoMax, setMontoMax]       = useState('')
+
+  const socios = ['todos', ...new Set(orders.map(o => o.client))]
+
   const filtered = useMemo(() => {
     let result = orders
     if (activeStatus !== 'all') result = result.filter(o => o.status === activeStatus)
@@ -391,8 +397,13 @@ export default function OCView({ setView, role = 'prov' }) {
         o.amount.toLowerCase().includes(q)
       )
     }
+    if (dateFrom) result = result.filter(o => o.date >= dateFrom)
+    if (dateTo)   result = result.filter(o => o.date <= dateTo)
+    if (socioFilter !== 'todos') result = result.filter(o => o.client === socioFilter)
+    if (montoMin) result = result.filter(o => parseFloat(o.amount.replace(/[^0-9.]/g,'')) >= parseFloat(montoMin))
+    if (montoMax) result = result.filter(o => parseFloat(o.amount.replace(/[^0-9.]/g,'')) <= parseFloat(montoMax))
     return result
-  }, [orders, activeStatus, searchQuery])
+  }, [orders, activeStatus, searchQuery, dateFrom, dateTo, socioFilter, montoMin, montoMax])
 
   const counts = useMemo(() => {
     const c = { all: orders.length }
@@ -448,7 +459,7 @@ export default function OCView({ setView, role = 'prov' }) {
           </button>
         </div>
       ) : (
-      <div style={{ display: 'flex', gap: '6px', marginBottom: '14px', overflowX: 'auto', paddingBottom: '6px', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      <div style={{ display: 'flex', gap: '6px', marginBottom: showFilters?'8px':'14px', overflowX: 'auto', paddingBottom: '6px', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none', alignItems: 'center' }}>
         {allStatuses.map(s => (
           <div key={s.key} onClick={() => setActiveStatus(s.key)} style={{
             display: 'flex', alignItems: 'center', gap: '6px',
@@ -463,7 +474,48 @@ export default function OCView({ setView, role = 'prov' }) {
             </span>
           </div>
         ))}
+        <button onClick={() => setShowFilters(!showFilters)}
+          style={{ display:'flex', alignItems:'center', gap:'5px', padding:'6px 14px', borderRadius:'100px', border:`1px solid ${showFilters?'rgba(14,77,146,0.3)':'rgba(14,77,146,0.1)'}`, background: showFilters?'#EEF5FF':'#fff', color: showFilters?'#0E4D92':'#6B8BAE', fontSize:'12px', fontWeight: showFilters?600:400, cursor:'pointer', fontFamily:"'DM Sans',sans-serif", flexShrink:0, transition:'all .15s' }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+          Filtros {(dateFrom||dateTo||socioFilter!=='todos'||montoMin||montoMax) ? '●' : ''}
+        </button>
       </div>
+      )}
+
+      {/* Panel filtros avanzados */}
+      {showFilters && !isMobile && (
+        <div style={{ background:'#fff', border:'1px solid rgba(14,77,146,0.1)', borderRadius:'10px', padding:'14px 16px', marginBottom:'14px', display:'grid', gridTemplateColumns:'1fr 1fr 1fr 1fr auto', gap:'10px', alignItems:'flex-end' }}>
+          <div>
+            <label style={{ fontSize:'10px', fontWeight:600, color:'#6B8BAE', textTransform:'uppercase', letterSpacing:'.5px', display:'block', marginBottom:'4px' }}>Fecha desde</label>
+            <input type="date" value={dateFrom} onChange={e=>setDateFrom(e.target.value)}
+              style={{ width:'100%', height:'32px', border:'1px solid rgba(14,77,146,0.15)', borderRadius:'7px', padding:'0 8px', fontSize:'12px', fontFamily:"'DM Sans',sans-serif", color:'#0B1F3A', outline:'none', boxSizing:'border-box' }}/>
+          </div>
+          <div>
+            <label style={{ fontSize:'10px', fontWeight:600, color:'#6B8BAE', textTransform:'uppercase', letterSpacing:'.5px', display:'block', marginBottom:'4px' }}>Fecha hasta</label>
+            <input type="date" value={dateTo} onChange={e=>setDateTo(e.target.value)}
+              style={{ width:'100%', height:'32px', border:'1px solid rgba(14,77,146,0.15)', borderRadius:'7px', padding:'0 8px', fontSize:'12px', fontFamily:"'DM Sans',sans-serif", color:'#0B1F3A', outline:'none', boxSizing:'border-box' }}/>
+          </div>
+          <div>
+            <label style={{ fontSize:'10px', fontWeight:600, color:'#6B8BAE', textTransform:'uppercase', letterSpacing:'.5px', display:'block', marginBottom:'4px' }}>Socio comercial</label>
+            <select value={socioFilter} onChange={e=>setSocioFilter(e.target.value)}
+              style={{ width:'100%', height:'32px', border:'1px solid rgba(14,77,146,0.15)', borderRadius:'7px', padding:'0 8px', fontSize:'12px', fontFamily:"'DM Sans',sans-serif", color:'#0B1F3A', outline:'none', background:'#fff', boxSizing:'border-box' }}>
+              {socios.map(s => <option key={s} value={s}>{s==='todos'?'Todos los socios':s}</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={{ fontSize:'10px', fontWeight:600, color:'#6B8BAE', textTransform:'uppercase', letterSpacing:'.5px', display:'block', marginBottom:'4px' }}>Monto (S/)</label>
+            <div style={{ display:'flex', gap:'4px' }}>
+              <input type="number" placeholder="Mín" value={montoMin} onChange={e=>setMontoMin(e.target.value)}
+                style={{ width:'50%', height:'32px', border:'1px solid rgba(14,77,146,0.15)', borderRadius:'7px', padding:'0 6px', fontSize:'12px', fontFamily:"'DM Sans',sans-serif", color:'#0B1F3A', outline:'none', boxSizing:'border-box' }}/>
+              <input type="number" placeholder="Máx" value={montoMax} onChange={e=>setMontoMax(e.target.value)}
+                style={{ width:'50%', height:'32px', border:'1px solid rgba(14,77,146,0.15)', borderRadius:'7px', padding:'0 6px', fontSize:'12px', fontFamily:"'DM Sans',sans-serif", color:'#0B1F3A', outline:'none', boxSizing:'border-box' }}/>
+            </div>
+          </div>
+          <button onClick={() => { setDateFrom(''); setDateTo(''); setSocioFilter('todos'); setMontoMin(''); setMontoMax('') }}
+            style={{ height:'32px', padding:'0 12px', border:'1px solid rgba(14,77,146,0.1)', borderRadius:'7px', background:'#F8FBFF', color:'#6B8BAE', fontSize:'11px', cursor:'pointer', fontFamily:"'DM Sans',sans-serif", whiteSpace:'nowrap' }}>
+            Limpiar
+          </button>
+        </div>
       )}
 
       {/* Toolbar */}

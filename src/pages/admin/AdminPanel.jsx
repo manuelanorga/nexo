@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AdminDashboard from './views/AdminDashboard'
+import TenantsView from './views/TenantsView'
 
 const NAV = [
   { sec: 'Operaciones', items: [
@@ -158,6 +159,8 @@ export default function AdminPanel() {
         <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px', background: bg }}>
           {view === 'dashboard'
             ? <AdminDashboard {...{ accent, accentBg, text, text2, text3, border, white, bg }} />
+            : view === 'tenants'
+            ? <TenantsView {...{ accent, accentBg, text, text2, text3, border, white, bg }} />
             : <ComingSoon label={COMING[view]} {...{ accent, accentBg, text2, text3, border }} />
           }
         </div>

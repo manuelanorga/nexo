@@ -393,55 +393,151 @@ function TabBilling() {
 }
 
 
-function TabAPI() {
+function TabAPI({ role }) {
   const [showToken, setShowToken] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [sapStatus, setSapStatus] = useState('ok') // ok | error | testing
+  const [webhookSaved, setWebhookSaved] = useState(false)
+  const isProv = role === 'prov'
+
   const token = 'nxo_live_sk_4f8e2a1b9c3d7f6e5a2b8c4d1e9f3a7b'
   const copy = () => { navigator.clipboard?.writeText(token); setCopied(true); setTimeout(()=>setCopied(false),2000) }
+  const testSap = () => { setSapStatus('testing'); setTimeout(()=>setSapStatus('ok'),2000) }
+  const saveWebhook = () => { setWebhookSaved(true); setTimeout(()=>setWebhookSaved(false),2000) }
 
   return (
     <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'24px' }}>
+
+      {/* IZQUIERDA */}
       <div>
-        <div style={{ fontSize:'13px', fontWeight:600, color:'#0B1F3A', marginBottom:'16px', paddingBottom:'8px', borderBottom:'1px solid rgba(14,77,146,0.08)' }}>Credenciales SUNAT / OSE</div>
+        {isProv ? (
+          <>
+            <div style={{ fontSize:'13px', fontWeight:600, color:'#0B1F3A', marginBottom:'16px', paddingBottom:'8px', borderBottom:'1px solid rgba(14,77,146,0.08)' }}>
+              Conexión con SAP
+            </div>
 
-        <div style={{ padding:'10px 12px', background:'#F0FDF4', border:'1px solid #BBF7D0', borderRadius:'8px', fontSize:'11px', color:'#166534', marginBottom:'16px', lineHeight:1.5 }}>
-          ✓ Conexión con Nubefact activa · Última sincronización hace 3 min
-        </div>
+            {/* Status SAP */}
+            <div style={{ padding:'10px 12px', background: sapStatus==='ok'?'#F0FDF4':sapStatus==='testing'?'#FFF7ED':'#FEF2F2', border:`1px solid ${sapStatus==='ok'?'#BBF7D0':sapStatus==='testing'?'#FED7AA':'#FECACA'}`, borderRadius:'8px', fontSize:'11px', color: sapStatus==='ok'?'#166534':sapStatus==='testing'?'#92400E':'#991B1B', marginBottom:'16px', lineHeight:1.5, display:'flex', alignItems:'center', gap:'8px' }}>
+              {sapStatus==='ok' && <><span>✓</span> Conexión con SAP activa · Última sincronización hace 5 min</>}
+              {sapStatus==='testing' && <><span style={{ animation:'lspin .7s linear infinite', display:'inline-block' }}>⟳</span> Probando conexión...</>}
+              {sapStatus==='error' && <><span>✗</span> Error de conexión · Verifica el endpoint</>}
+            </div>
 
-        <Field label="Proveedor OSE" value="Nubefact"/>
-        <Field label="Token de API Nubefact" value="nubefact_tk_••••••••••••3f8a" hint="Ingresa el token de tu cuenta en nubefact.com"/>
-        <Field label="RUC secundario SUNAT" value="20100128954" locked/>
-        <Field label="Clave SOL (solo lectura)" value="••••••••" hint="Usada para consultar CDR automáticamente"/>
-        <SaveBtn label="Guardar credenciales"/>
+            <Field label="Endpoint SAP" value="https://sap.arcacontinental.pe/api/nexo" hint="URL del servicio SAP que recibe datos de NEXO"/>
+            <Field label="Token de autenticación SAP" value="sap_tk_••••••••••••••••2f9c" hint="Token proporcionado por el equipo técnico de Arca"/>
+            <Field label="Ambiente" value="Producción"/>
+
+            <div style={{ display:'flex', gap:'8px', marginTop:'4px' }}>
+              <SaveBtn label="Guardar configuración"/>
+              <button onClick={testSap}
+                style={{ padding:'9px 14px', border:'1px solid rgba(14,77,146,0.15)', borderRadius:'8px', background:'transparent', color:'#0E4D92', fontSize:'12px', fontWeight:500, cursor:'pointer', fontFamily:"'DM Sans',sans-serif" }}>
+                Probar conexión
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div style={{ fontSize:'13px', fontWeight:600, color:'#0B1F3A', marginBottom:'16px', paddingBottom:'8px', borderBottom:'1px solid rgba(14,77,146,0.08)' }}>
+              Conexión con NEXO
+            </div>
+            <div style={{ padding:'10px 12px', background:'#F0FDF4', border:'1px solid #BBF7D0', borderRadius:'8px', fontSize:'11px', color:'#166534', marginBottom:'16px' }}>
+              ✓ Conexión activa · Última actividad hace 2 min
+            </div>
+            <div style={{ background:'#F8FAFC', border:'1px solid rgba(14,77,146,0.08)', borderRadius:'10px', padding:'16px', marginBottom:'16px' }}>
+              <div style={{ fontSize:'11px', color:'#6B8BAE', marginBottom:'12px', lineHeight:1.5 }}>
+                Tu sistema puede conectarse a NEXO usando esta API Key para enviar y recibir Órdenes de Compra automáticamente.
+              </div>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'12px', marginBottom:'16px' }}>
+                {[
+                  { label:'OCs emitidas este mes', val:'214', color:'#0E4D92' },
+                  { label:'OCs confirmadas', val:'198', color:'#166534' },
+                  { label:'Tiempo promedio respuesta', val:'1.2s', color:'#92400E' },
+                  { label:'Errores este mes', val:'0', color:'#94A3B8' },
+                ].map(s => (
+                  <div key={s.label} style={{ background:'#fff', border:'1px solid rgba(14,77,146,0.08)', borderRadius:'8px', padding:'10px 12px' }}>
+                    <div style={{ fontSize:'9px', color:'#94A3B8', textTransform:'uppercase', letterSpacing:'.5px', marginBottom:'3px' }}>{s.label}</div>
+                    <div style={{ fontSize:'18px', fontWeight:700, color:s.color, fontFamily:"'Fraunces',serif" }}>{s.val}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* EDI */}
+            <div style={{ fontSize:'13px', fontWeight:600, color:'#0B1F3A', marginBottom:'12px', paddingBottom:'8px', borderBottom:'1px solid rgba(14,77,146,0.08)' }}>
+              Conexión EDI
+            </div>
+            <div style={{ background:'#F8FAFC', border:'1px solid rgba(14,77,146,0.08)', borderRadius:'10px', padding:'16px' }}>
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'10px' }}>
+                <div style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A' }}>EDI con tu sistema</div>
+                <span style={{ fontSize:'10px', fontWeight:600, padding:'3px 9px', borderRadius:'20px', background:'#FFF7ED', color:'#C2410C', border:'1px solid #FED7AA' }}>
+                  En configuración
+                </span>
+              </div>
+              <div style={{ fontSize:'11px', color:'#6B8BAE', lineHeight:1.5, marginBottom:'12px' }}>
+                La conexión EDI se habilita una vez que tu retail esté activo en la red NEXO. Permite recibir y enviar documentos automáticamente sin entrar al portal.
+              </div>
+              <a href="https://wa.me/51931067775?text=Hola,%20quiero%20activar%20la%20conexión%20EDI%20para%20mi%20retail%20en%20NEXO"
+                target="_blank" rel="noreferrer"
+                style={{ display:'inline-flex', alignItems:'center', gap:'7px', padding:'8px 16px', background:'#25D366', border:'none', borderRadius:'8px', color:'#fff', fontSize:'12px', fontWeight:600, cursor:'pointer', textDecoration:'none', fontFamily:"'DM Sans',sans-serif" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Contacta al equipo para activar
+              </a>
+            </div>
+          </>
+        )}
       </div>
 
+      {/* DERECHA */}
       <div>
         <div style={{ fontSize:'13px', fontWeight:600, color:'#0B1F3A', marginBottom:'16px', paddingBottom:'8px', borderBottom:'1px solid rgba(14,77,146,0.08)', display:'flex', alignItems:'center', gap:'8px' }}>
-          API Keys & Webhooks
-          <span style={{ fontSize:'10px', background:'#F5F3FF', color:'#7C3AED', padding:'2px 7px', borderRadius:'6px', fontWeight:500 }}>Enterprise</span>
+          API Key & Webhook
+          <span style={{ fontSize:'10px', background:'#F5F3FF', color:'#7C3AED', padding:'2px 7px', borderRadius:'6px', fontWeight:500 }}>
+            {isProv ? 'Professional' : 'Enterprise'}
+          </span>
         </div>
 
-        <div style={{ background:'#F8FAFC', border:'1px solid rgba(14,77,146,0.08)', borderRadius:'10px', padding:'16px', marginBottom:'16px' }}>
-          <div style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A', marginBottom:'10px' }}>API Key de producción</div>
+        {/* API Key */}
+        <div style={{ background:'#F8FAFC', border:'1px solid rgba(14,77,146,0.08)', borderRadius:'10px', padding:'16px', marginBottom:'14px' }}>
+          <div style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A', marginBottom:'6px' }}>
+            {isProv ? 'Tu API Key de NEXO' : 'API Key de acceso'}
+          </div>
+          <div style={{ fontSize:'11px', color:'#6B8BAE', marginBottom:'10px' }}>
+            {isProv ? 'Usa esta clave en SAP para autenticar las llamadas a NEXO' : 'Usa esta clave para conectar tu sistema de compras con NEXO'}
+          </div>
           <div style={{ display:'flex', gap:'8px' }}>
             <div style={{ flex:1, padding:'8px 12px', background:'#fff', border:'1px solid rgba(14,77,146,0.12)', borderRadius:'7px', fontSize:'11px', fontFamily:'monospace', color:'#0B1F3A', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
-              {showToken ? token : 'nxo_live_sk_••••••••••••••••••••••••••••••'}
+              {showToken ? token : 'nxo_live_sk_••••••••••••••••••••••'}
             </div>
             <button onClick={()=>setShowToken(!showToken)} style={{ padding:'8px 10px', border:'1px solid rgba(14,77,146,0.12)', borderRadius:'7px', background:'#fff', cursor:'pointer', fontSize:'12px' }}>
               {showToken?'🙈':'👁'}
             </button>
-            <button onClick={copy} style={{ padding:'8px 12px', border:'none', borderRadius:'7px', background: copied?'#166534':'#0B1F3A', color:'#fff', fontSize:'11px', fontWeight:600, cursor:'pointer', fontFamily:"'DM Sans',sans-serif", transition:'background .2s' }}>
-              {copied?'✓':'Copiar'}
+            <button onClick={copy} style={{ padding:'8px 12px', border:'none', borderRadius:'7px', background: copied?'#166534':'#0B1F3A', color:'#fff', fontSize:'11px', fontWeight:600, cursor:'pointer', fontFamily:"'DM Sans',sans-serif", transition:'background .2s', whiteSpace:'nowrap' }}>
+              {copied?'✓ Copiado':'Copiar'}
             </button>
           </div>
-          <div style={{ fontSize:'10px', color:'#94A3B8', marginTop:'6px' }}>Úsala en el header: <code style={{ background:'#F1F5F9', padding:'1px 5px', borderRadius:'3px' }}>Authorization: Bearer &lt;API_KEY&gt;</code></div>
+          <div style={{ fontSize:'10px', color:'#94A3B8', marginTop:'6px' }}>
+            Header: <code style={{ background:'#F1F5F9', padding:'1px 5px', borderRadius:'3px', fontSize:'10px' }}>Authorization: Bearer &lt;API_KEY&gt;</code>
+          </div>
         </div>
 
+        {/* Webhook */}
         <div style={{ background:'#F8FAFC', border:'1px solid rgba(14,77,146,0.08)', borderRadius:'10px', padding:'16px' }}>
-          <div style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A', marginBottom:'10px' }}>Webhook URL</div>
-          <Field label="Endpoint de notificaciones" value="https://erp.arcacontinental.pe/nexo/webhook" hint="Recibirás un POST cuando el Retail apruebe una Orden de Pago"/>
-          <div style={{ display:'flex', gap:'8px', marginTop:'-8px' }}>
-            <SaveBtn label="Guardar webhook"/>
+          <div style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A', marginBottom:'4px' }}>Webhook de notificaciones</div>
+          <div style={{ fontSize:'11px', color:'#6B8BAE', marginBottom:'12px' }}>
+            {isProv
+              ? 'NEXO enviará un POST a esta URL cuando un Retail apruebe una OC o emita una Orden de Pago'
+              : 'NEXO enviará un POST a esta URL cuando Arca confirme o despache tu OC'}
+          </div>
+          <Field
+            label="URL de tu endpoint"
+            value={isProv ? 'https://sap.arcacontinental.pe/nexo/events' : 'https://sistemas.wong.com.pe/nexo/webhook'}
+            hint="Debe ser una URL pública que acepte POST con JSON"
+          />
+          <div style={{ display:'flex', gap:'8px', marginTop:'-4px' }}>
+            <button onClick={saveWebhook}
+              style={{ padding:'9px 16px', border:'none', borderRadius:'8px', background: webhookSaved?'#166534':'#0B1F3A', color:'#fff', fontSize:'12px', fontWeight:600, cursor:'pointer', fontFamily:"'DM Sans',sans-serif", transition:'background .2s' }}>
+              {webhookSaved ? '✓ Guardado' : 'Guardar webhook'}
+            </button>
             <button style={{ padding:'9px 14px', border:'1px solid rgba(14,77,146,0.15)', borderRadius:'8px', background:'transparent', color:'#0E4D92', fontSize:'12px', fontWeight:500, cursor:'pointer', fontFamily:"'DM Sans',sans-serif" }}>
               Probar envío
             </button>
@@ -712,7 +808,7 @@ export default function PerfilView({ role }) {
       <div style={{ background:'#fff', borderRadius:'12px', border:'1px solid rgba(14,77,146,0.08)', padding:'24px', boxShadow:'0 1px 4px rgba(14,77,146,0.06)' }}>
         {tab === 'empresa'  && <TabEmpresa/>}
         {tab === 'billing'  && <TabBilling/>}
-        {tab === 'api'      && <TabAPI/>}
+        {tab === 'api'      && <TabAPI role={role}/>}
         {tab === 'equipo'   && <TabEquipo/>}
       </div>
     </div>

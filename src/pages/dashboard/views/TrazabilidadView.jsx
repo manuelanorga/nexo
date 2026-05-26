@@ -228,7 +228,7 @@ function Timeline({ oc, isMobile }) {
         {/* Acciones */}
         <div style={{ background: '#fff', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '12px', padding: '14px 16px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           <button style={{ padding: '7px 14px', background: '#EEF5FF', border: 'none', borderRadius: '8px', fontSize: '11px', color: '#0E4D92', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>Descargar PDF</button>
-          <button style={{ padding: '7px 14px', background: '#F8FBFF', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '8px', fontSize: '11px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Descargar EDI</button>
+          {false && <button style={{ padding: '7px 14px', background: '#F8FBFF', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '8px', fontSize: '11px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Descargar EDI</button>} {/* oculto — activar por tenant desde admin */}
           <button style={{ padding: '7px 14px', background: '#F8FBFF', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '8px', fontSize: '11px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Compartir link</button>
         </div>
       </div>

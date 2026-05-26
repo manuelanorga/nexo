@@ -299,7 +299,8 @@ function OCModal({ oc, onClose, setView, onConfirm, onReject }) {
                   <span style={{ fontSize: '10px', color: '#9DB8D9', paddingLeft: '2px' }}>Disponible al confirmar</span>
                 </div>
               )}
-              {['confirmed','dispatched','transit','received','invoiced'].includes(oc.status) && (
+              {/* Descargar EDI oculto — activar por tenant desde admin cuando retail no tenga EDI automático */}
+              {false && ['confirmed','dispatched','transit','received','invoiced'].includes(oc.status) && (
                 <button onClick={() => {
                   const blob = new Blob([`ISA*00*          *00*          *ZZ*${oc.id}*ZZ*NEXO*260524*1432*U*00401*000000001*0*P*>
 ST*850*0001
@@ -313,7 +314,9 @@ IEA*1*000000001`], { type: 'text/plain' })
                   a.download = oc.id + '.edi'
                   a.click()
                   URL.revokeObjectURL(url)
-                }} style={{ padding: '7px 14px', background: '#fff', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Descargar EDI</button>
+                }} style={{ padding: '7px 14px', background: '#fff', border: '1px solid rgba(14,77,146,0.15)', borderRadius: '8px', fontSize: '12px', color: '#6B8BAE', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
+                  Descargar EDI
+                </button>
               )}
 
             </div>

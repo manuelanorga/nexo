@@ -113,6 +113,39 @@ function ProductModal({ product, onClose, onSave, isNew }) {
   )
 }
 
+function StockBadge({ stock, editable, onChange }) {
+  const [editing, setEditing] = useState(false)
+  const [val, setVal] = useState(stock ?? 0)
+
+  if (!editable) return (
+    <div style={{ display:'flex', alignItems:'center', gap:'5px' }}>
+      <div style={{ width:'6px', height:'6px', borderRadius:'50%', background:'#9CA3AF', flexShrink:0 }}/>
+      <span style={{ fontSize:'11px', color:'#9CA3AF', fontStyle:'italic' }}>SAP</span>
+    </div>
+  )
+
+  if (editing) return (
+    <input type="number" value={val} autoFocus
+      onChange={e => setVal(e.target.value)}
+      onBlur={() => { setEditing(false); onChange(parseInt(val)||0) }}
+      onKeyDown={e => e.key==='Enter' && e.target.blur()}
+      style={{ width:'60px', height:'24px', border:'1px solid rgba(0,194,168,0.4)', borderRadius:'6px', textAlign:'center', fontSize:'12px', fontFamily:"'DM Sans',sans-serif", color:'#0B1F3A', outline:'none', padding:'0 4px' }}/>
+  )
+
+  const n = parseInt(val) || 0
+  const color = n === 0 ? '#DC2626' : n < 20 ? '#D97706' : '#16A34A'
+  const bg    = n === 0 ? '#FEF2F2' : n < 20 ? '#FFFBEB' : '#F0FDF4'
+
+  return (
+    <div onClick={() => setEditing(true)} title="Clic para editar"
+      style={{ display:'inline-flex', alignItems:'center', gap:'5px', padding:'3px 8px', borderRadius:'10px', background:bg, cursor:'pointer', border:`1px solid ${color}20` }}>
+      <span style={{ width:'6px', height:'6px', borderRadius:'50%', background:color, flexShrink:0 }}/>
+      <span style={{ fontSize:'11px', fontWeight:600, color }}>{n === 0 ? 'Sin stock' : n}</span>
+      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    </div>
+  )
+}
+
 export default function CatálogoView() {
   const { searchQuery } = useApp()
   const [editProduct, setEditProduct] = useState(null)
@@ -122,6 +155,13 @@ export default function CatálogoView() {
   const [includePrices, setIncludePrices] = useState(true)
   const [includeStatus, setIncludeStatus] = useState(true)
   const [data, setData] = useState(catalogData)
+  const [stockManual, setStockManual] = useState(false)
+  const [stocks, setStocks] = useState({
+    '07702459082090': 120, '07702459082014': 200,
+    '07702459082038': 18,  '07702459082045': 0,
+    '07702459082052': 85,  '07702459082069': 340,
+  })
+  const updateStock = (ean, val) => setStocks(s => ({...s, [ean]: val}))
   const isMobile = useIsMobile()
 
   const filtered = useMemo(() => {
@@ -169,6 +209,24 @@ export default function CatálogoView() {
 
   return (
     <div>
+      {/* Toggle maestro de stock */}
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'10px 14px', background: stockManual?'#FFF7ED':'#F0FDF4', border:`1px solid ${stockManual?'#FED7AA':'#BBF7D0'}`, borderRadius:'8px', marginBottom:'12px' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:'10px' }}>
+          <span style={{ fontSize:'16px' }}>{stockManual ? '📦' : '🔗'}</span>
+          <div>
+            <div style={{ fontSize:'12px', fontWeight:600, color: stockManual?'#C2410C':'#166534' }}>
+              {stockManual ? 'Gestión de stock manual activa' : 'Stock sincronizado desde SAP'}
+            </div>
+            <div style={{ fontSize:'10px', color: stockManual?'#D97706':'#16A34A' }}>
+              {stockManual ? 'Edita el stock haciendo clic en cualquier valor de la tabla' : 'El stock se actualiza automáticamente desde SAP — solo lectura'}
+            </div>
+          </div>
+        </div>
+        <button onClick={() => setStockManual(!stockManual)}
+          style={{ width:'40px', height:'22px', borderRadius:'11px', border:'none', background: stockManual?'#F59E0B':'#10B981', cursor:'pointer', position:'relative', transition:'background .2s', flexShrink:0 }}>
+          <div style={{ width:'16px', height:'16px', borderRadius:'50%', background:'#fff', position:'absolute', top:'3px', transition:'left .2s', left: stockManual?'21px':'3px', boxShadow:'0 1px 3px rgba(0,0,0,0.2)' }}/>
+        </button>
+      </div>
       {showExport && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(11,31,58,0.55)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowExport(false)}>
           <div style={{ background: '#fff', borderRadius: '16px', width: '100%', maxWidth: '380px', boxShadow: '0 24px 80px rgba(0,0,0,0.2)', overflow: 'hidden' }} onClick={e => e.stopPropagation()}>
@@ -252,7 +310,7 @@ export default function CatálogoView() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ background: '#F8FBFF', borderBottom: '1px solid rgba(14,77,146,0.08)' }}>
-              {['EAN','Cód. Interno','Producto','Presentación','Peso','Precio Base','Estado',''].map(h => (
+              {['EAN','Cód. Interno','Producto','Presentación','Peso','Precio Base','Stock','Estado',''].map(h => (
                 <th key={h} style={{ padding: '9px 12px', textAlign: 'left', fontSize: '10px', color: '#6B8BAE', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.3px', whiteSpace: 'nowrap' }}>{h}</th>
               ))}
             </tr>
@@ -269,6 +327,9 @@ export default function CatálogoView() {
                 <td style={{ padding: '9px 12px', fontSize: '11px', color: '#6B8BAE' }}>{p.presentation}</td>
                 <td style={{ padding: '9px 12px', fontSize: '11px', color: '#6B8BAE' }}>{p.weight}</td>
                 <td style={{ padding: '9px 12px', fontFamily: 'monospace', fontSize: '11px', fontWeight: 600, color: '#0B1F3A' }}>{p.basePrice}</td>
+                <td style={{ padding: '9px 12px' }}>
+                  <StockBadge stock={stocks[p.ean]??null} editable={stockManual} onChange={v=>updateStock(p.ean,v)}/>
+                </td>
                 <td style={{ padding: '9px 12px' }}><Badge status={p.status} /></td>
                 <td style={{ padding: '9px 12px' }}>
                   <button onClick={() => setEditProduct(p)} style={{ padding: '4px 10px', background: '#EEF5FF', border: 'none', borderRadius: '6px', fontSize: '10px', color: '#0E4D92', cursor: 'pointer', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>Editar</button>

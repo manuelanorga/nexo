@@ -1,6 +1,14 @@
 import { useState, useRef } from 'react'
 
-const TABS = [
+const TABS_PROV = [
+  { id: 'empresa',      label: 'Datos de la Empresa',   icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' },
+  { id: 'billing',      label: 'Plan & Suscripción',    icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z' },
+  { id: 'comercial',    label: 'Config. Comercial',     icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z' },
+  { id: 'api',          label: 'Conectividad & API',    icon: 'M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1' },
+  { id: 'equipo',       label: 'Mi Equipo',             icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z' },
+]
+
+const TABS_RET = [
   { id: 'empresa',      label: 'Datos de la Empresa',   icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' },
   { id: 'billing',      label: 'Plan & Suscripción',    icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z' },
   { id: 'api',          label: 'Conectividad & API',    icon: 'M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1' },
@@ -765,9 +773,206 @@ function TabEquipo() {
   )
 }
 
+function Toggle({ value, onChange }) {
+  return (
+    <button onClick={() => onChange(!value)}
+      style={{ width:'40px', height:'22px', borderRadius:'11px', border:'none', background: value?'#00C2A8':'#E5E7EB', cursor:'pointer', position:'relative', transition:'background .2s', flexShrink:0 }}>
+      <div style={{ width:'16px', height:'16px', borderRadius:'50%', background:'#fff', position:'absolute', top:'3px', transition:'left .2s', left: value?'21px':'3px', boxShadow:'0 1px 3px rgba(0,0,0,0.2)' }}/>
+    </button>
+  )
+}
+
+function TabComercial({ comercial, setComercial }) {
+  const [retailSel, setRetailSel] = useState(comercial.retails[0]?.id || null)
+  const retail = comercial.retails.find(r => r.id === retailSel)
+
+  const updateRetail = (id, key, subkey, val) => {
+    setComercial(c => ({...c, retails: c.retails.map(r =>
+      r.id === id ? {...r, [key]: {...r[key], [subkey]: val}} : r
+    )}))
+  }
+
+  const cardStyle = { background:'#fff', border:'1px solid rgba(14,77,146,0.08)', borderRadius:'10px', padding:'18px 20px' }
+  const rowStyle  = { display:'flex', alignItems:'center', justifyContent:'space-between', padding:'9px 0', borderBottom:'1px solid rgba(14,77,146,0.06)' }
+
+  return (
+    <div style={{ display:'flex', flexDirection:'column', gap:'16px' }}>
+
+      {/* Configuración global */}
+      <div style={{ fontSize:'13px', fontWeight:600, color:'#0B1F3A', paddingBottom:'8px', borderBottom:'1px solid rgba(14,77,146,0.08)' }}>
+        Configuración global — aplica a todos los retails salvo que configures uno específico
+      </div>
+
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'14px' }}>
+
+        {/* Monedas globales */}
+        <div style={cardStyle}>
+          <div style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A', marginBottom:'4px' }}>Monedas permitidas</div>
+          <div style={{ fontSize:'11px', color:'#6B8BAE', marginBottom:'14px' }}>El retail solo verá las monedas habilitadas al crear una OC</div>
+          {[['PEN','🇵🇪 Soles (PEN)'],['USD','🇺🇸 Dólares (USD)']].map(([key,lbl]) => (
+            <div key={key} style={rowStyle}>
+              <span style={{ fontSize:'13px', color:'#0B1F3A' }}>{lbl}</span>
+              <Toggle value={comercial.monedas[key]} onChange={v => setComercial(c => ({...c, monedas:{...c.monedas,[key]:v}}))}/>
+            </div>
+          ))}
+          <div style={{ marginTop:'10px', padding:'7px 10px', background:'#FFFBEB', borderRadius:'7px', fontSize:'10px', color:'#D97706', border:'1px solid #FDE68A' }}>
+            ⚠ TC siempre es el oficial SUNAT del día
+          </div>
+        </div>
+
+        {/* Condiciones de pago globales */}
+        <div style={cardStyle}>
+          <div style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A', marginBottom:'4px' }}>Condiciones de pago</div>
+          <div style={{ fontSize:'11px', color:'#6B8BAE', marginBottom:'14px' }}>Plazos que el retail puede seleccionar en una OC</div>
+          {[['contado','Contado'],['d15','15 días'],['d30','30 días'],['d60','60 días'],['d90','90 días']].map(([key,lbl]) => (
+            <div key={key} style={rowStyle}>
+              <span style={{ fontSize:'13px', color:'#0B1F3A' }}>{lbl}</span>
+              <Toggle value={comercial.pagos[key]} onChange={v => setComercial(c => ({...c, pagos:{...c.pagos,[key]:v}}))}/>
+            </div>
+          ))}
+        </div>
+
+        {/* Monto mínimo + Bonificaciones */}
+        <div style={cardStyle}>
+          <div style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A', marginBottom:'4px' }}>Monto mínimo de OC</div>
+          <div style={{ fontSize:'11px', color:'#6B8BAE', marginBottom:'14px' }}>La OC se bloquea si no alcanza este monto</div>
+          <div style={{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'16px' }}>
+            <span style={{ fontSize:'14px', color:'#6B8BAE', fontWeight:600 }}>S/</span>
+            <input type="number" value={comercial.montoMin}
+              onChange={e => setComercial(c => ({...c, montoMin: parseInt(e.target.value)||0}))}
+              style={{ flex:1, padding:'8px 12px', border:'1px solid rgba(14,77,146,0.15)', borderRadius:'8px', fontSize:'14px', fontFamily:"'DM Sans',sans-serif", color:'#0B1F3A', outline:'none', fontWeight:600 }}/>
+          </div>
+          <div style={rowStyle}>
+            <div>
+              <div style={{ fontSize:'13px', color:'#0B1F3A', fontWeight:500 }}>Bonificaciones</div>
+              <div style={{ fontSize:'10px', color:'#6B8BAE' }}>Permite unidades bonificadas por producto</div>
+            </div>
+            <Toggle value={comercial.bonificaciones} onChange={v => setComercial(c => ({...c, bonificaciones:v}))}/>
+          </div>
+        </div>
+
+        {/* Resumen */}
+        <div style={cardStyle}>
+          <div style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A', marginBottom:'14px' }}>Configuración activa</div>
+          <div style={{ display:'flex', flexWrap:'wrap', gap:'5px', marginBottom:'14px' }}>
+            {Object.entries(comercial.monedas).filter(([,v])=>v).map(([k]) => (
+              <span key={k} style={{ fontSize:'10px', padding:'3px 9px', borderRadius:'10px', background:'rgba(0,194,168,0.08)', color:'#00C2A8', fontWeight:600 }}>{k}</span>
+            ))}
+            {Object.entries(comercial.pagos).filter(([,v])=>v).map(([k]) => (
+              <span key={k} style={{ fontSize:'10px', padding:'3px 9px', borderRadius:'10px', background:'#F3F4F6', color:'#6B7280' }}>
+                {k==='contado'?'Contado':k==='d15'?'15d':k==='d30'?'30d':k==='d60'?'60d':'90d'}
+              </span>
+            ))}
+            <span style={{ fontSize:'10px', padding:'3px 9px', borderRadius:'10px', background:'#F3F4F6', color:'#6B7280' }}>Min S/{comercial.montoMin}</span>
+            {comercial.bonificaciones && <span style={{ fontSize:'10px', padding:'3px 9px', borderRadius:'10px', background:'#F0FDF4', color:'#16A34A' }}>Bonif. ✓</span>}
+          </div>
+          <button style={{ width:'100%', padding:'10px', border:'none', borderRadius:'8px', background:'#0B1F3A', color:'#fff', fontSize:'13px', fontWeight:600, cursor:'pointer', fontFamily:"'DM Sans',sans-serif" }}>
+            Guardar configuración global
+          </button>
+        </div>
+      </div>
+
+      {/* Gestión de inventario */}
+      <div style={{ fontSize:'13px', fontWeight:600, color:'#0B1F3A', paddingBottom:'8px', borderTop:'1px solid rgba(14,77,146,0.08)', paddingTop:'16px', marginTop:'4px' }}>
+        Gestión de inventario
+      </div>
+
+      <div style={{ background:'#fff', border:'1px solid rgba(14,77,146,0.08)', borderRadius:'10px', padding:'18px 20px', marginBottom:'4px' }}>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'16px' }}>
+          <div>
+            <div style={{ fontSize:'13px', fontWeight:600, color:'#0B1F3A', marginBottom:'3px' }}>
+              {comercial.stockManual ? '📦 Gestión de stock manual activa' : '🔗 Stock sincronizado desde SAP'}
+            </div>
+            <div style={{ fontSize:'11px', color:'#6B8BAE', lineHeight:1.5 }}>
+              {comercial.stockManual
+                ? 'Puedes editar el stock de cada SKU directamente en el Catálogo de NEXO'
+                : 'El stock se consulta automáticamente desde SAP en tiempo real. No requiere gestión manual.'}
+            </div>
+          </div>
+          <Toggle value={comercial.stockManual} onChange={v => setComercial(c => ({...c, stockManual:v}))}/>
+        </div>
+
+        {/* Banner contextual */}
+        {comercial.stockManual ? (
+          <div style={{ padding:'10px 14px', background:'#FFF7ED', border:'1px solid #FED7AA', borderRadius:'8px', fontSize:'11px', color:'#C2410C', lineHeight:1.5 }}>
+            ⚠ <strong>Modo manual activo</strong> — El stock en el Catálogo es editable. Recuerda mantenerlo actualizado para evitar OCs con productos sin disponibilidad.
+          </div>
+        ) : (
+          <div style={{ padding:'10px 14px', background:'#F0FDF4', border:'1px solid #BBF7D0', borderRadius:'8px', fontSize:'11px', color:'#166534', lineHeight:1.5 }}>
+            ✓ <strong>Integración SAP activa</strong> — El stock se actualiza automáticamente. No necesitas hacer nada.
+          </div>
+        )}
+      </div>
+
+      {/* Config por retail */}
+      <div style={{ fontSize:'13px', fontWeight:600, color:'#0B1F3A', paddingBottom:'8px', borderTop:'1px solid rgba(14,77,146,0.08)', paddingTop:'16px' }}>
+        Configuración por retail — sobreescribe la configuración global para ese retail específico
+      </div>
+
+      <div style={{ display:'flex', gap:'8px', marginBottom:'4px' }}>
+        {comercial.retails.map(r => (
+          <button key={r.id} onClick={() => setRetailSel(r.id)}
+            style={{ padding:'6px 14px', borderRadius:'8px', border:`1px solid ${retailSel===r.id?'rgba(0,194,168,0.3)':'rgba(14,77,146,0.1)'}`, background: retailSel===r.id?'rgba(0,194,168,0.08)':'#fff', color: retailSel===r.id?'#00C2A8':'#6B8BAE', fontSize:'12px', fontWeight: retailSel===r.id?600:400, cursor:'pointer', fontFamily:"'DM Sans',sans-serif" }}>
+            {r.name}
+          </button>
+        ))}
+      </div>
+
+      {retail && (
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'14px' }}>
+          <div style={cardStyle}>
+            <div style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A', marginBottom:'14px' }}>Monedas — {retail.name}</div>
+            {[['PEN','🇵🇪 Soles (PEN)'],['USD','🇺🇸 Dólares (USD)']].map(([key,lbl]) => (
+              <div key={key} style={rowStyle}>
+                <span style={{ fontSize:'13px', color:'#0B1F3A' }}>{lbl}</span>
+                <Toggle value={retail.monedas[key]} onChange={v => updateRetail(retail.id,'monedas',key,v)}/>
+              </div>
+            ))}
+          </div>
+          <div style={cardStyle}>
+            <div style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A', marginBottom:'14px' }}>Condiciones de pago — {retail.name}</div>
+            {[['contado','Contado'],['d15','15 días'],['d30','30 días'],['d60','60 días'],['d90','90 días']].map(([key,lbl]) => (
+              <div key={key} style={rowStyle}>
+                <span style={{ fontSize:'13px', color:'#0B1F3A' }}>{lbl}</span>
+                <Toggle value={retail.pagos[key]} onChange={v => updateRetail(retail.id,'pagos',key,v)}/>
+              </div>
+            ))}
+          </div>
+          <div style={cardStyle}>
+            <div style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A', marginBottom:'14px' }}>Monto mínimo — {retail.name}</div>
+            <div style={{ display:'flex', alignItems:'center', gap:'8px' }}>
+              <span style={{ fontSize:'14px', color:'#6B8BAE', fontWeight:600 }}>S/</span>
+              <input type="number" value={retail.montoMin}
+                onChange={e => setComercial(c => ({...c, retails: c.retails.map(r => r.id===retail.id?{...r,montoMin:parseInt(e.target.value)||0}:r)}))}
+                style={{ flex:1, padding:'8px 12px', border:'1px solid rgba(14,77,146,0.15)', borderRadius:'8px', fontSize:'14px', fontFamily:"'DM Sans',sans-serif", color:'#0B1F3A', outline:'none', fontWeight:600 }}/>
+            </div>
+          </div>
+          <div style={{ ...cardStyle, display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <button style={{ padding:'10px 20px', border:'none', borderRadius:'8px', background:'#0B1F3A', color:'#fff', fontSize:'13px', fontWeight:600, cursor:'pointer', fontFamily:"'DM Sans',sans-serif" }}>
+              Guardar config de {retail.name}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function PerfilView({ role }) {
   const [tab, setTab] = useState('empresa')
   const isProv = role === 'prov'
+  const TABS = isProv ? TABS_PROV : TABS_RET
+
+  const [comercial, setComercial] = useState({
+    monedas:  { PEN: true, USD: false },
+    pagos:    { contado: true, d15: true, d30: true, d60: false, d90: false },
+    montoMin: 500,
+    bonificaciones: true,
+    retails: [
+      { id:2, name:'Wong S.A.',   monedas:{ PEN:true, USD:false }, pagos:{ contado:true, d15:true, d30:true, d60:false, d90:false }, montoMin:500 },
+      { id:3, name:'Tottus Perú', monedas:{ PEN:true, USD:false }, pagos:{ contado:false, d15:false, d30:true, d60:true, d90:false }, montoMin:1000 },
+    ]
+  })
 
   return (
     <div style={{ maxWidth:'1100px', margin:'0 auto', fontFamily:"'DM Sans',sans-serif" }}>
@@ -810,6 +1015,7 @@ export default function PerfilView({ role }) {
         {tab === 'billing'  && <TabBilling/>}
         {tab === 'api'      && <TabAPI role={role}/>}
         {tab === 'equipo'   && <TabEquipo/>}
+        {tab === 'comercial' && isProv && <TabComercial comercial={comercial} setComercial={setComercial}/>}
       </div>
     </div>
   )

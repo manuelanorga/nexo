@@ -198,8 +198,7 @@ export default function Topbar({ role, view, setView, onMenuClick }) {
         <button
           onClick={() => {
             if (!isProv) { setView('nueva-oc'); return }
-            if (view === 'dashboard') setMenuOpen(!menuOpen)
-            else setView('nueva-oc')
+            setMenuOpen(!menuOpen)
           }}
           style={{
             display: 'flex', alignItems: 'center', gap: '4px',
@@ -209,12 +208,12 @@ export default function Topbar({ role, view, setView, onMenuClick }) {
             fontFamily: "'DM Sans', sans-serif"
           }}>
           {isProv
-            ? <>{!isMobile && 'Acciones'} {view === 'dashboard' ? '▾' : '+'}</>
+            ? <>{!isMobile && 'Acciones'} ▾</>
             : <>+ {!isMobile && 'Nueva OC'}</>
           }
         </button>
 
-        {menuOpen && view === 'dashboard' && (
+        {menuOpen && isProv && (
           <>
             <div style={{ position: 'fixed', inset: 0, zIndex: 90 }} onClick={() => setMenuOpen(false)} />
             <div style={{

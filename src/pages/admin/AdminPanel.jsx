@@ -5,6 +5,7 @@ import TenantsView from './views/TenantsView'
 import SistemaView from './views/SistemaView'
 import TransaccionesView from './views/TransaccionesView'
 import BillingView from './views/BillingView'
+import EquipoView from './views/EquipoView'
 
 const NAV = [
   { sec: 'Operaciones', items: [
@@ -118,7 +119,7 @@ export default function AdminPanel() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
             <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: accentBg, border: `1px solid rgba(0,194,168,0.2)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 600, color: accent, flexShrink: 0 }}>MA</div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: '12px', fontWeight: 500, color: text }}>Manuel Norga</div>
+              <div style={{ fontSize: '12px', fontWeight: 500, color: text }}>Manuel Añorga</div>
               <div style={{ fontSize: '10px', color: text3 }}>Super Admin</div>
             </div>
             <div onClick={() => navigate('/')} title="Ir a la plataforma"
@@ -170,6 +171,8 @@ export default function AdminPanel() {
             ? <TransaccionesView {...{ accent, accentBg, text, text2, text3, border, white, bg }} />
             : view === 'billing'
             ? <BillingView {...{ accent, accentBg, text, text2, text3, border, white, bg }} />
+            : view === 'equipo'
+            ? <EquipoView {...{ accent, accentBg, text, text2, text3, border, white, bg }} />
             : <ComingSoon label={COMING[view]} {...{ accent, accentBg, text2, text3, border }} />
           }
         </div>

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const TENANTS = [
-  { id:1, name:'Arca Continental', slug:'arca-continental', ruc:'20100128954', razonSocial:'ARCA CONTINENTAL LINDLEY S.A.', direccion:'Av. Nicolás Arriola 589, La Victoria, Lima', type:'prov', plan:'Professional', status:'ok', txns:428, lastSeen:'hace 2 min', createdAt:'12 ene 2025', erp:'SAP',
+  { id:1, name:'Arca Continental', slug:'arca-continental', ruc:'20100128954', razonSocial:'ARCA CONTINENTAL LINDLEY S.A.', direccion:'Av. Nicolás Arriola 589, La Victoria, Lima', type:'prov', plan:'Professional', status:'ok', txns:428, lastSeen:'hace 2 min', createdAt:'12 ene 2025', erp:'SAP', edi:false, stockManual:false,
     users:[
       { id:1, name:'Ricardo Torres',  email:'r.torres@arca.com.pe',  rol:'Admin de Ventas',       status:'active', lastAccess:'hace 5 min' },
       { id:2, name:'Claudia Mendoza', email:'c.mendoza@arca.com.pe', rol:'Facturador / Contador',  status:'active', lastAccess:'hace 1h' },
@@ -10,7 +10,7 @@ const TENANTS = [
     ],
     connections:[]
   },
-  { id:2, name:'Wong S.A.', slug:'wong-supermercados', ruc:'20492092313', razonSocial:'CENCOSUD RETAIL PERU S.A.', direccion:'Av. Benavides 4545, Miraflores, Lima', type:'ret', plan:'Professional', status:'ok', txns:214, lastSeen:'hace 1 min', createdAt:'15 ene 2025', erp:'Oracle',
+  { id:2, name:'Wong S.A.', slug:'wong-supermercados', ruc:'20492092313', razonSocial:'CENCOSUD RETAIL PERU S.A.', direccion:'Av. Benavides 4545, Miraflores, Lima', type:'ret', plan:'Introducción', status:'ok', txns:214, lastSeen:'hace 1 min', createdAt:'15 ene 2025', erp:'Oracle', edi:false, stockManual:false,
     users:[
       { id:4, name:'Ana Flores',    email:'a.flores@wong.com.pe',  rol:'Admin de Compras',         status:'active',  lastAccess:'hace 2 min' },
       { id:5, name:'Carlos Ruiz',   email:'c.ruiz@wong.com.pe',    rol:'Comprador / Op. Logístico', status:'active',  lastAccess:'hace 30 min' },
@@ -20,7 +20,7 @@ const TENANTS = [
       { id:1, provId:1, provName:'Arca Continental', provSlug:'arca-continental', status:'active', ocs:214, since:'15 ene 2025', modules:['OC','Despacho','Recibo','Financiero'] },
     ]
   },
-  { id:3, name:'Tottus Perú', slug:'tottus-peru', ruc:'20393638682', razonSocial:'HIPERMERCADOS TOTTUS S.A.', direccion:'Av. Defensores del Morro 1277, Chorrillos, Lima', type:'ret', plan:'Professional', status:'warn', txns:98, lastSeen:'hace 8 min', createdAt:'20 ene 2025', erp:'SAP',
+  { id:3, name:'Tottus Perú', slug:'tottus-peru', ruc:'20393638682', razonSocial:'HIPERMERCADOS TOTTUS S.A.', direccion:'Av. Defensores del Morro 1277, Chorrillos, Lima', type:'ret', plan:'Introducción', status:'warn', txns:98, lastSeen:'hace 8 min', createdAt:'20 ene 2025', erp:'SAP', edi:false, stockManual:false,
     users:[
       { id:7, name:'Luis García',  email:'l.garcia@tottus.com.pe', rol:'Admin de Compras',          status:'active', lastAccess:'hace 10 min' },
       { id:8, name:'María Quispe', email:'m.quispe@tottus.com.pe', rol:'Comprador / Op. Logístico', status:'active', lastAccess:'hace 1h' },
@@ -29,7 +29,7 @@ const TENANTS = [
       { id:2, provId:1, provName:'Arca Continental', provSlug:'arca-continental', status:'pending', ocs:0, since:'20 ene 2025', modules:['OC'] },
     ]
   },
-  { id:4, name:'Plaza Vea', slug:'plaza-vea-spsa', ruc:'20331066703', razonSocial:'SUPERMERCADOS PERUANOS S.A.', direccion:'Av. Paseo de la República 3220, San Isidro, Lima', type:'ret', plan:'Starter', status:'ok', txns:176, lastSeen:'hace 4 min', createdAt:'01 feb 2025', erp:'Odoo',
+  { id:4, name:'Plaza Vea', slug:'plaza-vea-spsa', ruc:'20331066703', razonSocial:'SUPERMERCADOS PERUANOS S.A.', direccion:'Av. Paseo de la República 3220, San Isidro, Lima', type:'ret', plan:'Introducción', status:'ok', txns:176, lastSeen:'hace 4 min', createdAt:'01 feb 2025', erp:'Odoo', edi:false, stockManual:false,
     users:[
       { id:9,  name:'Roberto Silva', email:'r.silva@spsa.com.pe',  rol:'Admin de Compras',          status:'active',  lastAccess:'hace 5 min' },
       { id:10, name:'Carla Huamán',  email:'c.huaman@spsa.com.pe', rol:'Comprador / Op. Logístico', status:'active',  lastAccess:'hace 2h' },
@@ -37,14 +37,14 @@ const TENANTS = [
     ],
     connections:[]
   },
-  { id:5, name:'Metro', slug:'metro-cencosud', ruc:'20492092313', razonSocial:'CENCOSUD RETAIL PERU S.A.', direccion:'Av. Benavides 4545, Miraflores, Lima', type:'ret', plan:'Starter', status:'ok', txns:331, lastSeen:'hace 3 min', createdAt:'10 feb 2025', erp:'Ninguno',
+  { id:5, name:'Metro', slug:'metro-cencosud', ruc:'20492092313', razonSocial:'CENCOSUD RETAIL PERU S.A.', direccion:'Av. Benavides 4545, Miraflores, Lima', type:'ret', plan:'Introducción', status:'ok', txns:331, lastSeen:'hace 3 min', createdAt:'10 feb 2025', erp:'Ninguno', edi:false, stockManual:false,
     users:[
       { id:12, name:'Fernando Castillo', email:'f.castillo@metro.com.pe', rol:'Admin de Compras',          status:'active', lastAccess:'hace 3 min' },
       { id:13, name:'Sofía Paredes',     email:'s.paredes@metro.com.pe',  rol:'Comprador / Op. Logístico', status:'active', lastAccess:'hace 45 min' },
     ],
     connections:[]
   },
-  { id:6, name:'Vivanda', slug:'vivanda-sa', ruc:'20331066703', razonSocial:'SUPERMERCADOS PERUANOS S.A.', direccion:'Av. Paseo de la República 3220, San Isidro, Lima', type:'ret', plan:'Starter', status:'pause', txns:0, lastSeen:'hace 2h', createdAt:'24 may 2025', erp:'Ninguno',
+  { id:6, name:'Vivanda', slug:'vivanda-sa', ruc:'20331066703', razonSocial:'SUPERMERCADOS PERUANOS S.A.', direccion:'Av. Paseo de la República 3220, San Isidro, Lima', type:'ret', plan:'Introducción', status:'pause', txns:0, lastSeen:'hace 2h', createdAt:'24 may 2025', erp:'Ninguno', edi:false, stockManual:false,
     users:[
       { id:14, name:'Gabriela Núñez', email:'g.nunez@vivanda.com.pe', rol:'Admin de Compras', status:'invited', lastAccess:'Nunca' },
     ],
@@ -146,7 +146,8 @@ function DrawerNuevoTenant({ onClose, accent, accentBg, text, text2, text3, bord
               <label style={{ fontSize:'11px', fontWeight:500, color:text2, display:'block', marginBottom:'5px' }}>Plan</label>
               <select value={form.plan} onChange={e => setForm(f=>({...f,plan:e.target.value}))}
                 style={{ width:'100%', padding:'8px 10px', border:`1px solid ${border}`, borderRadius:'7px', fontSize:'13px', fontFamily:"'Inter',sans-serif", color:text, background:white, outline:'none' }}>
-                <option>Starter</option>
+                <option>Introducción</option>
+                <option>Crecimiento</option>
                 <option>Professional</option>
               </select>
             </div>
@@ -364,7 +365,7 @@ function TenantDetail({ tenant, onBack, accent, accentBg, text, text2, text3, bo
           <span style={{ fontSize:'11px', fontWeight:500, padding:'3px 9px', borderRadius:'20px', background:isProv?'#EFF6FF':'#F0FDF4', color:isProv?'#2563EB':'#16A34A' }}>
             {isProv?'Proveedor':'Retail'}
           </span>
-          <span style={{ fontSize:'11px', fontWeight:500, padding:'3px 9px', borderRadius:'20px', background:tenant.plan==='Professional'?'#F5F3FF':'#F3F4F6', color:tenant.plan==='Professional'?'#7C3AED':'#6B7280' }}>
+          <span style={{ fontSize:'11px', fontWeight:500, padding:'3px 9px', borderRadius:'20px', background:tenant.plan==='Professional'?'#F5F3FF':tenant.plan==='Introducción'?'#FFF7ED':'#F3F4F6', color:tenant.plan==='Professional'?'#7C3AED':tenant.plan==='Introducción'?'#C2410C':'#6B7280' }}>
             {tenant.plan}
           </span>
           <span style={{ fontSize:'11px', fontWeight:500, padding:'3px 9px', borderRadius:'20px', background:`${SC[tenant.status]}14`, color:SC[tenant.status], display:'inline-flex', alignItems:'center', gap:'4px' }}>
@@ -614,6 +615,43 @@ function TenantDetail({ tenant, onBack, accent, accentBg, text, text2, text3, bo
               </div>
             </div>
 
+            {/* EDI y Stock — solo para retails */}
+            {!isProv && (
+              <>
+                <div style={{ height:'1px', background:border, margin:'16px 0' }}/>
+                <div style={{ fontSize:'12px', fontWeight:600, color:text, marginBottom:'14px' }}>Conectividad</div>
+                <div style={{ ...card, padding:'14px 16px', marginBottom:'10px' }}>
+                  <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+                    <div>
+                      <div style={{ fontSize:'13px', color:text, fontWeight:500 }}>Botón "Descargar EDI"</div>
+                      <div style={{ fontSize:'10px', color:text3, marginTop:'2px' }}>Actívalo si este retail NO tiene EDI automático</div>
+                    </div>
+                    <button onClick={() => {}}
+                      style={{ width:'40px', height:'22px', borderRadius:'11px', border:'none', background:'#E5E7EB', cursor:'pointer', position:'relative', transition:'background .2s', flexShrink:0 }}>
+                      <div style={{ width:'16px', height:'16px', borderRadius:'50%', background:'#fff', position:'absolute', top:'3px', left:'3px', boxShadow:'0 1px 3px rgba(0,0,0,0.2)' }}/>
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+            {isProv && (
+              <>
+                <div style={{ height:'1px', background:border, margin:'16px 0' }}/>
+                <div style={{ fontSize:'12px', fontWeight:600, color:text, marginBottom:'14px' }}>Gestión de inventario</div>
+                <div style={{ ...card, padding:'14px 16px', marginBottom:'10px' }}>
+                  <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+                    <div>
+                      <div style={{ fontSize:'13px', color:text, fontWeight:500 }}>Stock manual en NEXO</div>
+                      <div style={{ fontSize:'10px', color:text3, marginTop:'2px' }}>OFF = stock desde SAP · ON = editable en NEXO</div>
+                    </div>
+                    <button onClick={() => {}}
+                      style={{ width:'40px', height:'22px', borderRadius:'11px', border:'none', background:'#E5E7EB', cursor:'pointer', position:'relative', transition:'background .2s', flexShrink:0 }}>
+                      <div style={{ width:'16px', height:'16px', borderRadius:'50%', background:'#fff', position:'absolute', top:'3px', left:'3px', boxShadow:'0 1px 3px rgba(0,0,0,0.2)' }}/>
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
             <div style={{ marginTop:'14px' }}>
               <button style={{ width:'100%', padding:'10px', border:'none', borderRadius:'8px', background:text, color:'#fff', fontSize:'13px', fontWeight:600, cursor:'pointer', fontFamily:"'Inter',sans-serif" }}>
                 Guardar configuración comercial
@@ -696,7 +734,7 @@ export default function TenantsView({ accent, accentBg, text, text2, text3, bord
             <span style={{ fontSize:'11px', fontWeight:500, padding:'2px 8px', borderRadius:'20px', background:t.type==='prov'?'#EFF6FF':'#F0FDF4', color:t.type==='prov'?'#2563EB':'#16A34A', display:'inline-block' }}>
               {t.type==='prov'?'Proveedor':'Retail'}
             </span>
-            <span style={{ fontSize:'11px', fontWeight:500, padding:'2px 8px', borderRadius:'20px', background:t.plan==='Professional'?'#F5F3FF':'#F3F4F6', color:t.plan==='Professional'?'#7C3AED':'#6B7280', display:'inline-block' }}>{t.plan}</span>
+            <span style={{ fontSize:'11px', fontWeight:500, padding:'2px 8px', borderRadius:'20px', background:t.plan==='Professional'?'#F5F3FF':t.plan==='Introducción'?'#FFF7ED':'#F3F4F6', color:t.plan==='Professional'?'#7C3AED':t.plan==='Introducción'?'#C2410C':'#6B7280', display:'inline-block' }}>{t.plan}</span>
             <span style={{ fontSize:'13px', fontWeight:500, color:t.txns>0?text:text3 }}>{t.txns>0?t.txns.toLocaleString():'—'}</span>
             <span style={{ fontSize:'11px', fontWeight:500, padding:'3px 8px', borderRadius:'20px', background:`${SC[t.status]}14`, color:SC[t.status], display:'inline-flex', alignItems:'center', gap:'4px' }}>
               <span style={{ width:'5px', height:'5px', borderRadius:'50%', background:SC[t.status] }}/>{SL[t.status]}

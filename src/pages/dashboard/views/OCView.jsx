@@ -371,6 +371,7 @@ export default function OCView({ setView, role = 'prov' }) {
   const isMobile = useIsMobile()
   const [showAllFilters, setShowAllFilters] = useState(false)
   const [qrOC, setQrOC] = useState(null)
+  const [confirmToast, setConfirmToast] = useState(0)
 
   useEffect(() => {
     if (selectedOCId) {
@@ -430,6 +431,13 @@ export default function OCView({ setView, role = 'prov' }) {
   return (
     <div>
       {qrOC && <QRModal oc={qrOC} onClose={() => setQrOC(null)} />}
+
+      {/* Toast confirmación masiva */}
+      {confirmToast > 0 && (
+        <div style={{ position:'fixed', bottom:'24px', left:'50%', transform:'translateX(-50%)', background:'#064E3B', color:'#4ADE80', padding:'12px 24px', borderRadius:'10px', fontSize:'13px', fontWeight:600, zIndex:999, boxShadow:'0 8px 24px rgba(0,0,0,0.2)', display:'flex', alignItems:'center', gap:'8px', fontFamily:"'DM Sans',sans-serif" }}>
+          ✓ {confirmToast} {confirmToast===1?'OC confirmada':'OCs confirmadas'} exitosamente
+        </div>
+      )}
       {selectedOC && <OCModal oc={selectedOC} onClose={() => setSelectedOC(null)} setView={setView} onConfirm={handleConfirm} onReject={handleReject} />}
 
       {/* Stats bar */}
@@ -524,9 +532,43 @@ export default function OCView({ setView, role = 'prov' }) {
           Total encontrados: <strong style={{ color: '#0B1F3A' }}>{TOTAL}</strong> · Seleccionados: <strong style={{ color: '#0E4D92' }}>{selected.length}</strong>
         </div>
         <div style={{ display: 'flex', gap: '6px' }}>
-          <button disabled={!canActSelected} onClick={() => canActSelected && alert('Confirmando ' + selected.length + ' OCs seleccionadas')} style={{ padding: '6px 12px', background: canActSelected ? '#D1FAE5' : '#F0F7FF', border: 'none', borderRadius: '8px', fontSize: '11px', color: canActSelected ? '#065F46' : '#9DB8D9', cursor: canActSelected ? 'pointer' : 'default', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>✓ Confirmar selección</button>
-          <button disabled={selected.length === 0} style={{ padding: '6px 12px', background: selected.length > 0 ? '#0B1F3A' : '#F0F7FF', border: 'none', borderRadius: '8px', fontSize: '11px', color: selected.length > 0 ? '#00F5A0' : '#9DB8D9', cursor: selected.length > 0 ? 'pointer' : 'default', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>PDF Consolidado</button>
-          <button disabled={selected.length === 0} style={{ padding: '6px 12px', background: selected.length > 0 ? '#0B1F3A' : '#F0F7FF', border: 'none', borderRadius: '8px', fontSize: '11px', color: selected.length > 0 ? '#00F5A0' : '#9DB8D9', cursor: selected.length > 0 ? 'pointer' : 'default', fontWeight: 600, fontFamily: "'DM Sans', sans-serif" }}>Generar Listado</button>
+          <button disabled={!canActSelected} onClick={() => {
+            if (!canActSelected) return
+            setOrders(prev => prev.map(o => selected.includes(o.id) && ['published','processing'].includes(o.status) ? {...o, status:'confirmed'} : o))
+            setSelected([])
+            setConfirmToast(selected.length)
+            setTimeout(() => setConfirmToast(0), 3000)
+          }} style={{ padding:'6px 12px', background: canActSelected?'#D1FAE5':'#F0F7FF', border:'none', borderRadius:'8px', fontSize:'11px', color: canActSelected?'#065F46':'#9DB8D9', cursor: canActSelected?'pointer':'default', fontWeight:600, fontFamily:"'DM Sans',sans-serif" }}>
+            ✓ Confirmar selección {canActSelected ? `(${selected.filter(id => { const o = orders.find(x=>x.id===id); return o && ['published','processing'].includes(o.status) }).length})` : ''}
+          </button>
+          <button disabled={selected.length===0} onClick={() => {
+            if (selected.length===0) return
+            const ocs = orders.filter(o => selected.includes(o.id))
+            const sep = '─'.repeat(60)
+            const rows = ocs.map(o => o.id + ' | ' + o.client + ' | ' + o.amount + ' | ' + o.status).join('\n')
+            const total = ocs.reduce((s,o) => s + parseFloat(o.amount.replace(/[^0-9.]/g,'')), 0).toLocaleString('es-PE')
+            const content = 'NEXO O2P — PDF Consolidado\nFecha: ' + new Date().toLocaleDateString('es-PE') + '\nTotal OCs: ' + ocs.length + '\n' + sep + '\n' + rows + '\n' + sep + '\nTotal: S/ ' + total
+            const blob = new Blob([content], { type:'text/plain' })
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url; a.download = 'NEXO_PDF_Consolidado_' + new Date().toISOString().split('T')[0] + '.txt'
+            a.click(); URL.revokeObjectURL(url)
+          }} style={{ padding:'6px 12px', background: selected.length>0?'#0B1F3A':'#F0F7FF', border:'none', borderRadius:'8px', fontSize:'11px', color: selected.length>0?'#00F5A0':'#9DB8D9', cursor: selected.length>0?'pointer':'default', fontWeight:600, fontFamily:"'DM Sans',sans-serif" }}>
+            PDF Consolidado {selected.length>0?'('+selected.length+')':''}
+          </button>
+          <button disabled={selected.length===0} onClick={() => {
+            if (selected.length===0) return
+            const ocs = orders.filter(o => selected.includes(o.id))
+            const header = 'N\u00b0 Orden\tSocio Comercial\tEmisi\u00f3n\tEntrega\tMonto\tEstado\n'
+            const rows = ocs.map(o => o.id + '\t' + o.client + '\t' + o.date + '\t' + o.delivery + '\t' + o.amount + '\t' + o.status).join('\n')
+            const blob = new Blob([header + rows], { type:'text/tab-separated-values' })
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url; a.download = 'NEXO_Listado_OCs_' + new Date().toISOString().split('T')[0] + '.xls'
+            a.click(); URL.revokeObjectURL(url)
+          }} style={{ padding:'6px 12px', background: selected.length>0?'#0B1F3A':'#F0F7FF', border:'none', borderRadius:'8px', fontSize:'11px', color: selected.length>0?'#00F5A0':'#9DB8D9', cursor: selected.length>0?'pointer':'default', fontWeight:600, fontFamily:"'DM Sans',sans-serif" }}>
+            Generar Listado {selected.length>0?'('+selected.length+')':''}
+          </button>
           <button style={{ padding: '6px 12px', background: '#fff', border: '1px solid rgba(14,77,146,0.1)', borderRadius: '8px', fontSize: '11px', color: '#0B1F3A', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>Descargar Consulta</button>
         </div>
       </div>

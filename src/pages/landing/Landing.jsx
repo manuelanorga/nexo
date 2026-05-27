@@ -109,6 +109,7 @@ const t = {
 function TrazabilidadAnimada({ fg2, dark }) {
   const [activeStep, setActiveStep] = useState(0)
   const [traveling, setTraveling] = useState(false)
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
 
   const steps = [
     { n:'1', label:'OC Emitida',      icon:'📋', color:'#00F5A0' },
@@ -133,88 +134,97 @@ function TrazabilidadAnimada({ fg2, dark }) {
     return () => clearInterval(interval)
   }, [])
 
-  const progress = ((activeStep) / (steps.length - 1)) * 100
+  const progress = (activeStep / (steps.length - 1)) * 100
 
+  const StepCircle = ({ step, i }) => {
+    const isActive = i === activeStep
+    const isDone = i < activeStep
+    return (
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'row' : 'column', alignItems: 'center', gap: isMobile ? '12px' : '10px', width: isMobile ? '100%' : 'auto' }}>
+        <div style={{
+          width: '48px', height: '48px', borderRadius: '50%', flexShrink: 0,
+          background: isActive ? `${step.color}25` : isDone ? `${step.color}10` : dark?'rgba(255,255,255,0.03)':'rgba(14,77,146,0.03)',
+          border: isActive ? `2px solid ${step.color}` : isDone ? `2px solid ${step.color}50` : `2px solid ${dark?'rgba(255,255,255,0.08)':'rgba(14,77,146,0.1)'}`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '18px', position: 'relative',
+          transition: 'all .4s ease',
+          animation: isActive ? 'stepActivate .4s ease' : 'none',
+          boxShadow: isActive ? `0 0 16px ${step.color}30` : 'none',
+        }}>
+          <span style={{ transition: 'opacity .3s', opacity: isDone||isActive?1:.4 }}>{step.icon}</span>
+          <div style={{
+            position: 'absolute', top: '-6px', right: '-6px',
+            width: '20px', height: '20px', borderRadius: '50%',
+            background: isActive||isDone ? step.color : dark?'rgba(255,255,255,0.08)':'rgba(14,77,146,0.08)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: '9px', fontWeight: 700,
+            color: isActive||isDone ? '#0B1F3A' : dark?'rgba(255,255,255,0.3)':'rgba(14,77,146,0.3)',
+            transition: 'all .4s ease',
+            boxShadow: isActive ? `0 0 8px ${step.color}60` : 'none',
+          }}>{step.n}</div>
+        </div>
+        <div style={{
+          fontSize: '10px', textAlign: isMobile ? 'left' : 'center', lineHeight: 1.3,
+          color: isActive ? step.color : isDone ? (dark?'rgba(255,255,255,0.5)':'rgba(14,77,146,0.5)') : (dark?'rgba(255,255,255,0.25)':'rgba(14,77,146,0.25)'),
+          fontWeight: isActive ? 600 : 400,
+          transition: 'all .4s ease',
+        }}>{step.label}</div>
+      </div>
+    )
+  }
+
+  if (isMobile) {
+    return (
+      <div style={{ position: 'relative', padding: '10px 0 20px' }}>
+        <style>{`@keyframes atomPulse{0%,100%{transform:scale(1);opacity:1;box-shadow:0 0 0 0 rgba(0,245,160,0.4)}50%{transform:scale(1.15);opacity:.9;box-shadow:0 0 0 8px rgba(0,245,160,0)}} @keyframes stepActivate{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}`}</style>
+
+        {/* Línea vertical */}
+        <div style={{ position: 'absolute', left: '23px', top: '24px', bottom: '24px', width: '2px', background: dark?'rgba(255,255,255,0.06)':'rgba(14,77,146,0.08)', zIndex: 0 }}/>
+        {/* Progreso vertical */}
+        <div style={{ position: 'absolute', left: '23px', top: '24px', width: '2px', zIndex: 1, borderRadius: '1px', transition: 'height .6s cubic-bezier(0.4,0,0.2,1)', height: `${progress}%`, background: 'linear-gradient(to bottom, #00F5A0, #4ADE80, #60A5FA, #A78BFA)' }}/>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', zIndex: 2 }}>
+          {steps.map((step, i) => (
+            <div key={step.n} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <StepCircle step={step} i={i}/>
+            </div>
+          ))}
+        </div>
+
+        {/* Badge */}
+        <div style={{ marginTop: '20px', textAlign: 'center' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: '100px', background: `${steps[activeStep].color}12`, border: `1px solid ${steps[activeStep].color}30`, transition: 'all .4s ease' }}>
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: steps[activeStep].color, animation: 'atomPulse 1s infinite' }}/>
+            <span style={{ fontSize: '12px', color: steps[activeStep].color, fontWeight: 600 }}>Etapa {steps[activeStep].n} — {steps[activeStep].label}</span>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // DESKTOP — horizontal
   return (
     <div style={{ position: 'relative', padding: '20px 0 40px' }}>
-      <style>{`
-        @keyframes atomPulse {
-          0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(0,245,160,0.4); }
-          50% { transform: scale(1.15); opacity: .9; box-shadow: 0 0 0 8px rgba(0,245,160,0); }
-        }
-        @keyframes stepActivate {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.12); }
-          100% { transform: scale(1); }
-        }
-        @keyframes trailFade {
-          0% { opacity: .8; }
-          100% { opacity: 0; }
-        }
-      `}</style>
+      <style>{`@keyframes atomPulse{0%,100%{transform:scale(1);opacity:1;box-shadow:0 0 0 0 rgba(0,245,160,0.4)}50%{transform:scale(1.15);opacity:.9;box-shadow:0 0 0 8px rgba(0,245,160,0)}} @keyframes stepActivate{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}`}</style>
 
-      {/* Línea de fondo */}
+      {/* Línea fondo */}
       <div style={{ position: 'absolute', top: '44px', left: '5%', right: '5%', height: '2px', background: dark?'rgba(255,255,255,0.06)':'rgba(14,77,146,0.08)', zIndex: 0, borderRadius: '1px' }}/>
-
-      {/* Línea de progreso animada */}
+      {/* Progreso */}
       <div style={{ position: 'absolute', top: '44px', left: '5%', height: '2px', zIndex: 1, borderRadius: '1px', transition: 'width .6s cubic-bezier(0.4,0,0.2,1)', width: `${progress * 0.9}%`, background: 'linear-gradient(to right, #00F5A0, #4ADE80, #60A5FA, #A78BFA)' }}/>
 
-      {/* Átomo viajero */}
-      <div style={{
-        position: 'absolute', top: '37px', zIndex: 10,
-        left: `calc(5% + ${progress * 0.9}% - 8px)`,
-        transition: traveling ? 'left .4s cubic-bezier(0.4,0,0.2,1)' : 'left .6s cubic-bezier(0.4,0,0.2,1)',
-        pointerEvents: 'none',
-      }}>
-        {/* Anillo exterior pulsante */}
+      {/* Átomo */}
+      <div style={{ position: 'absolute', top: '37px', zIndex: 10, left: `calc(5% + ${progress * 0.9}% - 8px)`, transition: traveling ? 'left .4s cubic-bezier(0.4,0,0.2,1)' : 'left .6s cubic-bezier(0.4,0,0.2,1)', pointerEvents: 'none' }}>
         <div style={{ position: 'absolute', inset: '-6px', borderRadius: '50%', border: `1.5px solid ${steps[activeStep].color}`, opacity: .4, animation: 'atomPulse 1.2s ease-in-out infinite' }}/>
-        {/* Anillo medio */}
         <div style={{ position: 'absolute', inset: '-3px', borderRadius: '50%', border: `1px solid ${steps[activeStep].color}`, opacity: .6 }}/>
-        {/* Núcleo */}
         <div style={{ width: '16px', height: '16px', borderRadius: '50%', background: steps[activeStep].color, boxShadow: `0 0 12px ${steps[activeStep].color}80` }}/>
       </div>
 
       {/* Steps */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(9,1fr)', gap: '4px', position: 'relative', zIndex: 2 }}>
-        {steps.map((step, i) => {
-          const isActive = i === activeStep
-          const isDone = i < activeStep
-          return (
-            <div key={step.n} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-              <div style={{
-                width: '48px', height: '48px', borderRadius: '50%',
-                background: isActive ? `${step.color}25` : isDone ? `${step.color}10` : dark?'rgba(255,255,255,0.03)':'rgba(14,77,146,0.03)',
-                border: isActive ? `2px solid ${step.color}` : isDone ? `2px solid ${step.color}50` : `2px solid ${dark?'rgba(255,255,255,0.08)':'rgba(14,77,146,0.1)'}`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '18px', flexShrink: 0, position: 'relative',
-                transition: 'all .4s ease',
-                animation: isActive ? 'stepActivate .4s ease' : 'none',
-                boxShadow: isActive ? `0 0 16px ${step.color}30` : 'none',
-              }}>
-                <span style={{ transition: 'opacity .3s', opacity: isDone||isActive?1:.4 }}>{step.icon}</span>
-                <div style={{
-                  position: 'absolute', top: '-6px', right: '-6px',
-                  width: '20px', height: '20px', borderRadius: '50%',
-                  background: isActive||isDone ? step.color : dark?'rgba(255,255,255,0.08)':'rgba(14,77,146,0.08)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '9px', fontWeight: 700,
-                  color: isActive||isDone ? '#0B1F3A' : dark?'rgba(255,255,255,0.3)':'rgba(14,77,146,0.3)',
-                  transition: 'all .4s ease',
-                  boxShadow: isActive ? `0 0 8px ${step.color}60` : 'none',
-                }}>{step.n}</div>
-              </div>
-              <div style={{
-                fontSize: '10px', textAlign: 'center', lineHeight: 1.3,
-                color: isActive ? step.color : isDone ? (dark?'rgba(255,255,255,0.5)':'rgba(14,77,146,0.5)') : (dark?'rgba(255,255,255,0.25)':'rgba(14,77,146,0.25)'),
-                fontWeight: isActive ? 600 : 400,
-                transition: 'all .4s ease',
-              }}>{step.label}</div>
-            </div>
-          )
-        })}
+        {steps.map((step, i) => <StepCircle key={step.n} step={step} i={i}/>)}
       </div>
 
-      {/* Info del paso activo */}
+      {/* Badge */}
       <div style={{ marginTop: '24px', textAlign: 'center', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: '100px', background: `${steps[activeStep].color}12`, border: `1px solid ${steps[activeStep].color}30`, transition: 'all .4s ease' }}>
           <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: steps[activeStep].color, animation: 'atomPulse 1s infinite' }}/>
@@ -224,6 +234,7 @@ function TrazabilidadAnimada({ fg2, dark }) {
     </div>
   )
 }
+
 
 export default function Landing() {
   const navigate = useNavigate()
@@ -266,6 +277,12 @@ export default function Landing() {
           .hide-mobile { display: none !important; }
           .hero-section { padding: 100px 20px 60px !important; }
           .section-pad { padding: 60px 20px !important; }
+          @media (max-width: 768px) {
+            .features-grid { grid-template-columns: 1fr !important; }
+            .roles-grid { grid-template-columns: 1fr !important; }
+            .flow-bar { gap: 6px !important; }
+            .footer-inner { flex-direction: column !important; align-items: flex-start !important; gap: 16px !important; }
+          }
           .mockup-sidebar { display: none !important; }
           .mockup-kpis { grid-template-columns: 1fr 1fr !important; }
         }
@@ -383,7 +400,7 @@ export default function Landing() {
       <section className="section-pad" style={{ padding: '80px 24px', maxWidth: '1100px', margin: '0 auto' }}>
         <div style={{ fontSize: '11px', color: '#00F5A0', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 500 }}>{tx.why}</div>
         <h2 style={{ fontFamily: "'Fraunces', serif", fontSize: 'clamp(28px,4vw,48px)', fontWeight: 900, letterSpacing: '-1.5px', marginBottom: '48px', lineHeight: 1.1, whiteSpace: 'pre-line' }}>{tx.whyTitle}</h2>
-        <div className="features-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '14px' }}>
+        <div className="features-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px' }}>
           {tx.features.map(([title, desc, tag]) => (
             <div key={title} style={{ background: card, border: `1px solid ${cardBorder}`, borderRadius: '16px', padding: '24px', transition: 'all .25s', cursor: 'default' }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(0,194,168,0.3)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
@@ -401,7 +418,7 @@ export default function Landing() {
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div style={{ fontSize: '11px', color: '#00F5A0', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 500 }}>{tx.model}</div>
           <h2 style={{ fontFamily: "'Fraunces', serif", fontSize: 'clamp(28px,4vw,48px)', fontWeight: 900, letterSpacing: '-1.5px', marginBottom: '48px', lineHeight: 1.1, whiteSpace: 'pre-line' }}>{tx.modelTitle}</h2>
-          <div className="roles-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+          <div className="roles-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
             {[
               { badge: tx.provBadge, bc: '#00F5A0', bb: 'rgba(0,194,168,0.1)', bbr: 'rgba(0,194,168,0.3)', title: tx.provTitle, sub: tx.provSub, bg2: 'linear-gradient(135deg,#0B1F3A,#0E2D52)', border: 'rgba(0,194,168,0.15)', dot: '#00F5A0', items: tx.provItems },
               { badge: tx.retBadge, bc: '#4ADE80', bb: 'rgba(74,222,128,0.1)', bbr: 'rgba(74,222,128,0.3)', title: tx.retTitle, sub: tx.retSub, bg2: 'linear-gradient(135deg,#052E16,#064E3B)', border: 'rgba(74,222,128,0.15)', dot: '#4ADE80', items: tx.retItems },
@@ -436,7 +453,7 @@ export default function Landing() {
           NEXO rastrea cada documento en tiempo real — desde que el retail emite la orden hasta que el proveedor confirma el pago. Sin llamadas, sin emails, sin incertidumbre.
         </p>
         <TrazabilidadAnimada fg2={fg2} dark={dark}/>
-        <div style={{ marginTop: '48px', display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '14px' }}>
+        <div style={{ marginTop: '48px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px' }}>
           {[
             { title: 'Sin llamadas de seguimiento', desc: 'El retail y el proveedor ven el estado en tiempo real desde sus portales. Cero emails de "¿llegó mi pedido?"', icon: '📵' },
             { title: 'Alertas automáticas', desc: 'NEXO notifica por WhatsApp o email en cada cambio de estado — sin que nadie tenga que hacer nada.', icon: '🔔' },
@@ -464,7 +481,7 @@ export default function Landing() {
             NEXO habla el idioma de tu infraestructura — SAP, Oracle, desarrollo propietario o EDI legacy. Sin migraciones, sin cambios en tu operación actual.
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '32px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '32px' }}>
             {/* ERP */}
             <div style={{ background: card, border: `1px solid ${cardBorder}`, borderRadius: '16px', padding: '28px' }}>
               <div style={{ fontSize: '11px', color: '#00F5A0', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '16px', fontWeight: 600 }}>ERP compatibles</div>
@@ -531,7 +548,7 @@ export default function Landing() {
           {lang === 'es' ? <>NEXO vs la <span style={{ color: '#00F5A0' }}>plataforma anterior.</span></> : <>NEXO vs your <span style={{ color: '#00F5A0' }}>previous platform.</span></>}
         </h2>
 
-        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', borderRadius: '16px', margin: '0 -2px' }}><div style={{ background: card, border: `1px solid ${cardBorder}`, borderRadius: '16px', overflow: 'hidden', minWidth: '560px' }}>
+        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', borderRadius: '16px', margin: '0 -2px' }}><div style={{ background: card, border: `1px solid ${cardBorder}`, borderRadius: '16px', overflow: 'hidden', minWidth: '600px' }}>
           {/* Header */}
           <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr', background: dark ? 'rgba(255,255,255,0.03)' : 'rgba(14,77,146,0.03)', borderBottom: `1px solid ${cardBorder}` }}>
             <div style={{ padding: '16px 24px', fontSize: '12px', color: fg2, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>

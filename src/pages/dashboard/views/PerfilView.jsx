@@ -773,16 +773,12 @@ function TabEquipo({ isProv }) {
       <div style={{ background:'#F8FAFC', border:'1px solid rgba(14,77,146,0.08)', borderRadius:'10px', padding:'16px' }}>
         <div style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A', marginBottom:'8px' }}>Permisos por rol</div>
         <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'8px' }}>
-          {[
-            { rol:'Facturador / Contador', perms:['Ver OCs entrantes','Generar XML factura','Subir factura a SUNAT','Ver estado de documentos'], color:'#0E4D92', bg:'#EEF5FF' },
-            { rol:'Tesorero', perms:['Todo lo anterior','Ver Órdenes de Pago','Solicitar Cobro Inmediato','Acceder a Factoring'], color:'#166534', bg:'#F0FDF4' },
-            { rol:'Admin de Ventas', perms:['Acceso completo','Gestionar usuarios','Configurar API','Ver billing'], color:'#7C3AED', bg:'#F5F3FF' },
-          ].map(r => (
-            <div key={r.rol} style={{ background:r.bg, border:`1px solid ${r.color}20`, borderRadius:'8px', padding:'12px' }}>
-              <div style={{ fontSize:'11px', fontWeight:700, color:r.color, marginBottom:'8px' }}>{r.rol}</div>
-              {r.perms.map(p => (
-                <div key={p} style={{ fontSize:'10px', color:'#4B5563', marginBottom:'4px', display:'flex', gap:'5px' }}>
-                  <span style={{ color:r.color, flexShrink:0 }}>✓</span>{p}
+          {Object.entries(ROL_INFO).map(([rol, info]) => (
+            <div key={rol} style={{ background:info.bg, border:`1px solid ${info.color}20`, borderRadius:'8px', padding:'12px' }}>
+              <div style={{ fontSize:'11px', fontWeight:700, color:info.color, marginBottom:'8px' }}>{rol}</div>
+              {info.modules.map(m => (
+                <div key={m} style={{ fontSize:'10px', color:'#4B5563', marginBottom:'4px', display:'flex', gap:'5px' }}>
+                  <span style={{ color:info.color, flexShrink:0 }}>✓</span>{m}
                 </div>
               ))}
             </div>

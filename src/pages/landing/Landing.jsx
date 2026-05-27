@@ -105,6 +105,126 @@ const t = {
   }
 }
 
+
+function TrazabilidadAnimada({ fg2, dark }) {
+  const [activeStep, setActiveStep] = useState(0)
+  const [traveling, setTraveling] = useState(false)
+
+  const steps = [
+    { n:'1', label:'OC Emitida',      icon:'📋', color:'#00F5A0' },
+    { n:'2', label:'OC Confirmada',   icon:'✓',  color:'#00F5A0' },
+    { n:'3', label:'ASN Generado',    icon:'📦', color:'#00F5A0' },
+    { n:'4', label:'En tránsito',     icon:'🚚', color:'#4ADE80' },
+    { n:'5', label:'En almacén',      icon:'🏭', color:'#4ADE80' },
+    { n:'6', label:'Recepción',       icon:'📥', color:'#4ADE80' },
+    { n:'7', label:'Devolución',      icon:'↩',  color:'#F59E0B' },
+    { n:'8', label:'Factura SUNAT',   icon:'🧾', color:'#60A5FA' },
+    { n:'9', label:'Pago confirmado', icon:'💰', color:'#A78BFA' },
+  ]
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTraveling(true)
+      setTimeout(() => {
+        setActiveStep(s => (s + 1) % steps.length)
+        setTraveling(false)
+      }, 400)
+    }, 1200)
+    return () => clearInterval(interval)
+  }, [])
+
+  const progress = ((activeStep) / (steps.length - 1)) * 100
+
+  return (
+    <div style={{ position: 'relative', padding: '20px 0 40px' }}>
+      <style>{`
+        @keyframes atomPulse {
+          0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(0,245,160,0.4); }
+          50% { transform: scale(1.15); opacity: .9; box-shadow: 0 0 0 8px rgba(0,245,160,0); }
+        }
+        @keyframes stepActivate {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.12); }
+          100% { transform: scale(1); }
+        }
+        @keyframes trailFade {
+          0% { opacity: .8; }
+          100% { opacity: 0; }
+        }
+      `}</style>
+
+      {/* Línea de fondo */}
+      <div style={{ position: 'absolute', top: '44px', left: '5%', right: '5%', height: '2px', background: dark?'rgba(255,255,255,0.06)':'rgba(14,77,146,0.08)', zIndex: 0, borderRadius: '1px' }}/>
+
+      {/* Línea de progreso animada */}
+      <div style={{ position: 'absolute', top: '44px', left: '5%', height: '2px', zIndex: 1, borderRadius: '1px', transition: 'width .6s cubic-bezier(0.4,0,0.2,1)', width: `${progress * 0.9}%`, background: 'linear-gradient(to right, #00F5A0, #4ADE80, #60A5FA, #A78BFA)' }}/>
+
+      {/* Átomo viajero */}
+      <div style={{
+        position: 'absolute', top: '37px', zIndex: 10,
+        left: `calc(5% + ${progress * 0.9}% - 8px)`,
+        transition: traveling ? 'left .4s cubic-bezier(0.4,0,0.2,1)' : 'left .6s cubic-bezier(0.4,0,0.2,1)',
+        pointerEvents: 'none',
+      }}>
+        {/* Anillo exterior pulsante */}
+        <div style={{ position: 'absolute', inset: '-6px', borderRadius: '50%', border: `1.5px solid ${steps[activeStep].color}`, opacity: .4, animation: 'atomPulse 1.2s ease-in-out infinite' }}/>
+        {/* Anillo medio */}
+        <div style={{ position: 'absolute', inset: '-3px', borderRadius: '50%', border: `1px solid ${steps[activeStep].color}`, opacity: .6 }}/>
+        {/* Núcleo */}
+        <div style={{ width: '16px', height: '16px', borderRadius: '50%', background: steps[activeStep].color, boxShadow: `0 0 12px ${steps[activeStep].color}80` }}/>
+      </div>
+
+      {/* Steps */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(9,1fr)', gap: '4px', position: 'relative', zIndex: 2 }}>
+        {steps.map((step, i) => {
+          const isActive = i === activeStep
+          const isDone = i < activeStep
+          return (
+            <div key={step.n} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+              <div style={{
+                width: '48px', height: '48px', borderRadius: '50%',
+                background: isActive ? `${step.color}25` : isDone ? `${step.color}10` : dark?'rgba(255,255,255,0.03)':'rgba(14,77,146,0.03)',
+                border: isActive ? `2px solid ${step.color}` : isDone ? `2px solid ${step.color}50` : `2px solid ${dark?'rgba(255,255,255,0.08)':'rgba(14,77,146,0.1)'}`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '18px', flexShrink: 0, position: 'relative',
+                transition: 'all .4s ease',
+                animation: isActive ? 'stepActivate .4s ease' : 'none',
+                boxShadow: isActive ? `0 0 16px ${step.color}30` : 'none',
+              }}>
+                <span style={{ transition: 'opacity .3s', opacity: isDone||isActive?1:.4 }}>{step.icon}</span>
+                <div style={{
+                  position: 'absolute', top: '-6px', right: '-6px',
+                  width: '20px', height: '20px', borderRadius: '50%',
+                  background: isActive||isDone ? step.color : dark?'rgba(255,255,255,0.08)':'rgba(14,77,146,0.08)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '9px', fontWeight: 700,
+                  color: isActive||isDone ? '#0B1F3A' : dark?'rgba(255,255,255,0.3)':'rgba(14,77,146,0.3)',
+                  transition: 'all .4s ease',
+                  boxShadow: isActive ? `0 0 8px ${step.color}60` : 'none',
+                }}>{step.n}</div>
+              </div>
+              <div style={{
+                fontSize: '10px', textAlign: 'center', lineHeight: 1.3,
+                color: isActive ? step.color : isDone ? (dark?'rgba(255,255,255,0.5)':'rgba(14,77,146,0.5)') : (dark?'rgba(255,255,255,0.25)':'rgba(14,77,146,0.25)'),
+                fontWeight: isActive ? 600 : 400,
+                transition: 'all .4s ease',
+              }}>{step.label}</div>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Info del paso activo */}
+      <div style={{ marginTop: '24px', textAlign: 'center', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: '100px', background: `${steps[activeStep].color}12`, border: `1px solid ${steps[activeStep].color}30`, transition: 'all .4s ease' }}>
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: steps[activeStep].color, animation: 'atomPulse 1s infinite' }}/>
+          <span style={{ fontSize: '12px', color: steps[activeStep].color, fontWeight: 600 }}>Etapa {steps[activeStep].n} — {steps[activeStep].label}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function Landing() {
   const navigate = useNavigate()
   const [lang, setLang] = useState('es')
@@ -299,6 +419,105 @@ export default function Landing() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* TRAZABILIDAD */}
+      <section className="section-pad" style={{ padding: '80px 24px', maxWidth: '1100px', margin: '0 auto' }}>
+        <div style={{ fontSize: '11px', color: '#00F5A0', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 500 }}>
+          Trazabilidad completa
+        </div>
+        <h2 style={{ fontFamily: "'Fraunces', serif", fontSize: 'clamp(28px,4vw,48px)', fontWeight: 900, letterSpacing: '-1.5px', marginBottom: '16px', lineHeight: 1.1 }}>
+          De la OC al cobro.<br/><span style={{ color: '#00F5A0' }}>Cada paso, visible.</span>
+        </h2>
+        <p style={{ fontSize: '16px', color: fg2, marginBottom: '48px', maxWidth: '580px' }}>
+          NEXO rastrea cada documento en tiempo real — desde que el retail emite la orden hasta que el proveedor confirma el pago. Sin llamadas, sin emails, sin incertidumbre.
+        </p>
+        <TrazabilidadAnimada fg2={fg2} dark={dark}/>
+        <div style={{ marginTop: '48px', display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '14px' }}>
+          {[
+            { title: 'Sin llamadas de seguimiento', desc: 'El retail y el proveedor ven el estado en tiempo real desde sus portales. Cero emails de "¿llegó mi pedido?"', icon: '📵' },
+            { title: 'Alertas automáticas', desc: 'NEXO notifica por WhatsApp o email en cada cambio de estado — sin que nadie tenga que hacer nada.', icon: '🔔' },
+            { title: 'Historial completo', desc: 'Cada evento queda registrado con timestamp. Auditoría completa disponible en cualquier momento.', icon: '🗂' },
+          ].map(item => (
+            <div key={item.title} style={{ background: card, border: `1px solid ${cardBorder}`, borderRadius: '16px', padding: '24px' }}>
+              <div style={{ fontSize: '24px', marginBottom: '10px' }}>{item.icon}</div>
+              <div style={{ fontFamily: "'Fraunces', serif", fontSize: '16px', fontWeight: 700, color: fg, marginBottom: '8px' }}>{item.title}</div>
+              <div style={{ fontSize: '13px', color: fg2, lineHeight: 1.6 }}>{item.desc}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* INTEGRACIONES */}
+      <section className="section-pad" style={{ padding: '80px 24px', background: sectionBg, borderTop: `1px solid ${sectionBorder}`, borderBottom: `1px solid ${sectionBorder}` }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <div style={{ fontSize: '11px', color: '#00F5A0', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '12px', fontWeight: 500 }}>
+            Multi-protocolo · Multi-ERP
+          </div>
+          <h2 style={{ fontFamily: "'Fraunces', serif", fontSize: 'clamp(28px,4vw,48px)', fontWeight: 900, letterSpacing: '-1.5px', marginBottom: '16px', lineHeight: 1.1 }}>
+            Se integra con tu sistema.<br/><span style={{ color: '#00F5A0' }}>Sin importar cuál sea.</span>
+          </h2>
+          <p style={{ fontSize: '16px', color: fg2, marginBottom: '48px', maxWidth: '580px' }}>
+            NEXO habla el idioma de tu infraestructura — SAP, Oracle, desarrollo propietario o EDI legacy. Sin migraciones, sin cambios en tu operación actual.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '32px' }}>
+            {/* ERP */}
+            <div style={{ background: card, border: `1px solid ${cardBorder}`, borderRadius: '16px', padding: '28px' }}>
+              <div style={{ fontSize: '11px', color: '#00F5A0', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '16px', fontWeight: 600 }}>ERP compatibles</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {[
+                  { name: 'SAP S/4HANA', desc: 'Integración bidireccional vía API REST y RFC', badge: 'Enterprise' },
+                  { name: 'Oracle ERP Cloud', desc: 'Sincronización de OCs, facturas y pagos', badge: 'Enterprise' },
+                  { name: 'Odoo / Microsoft D365', desc: 'Conectores listos para ERPs medianos', badge: 'Standard' },
+                  { name: 'Desarrollo propietario', desc: 'API REST documentada para integración a medida', badge: 'Custom' },
+                ].map(erp => (
+                  <div key={erp.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderBottom: `1px solid ${cardBorder}` }}>
+                    <div>
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: fg }}>{erp.name}</div>
+                      <div style={{ fontSize: '11px', color: fg2, marginTop: '2px' }}>{erp.desc}</div>
+                    </div>
+                    <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '10px', background: 'rgba(0,245,160,0.1)', color: '#00F5A0', fontWeight: 600, flexShrink: 0, marginLeft: '12px' }}>{erp.badge}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* EDI */}
+            <div style={{ background: card, border: `1px solid ${cardBorder}`, borderRadius: '16px', padding: '28px' }}>
+              <div style={{ fontSize: '11px', color: '#00F5A0', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '16px', fontWeight: 600 }}>Documentos EDI soportados</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {[
+                  { code: '850', name: 'Purchase Order', desc: 'Orden de Compra del retail al proveedor' },
+                  { code: '855', name: 'PO Acknowledgment', desc: 'Confirmación de OC por el proveedor' },
+                  { code: '856', name: 'Ship Notice (ASN)', desc: 'Aviso de despacho y notificación de mercancías' },
+                  { code: '810', name: 'Invoice', desc: 'Factura electrónica validada SUNAT' },
+                  { code: '820', name: 'Payment Order', desc: 'Orden de pago y confirmación de cobro' },
+                  { code: '204', name: 'Logistics', desc: 'Instrucciones logísticas y aviso de entrega' },
+                ].map(edi => (
+                  <div key={edi.code} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 0', borderBottom: `1px solid ${cardBorder}` }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: 'rgba(0,245,160,0.08)', border: '1px solid rgba(0,245,160,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'monospace', fontSize: '11px', fontWeight: 700, color: '#00F5A0', flexShrink: 0 }}>{edi.code}</div>
+                    <div>
+                      <div style={{ fontSize: '12px', fontWeight: 600, color: fg }}>{edi.name}</div>
+                      <div style={{ fontSize: '11px', color: fg2 }}>{edi.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Badges sectores */}
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '12px', color: fg2, marginBottom: '16px' }}>Diseñado para múltiples sectores</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center' }}>
+              {['🛒 Retail & Supermercados', '🏭 Manufactura', '🍎 Consumo masivo', '💊 Farmacéutico', '🏗 Construcción', '🍽 Food Service', '👗 Textil & Moda', '📦 Distribución'].map(s => (
+                <span key={s} style={{ fontSize: '12px', padding: '6px 14px', borderRadius: '100px', background: card, border: `1px solid ${cardBorder}`, color: fg2 }}>{s}</span>
+              ))}
+            </div>
           </div>
         </div>
       </section>

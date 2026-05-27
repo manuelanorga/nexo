@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AdminDashboard from './views/AdminDashboard'
 import TenantsView from './views/TenantsView'
+import SistemaView from './views/SistemaView'
+import TransaccionesView from './views/TransaccionesView'
+import BillingView from './views/BillingView'
 
 const NAV = [
   { sec: 'Operaciones', items: [
@@ -161,6 +164,12 @@ export default function AdminPanel() {
             ? <AdminDashboard {...{ accent, accentBg, text, text2, text3, border, white, bg }} />
             : view === 'tenants'
             ? <TenantsView {...{ accent, accentBg, text, text2, text3, border, white, bg }} />
+            : view === 'sistema'
+            ? <SistemaView {...{ accent, accentBg, text, text2, text3, border, white, bg }} />
+            : view === 'transacciones'
+            ? <TransaccionesView {...{ accent, accentBg, text, text2, text3, border, white, bg }} />
+            : view === 'billing'
+            ? <BillingView {...{ accent, accentBg, text, text2, text3, border, white, bg }} />
             : <ComingSoon label={COMING[view]} {...{ accent, accentBg, text2, text3, border }} />
           }
         </div>

@@ -32,7 +32,7 @@ const quickActions = [
   },
   {
     label: 'Nuevo SKU en Catálogo', desc: 'Agregar producto al catálogo',
-    view: 'catálogo', kbd: 'S', iconColor: '#166534', iconBg: '#EAF3DE',
+    view: 'catalogo', kbd: 'S', iconColor: '#166534', iconBg: '#EAF3DE',
     iconPath: 'M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'
   },
   {
@@ -243,7 +243,11 @@ export default function Topbar({ role, view, setView, onMenuClick }) {
               </div>
 
               {quickActions.map(item => (
-                <div key={item.view} onClick={() => { setView(item.view); setMenuOpen(false) }} style={{
+                <div key={item.view} onClick={() => {
+                  setView(item.view)
+                  setMenuOpen(false)
+                  if (item.view === 'catalogo') setOpenNuevoSKU(true)
+                }} style={{
                   display: 'flex', alignItems: 'center', gap: '10px',
                   padding: '8px 10px', cursor: 'pointer', borderRadius: '8px', transition: 'background .15s'
                 }}

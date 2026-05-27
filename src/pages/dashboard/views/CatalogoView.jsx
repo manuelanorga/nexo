@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useIsMobile } from '../../../hooks/useMediaQuery'
 import * as XLSX from 'xlsx'
 import { catalogData } from '../../../data/mockData'
@@ -147,7 +147,7 @@ function StockBadge({ stock, editable, onChange }) {
 }
 
 export default function CatálogoView() {
-  const { searchQuery } = useApp()
+  const { searchQuery, openNuevoSKU, setOpenNuevoSKU } = useApp()
   const [editProduct, setEditProduct] = useState(null)
   const [showNew, setShowNew] = useState(false)
   const [showExport, setShowExport] = useState(false)
@@ -162,6 +162,13 @@ export default function CatálogoView() {
     '07702459082052': 85,  '07702459082069': 340,
   })
   const updateStock = (ean, val) => setStocks(s => ({...s, [ean]: val}))
+
+  useEffect(() => {
+    if (openNuevoSKU) {
+      setShowNew(true)
+      setOpenNuevoSKU(false)
+    }
+  }, [openNuevoSKU])
   const isMobile = useIsMobile()
 
   const filtered = useMemo(() => {

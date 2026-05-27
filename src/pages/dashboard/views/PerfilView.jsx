@@ -958,6 +958,223 @@ function TabComercial({ comercial, setComercial }) {
   )
 }
 
+
+function TabBillingRetail() {
+  const [slider, setSlider] = useState(0)
+  const [showContact, setShowContact] = useState(false)
+
+  const STEPS = [
+    {
+      id: 'intro',
+      label: 'Introducción',
+      precio: 'S/ 399',
+      period: '/ mes',
+      badge: 'Precio de introducción',
+      badgeBg: '#FFF7ED', badgeColor: '#C2410C',
+      tag: '🎯 Precio especial de lanzamiento',
+      tagBg: '#FFF7ED', tagColor: '#C2410C',
+      desc: 'Ideal para retails en proceso de digitalización. Entra a NEXO con condiciones especiales de lanzamiento.',
+      dark: false,
+      accent: '#0E4D92',
+      features: [
+        { txt: 'Hasta 50 proveedores activos' },
+        { txt: 'Hasta 2,000 OCs / mes' },
+        { txt: 'S/ 0.25 por OC adicional' },
+        { txt: 'Portal web + mobile' },
+        { txt: 'API REST básica' },
+        { txt: 'Soporte por email (48h)' },
+        { txt: 'Trazabilidad básica (5 etapas)' },
+      ],
+      cta: null,
+      note: '* Precio de introducción válido para los primeros retails que se unan a la red NEXO. Precio de mercado estimado: S/ 3,500/mes.'
+    },
+    {
+      id: 'growth',
+      label: 'Crecimiento',
+      precio: 'S/ 799',
+      period: '/ mes',
+      badge: 'Precio estimado',
+      badgeBg: 'rgba(0,245,160,0.15)', badgeColor: '#065F46',
+      tag: '📈 Precio referencial de mercado',
+      tagBg: 'rgba(0,245,160,0.1)', tagColor: '#00F5A0',
+      desc: 'Para retails con operación establecida y múltiples proveedores. Trazabilidad completa y soporte prioritario.',
+      dark: true,
+      accent: '#00F5A0',
+      features: [
+        { txt: 'Hasta 200 proveedores activos' },
+        { txt: 'Hasta 10,000 OCs / mes' },
+        { txt: 'S/ 0.15 por OC adicional' },
+        { txt: 'Portal web + mobile + PWA' },
+        { txt: 'API avanzada + soporte integración' },
+        { txt: 'Trazabilidad completa (9 etapas)' },
+        { txt: 'Soporte prioritario (SLA 4h)' },
+        { txt: 'Reportes y analytics' },
+        { txt: 'Ejecutivo de cuenta asignado' },
+      ],
+      cta: 'Hablar con el equipo →',
+      note: '* Precio estimado referencial. El precio final se define según volumen y requerimientos de integración.'
+    },
+    {
+      id: 'enterprise',
+      label: 'Implementación',
+      precio: null,
+      period: null,
+      badge: 'A medida',
+      badgeBg: '#F5F3FF', badgeColor: '#7C3AED',
+      tag: '🏗️ Proyecto de integración',
+      tagBg: '#F5F3FF', tagColor: '#7C3AED',
+      desc: 'Para grandes retails con ERP corporativo (SAP, Oracle) que requieren integración EDI y soporte 24/7.',
+      dark: false,
+      accent: '#7C3AED',
+      features: [
+        { txt: 'Proveedores ilimitados' },
+        { txt: 'OCs ilimitadas' },
+        { txt: 'Integración EDI a medida' },
+        { txt: 'Conexión ERP (SAP / Oracle)' },
+        { txt: 'Soporte 24/7 con ejecutivo dedicado' },
+        { txt: 'SLA garantizado por contrato' },
+        { txt: 'Onboarding técnico incluido' },
+        { txt: 'Setup fee: S/ 15,000 - S/ 30,000' },
+      ],
+      cta: null,
+    },
+  ]
+
+  const step = STEPS[slider]
+
+  return (
+    <div style={{ fontFamily:"'DM Sans',sans-serif" }}>
+      <style>{`@keyframes planFadeR{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}} .plan-card-r{animation:planFadeR .25s ease both}`}</style>
+
+      {/* Tabs underline */}
+      <div style={{ display:'flex', borderBottom:'1px solid rgba(14,77,146,0.1)', marginBottom:'24px' }}>
+        {STEPS.map((s,i) => (
+          <button key={s.id} onClick={() => setSlider(i)}
+            style={{ padding:'10px 24px', border:'none', background:'transparent', cursor:'pointer', fontFamily:"'DM Sans',sans-serif", fontSize:'13px', fontWeight: slider===i?600:400, color: slider===i?'#0B1F3A':'#94A3B8', borderBottom: slider===i?'2px solid #0B1F3A':'2px solid transparent', marginBottom:'-1px', transition:'all .2s' }}>
+            {s.label}
+            {s.id === 'intro' && (
+              <span style={{ marginLeft:'6px', fontSize:'9px', fontWeight:600, padding:'2px 6px', borderRadius:'8px', background:'#FFF7ED', color:'#C2410C', verticalAlign:'middle' }}>Activo</span>
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* Plan card */}
+      <div className="plan-card-r" key={step.id} style={{ borderRadius:'16px', overflow:'hidden', marginBottom:'20px', boxShadow: step.dark?'0 8px 32px rgba(14,77,146,0.25)':'0 4px 16px rgba(14,77,146,0.08)', border: step.dark?'none':'1px solid rgba(14,77,146,0.1)' }}>
+
+        {/* Header */}
+        <div style={{ padding:'28px 32px 24px', background: step.dark?'linear-gradient(135deg,#0B1F3A,#0E4D92)':'#fff' }}>
+          <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', marginBottom:'12px' }}>
+            <span style={{ fontSize:'10px', fontWeight:700, padding:'3px 10px', borderRadius:'10px', background:step.badgeBg, color:step.badgeColor, letterSpacing:'.5px', textTransform:'uppercase' }}>
+              {step.badge}
+            </span>
+            <span style={{ fontSize:'10px', fontWeight:600, padding:'3px 10px', borderRadius:'10px', background:step.tagBg, color:step.tagColor }}>
+              {step.tag}
+            </span>
+          </div>
+
+          {step.precio ? (
+            <>
+              <div style={{ fontFamily:"'Fraunces',serif", fontSize:'36px', fontWeight:900, color: step.dark?step.accent:'#0B1F3A', lineHeight:1, marginBottom:'4px' }}>
+                {step.precio}
+              </div>
+              <div style={{ fontSize:'12px', color: step.dark?'rgba(255,255,255,0.4)':'#94A3B8', marginBottom:'12px' }}>{step.period} · Sin IGV · facturación mensual</div>
+            </>
+          ) : (
+            <div style={{ fontFamily:"'Fraunces',serif", fontSize:'24px', fontWeight:900, color:'#7C3AED', lineHeight:1, marginBottom:'16px' }}>
+              Precio a medida
+            </div>
+          )}
+
+          <div style={{ fontSize:'13px', color: step.dark?'rgba(255,255,255,0.6)':'#6B7280', lineHeight:1.5 }}>
+            {step.desc}
+          </div>
+        </div>
+
+        {/* Features */}
+        <div style={{ padding:'24px 32px', background: step.dark?'rgba(11,31,58,0.97)':'#FAFBFF', display:'grid', gridTemplateColumns:'1fr 1fr', gap:'10px 24px' }}>
+          {step.features.map((f,i) => (
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:'8px', fontSize:'12px', color: step.dark?'rgba(255,255,255,0.8)':'#374151' }}>
+              <span style={{ color:step.accent, flexShrink:0, fontSize:'14px', fontWeight:700 }}>✓</span>{f.txt}
+            </div>
+          ))}
+        </div>
+
+        {/* CTA / Note */}
+        <div style={{ padding:'20px 32px', background: step.dark?'rgba(11,31,58,0.97)':'#fff', borderTop:`1px solid ${step.dark?'rgba(255,255,255,0.06)':'rgba(14,77,146,0.06)'}` }}>
+          {step.id === 'enterprise' ? (
+            <div style={{ display:'flex', alignItems:'center', gap:'12px' }}>
+              <div style={{ flex:1 }}>
+                <div style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A', marginBottom:'2px' }}>¿Necesitas una integración a medida?</div>
+                <div style={{ fontSize:'11px', color:'#6B8BAE' }}>Cuéntanos tu infraestructura y te preparamos una propuesta en 48h.</div>
+              </div>
+              <a href="https://wa.me/51931067775?text=Hola,%20me%20interesa%20una%20integración%20EDI/ERP%20para%20mi%20retail%20en%20NEXO"
+                target="_blank" rel="noreferrer"
+                style={{ display:'flex', alignItems:'center', gap:'8px', padding:'10px 20px', background:'#25D366', border:'none', borderRadius:'10px', color:'#fff', fontSize:'13px', fontWeight:700, cursor:'pointer', textDecoration:'none', fontFamily:"'DM Sans',sans-serif", flexShrink:0 }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Hablar con el equipo
+              </a>
+            </div>
+          ) : step.id === 'growth' ? (
+            <div>
+              <a href="https://wa.me/51931067775?text=Hola,%20me%20interesa%20el%20plan%20de%20crecimiento%20para%20mi%20retail%20en%20NEXO"
+                target="_blank" rel="noreferrer"
+                style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:'8px', padding:'12px', background:'#00F5A0', border:'none', borderRadius:'10px', color:'#0B1F3A', fontSize:'14px', fontWeight:700, cursor:'pointer', textDecoration:'none', fontFamily:"'DM Sans',sans-serif", marginBottom:'10px' }}>
+                Hablar con el equipo →
+              </a>
+              {step.note && <div style={{ fontSize:'10px', color:'#94A3B8', textAlign:'center', lineHeight:1.5 }}>{step.note}</div>}
+            </div>
+          ) : (
+            <div>
+              <div style={{ fontSize:'12px', color:'#6B8BAE', textAlign:'center', lineHeight:1.6, marginBottom:'8px' }}>
+                Plan activo · <span onClick={() => setSlider(1)} style={{ color:'#0E4D92', cursor:'pointer', fontWeight:600 }}>Ver plan de Crecimiento →</span>
+              </div>
+              {step.note && <div style={{ fontSize:'10px', color:'#94A3B8', textAlign:'center', lineHeight:1.5, padding:'8px 12px', background:'#FFF7ED', borderRadius:'8px', border:'1px solid #FED7AA' }}>{step.note}</div>}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Método de pago */}
+      <div style={{ background:'#F8FAFC', border:'1px solid rgba(14,77,146,0.08)', borderRadius:'10px', padding:'16px', marginBottom:'20px' }}>
+        <div style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A', marginBottom:'12px' }}>Método de pago</div>
+        <div style={{ display:'flex', alignItems:'center', gap:'10px' }}>
+          <div style={{ width:'40px', height:'26px', background:'#1A1F71', borderRadius:'4px', display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <span style={{ fontSize:'8px', color:'#fff', fontWeight:700 }}>VISA</span>
+          </div>
+          <div>
+            <div style={{ fontSize:'12px', fontWeight:500, color:'#0B1F3A' }}>•••• •••• •••• 4242</div>
+            <div style={{ fontSize:'10px', color:'#94A3B8' }}>Vence 12/2026</div>
+          </div>
+          <button style={{ marginLeft:'auto', fontSize:'11px', color:'#0E4D92', background:'none', border:'1px solid rgba(14,77,146,0.2)', borderRadius:'6px', padding:'4px 10px', cursor:'pointer', fontFamily:"'DM Sans',sans-serif" }}>Cambiar</button>
+        </div>
+      </div>
+
+      {/* Historial */}
+      <div style={{ fontSize:'13px', fontWeight:600, color:'#0B1F3A', marginBottom:'12px', paddingBottom:'8px', borderBottom:'1px solid rgba(14,77,146,0.08)' }}>Historial de facturas</div>
+      <div style={{ border:'1px solid rgba(14,77,146,0.08)', borderRadius:'10px', overflow:'hidden' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr 80px', gap:'8px', padding:'8px 14px', background:'#F8FAFC', borderBottom:'1px solid rgba(14,77,146,0.06)' }}>
+          {['Factura','Fecha','Monto',''].map(h => (
+            <span key={h} style={{ fontSize:'9px', color:'#94A3B8', textTransform:'uppercase', letterSpacing:'.6px', fontWeight:600 }}>{h}</span>
+          ))}
+        </div>
+        {[
+          { id:'INV-2025-003', fecha:'01 Mar 2025', monto:'S/ 399' },
+          { id:'INV-2025-002', fecha:'01 Feb 2025', monto:'S/ 399' },
+          { id:'INV-2025-001', fecha:'01 Ene 2025', monto:'S/ 399' },
+        ].map((inv,i,arr) => (
+          <div key={inv.id} style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr 80px', gap:'8px', padding:'10px 14px', borderBottom: i<arr.length-1?'1px solid rgba(14,77,146,0.05)':'none', alignItems:'center' }}>
+            <span style={{ fontSize:'11px', fontWeight:600, color:'#0B1F3A', fontFamily:'monospace' }}>{inv.id}</span>
+            <span style={{ fontSize:'11px', color:'#6B8BAE' }}>{inv.fecha}</span>
+            <span style={{ fontSize:'12px', fontWeight:600, color:'#0B1F3A' }}>{inv.monto}</span>
+            <button style={{ fontSize:'10px', color:'#0E4D92', background:'#EEF5FF', border:'none', borderRadius:'5px', padding:'4px 8px', cursor:'pointer', fontFamily:"'DM Sans',sans-serif", fontWeight:500 }}>PDF ↓</button>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function PerfilView({ role }) {
   const [tab, setTab] = useState('empresa')
   const isProv = role === 'prov'
@@ -1012,7 +1229,7 @@ export default function PerfilView({ role }) {
       {/* Content */}
       <div style={{ background:'#fff', borderRadius:'12px', border:'1px solid rgba(14,77,146,0.08)', padding:'24px', boxShadow:'0 1px 4px rgba(14,77,146,0.06)' }}>
         {tab === 'empresa'  && <TabEmpresa/>}
-        {tab === 'billing'  && <TabBilling/>}
+        {tab === 'billing'   && (isProv ? <TabBilling/> : <TabBillingRetail/>)}
         {tab === 'api'      && <TabAPI role={role}/>}
         {tab === 'equipo'   && <TabEquipo/>}
         {tab === 'comercial' && isProv && <TabComercial comercial={comercial} setComercial={setComercial}/>}

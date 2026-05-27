@@ -141,17 +141,32 @@ export default function Topbar({ role, view, setView, onMenuClick }) {
 
       <div style={{ position:'relative', flexShrink:0 }}>
         <button onClick={() => setProfileOpen(!profileOpen)}
-          style={{ display:'flex', alignItems:'center', gap:'7px', padding:'6px 12px', borderRadius:'20px', border:`1px solid ${isProv?'rgba(14,77,146,0.15)':'rgba(22,163,74,0.15)'}`, background: accentBg, cursor:'pointer', fontFamily:"'DM Sans',sans-serif", transition:'all .15s' }}
-          onMouseEnter={e=>e.currentTarget.style.opacity='.8'}
+          style={{ display:'flex', alignItems:'center', gap:'8px', padding:'5px 10px 5px 5px', borderRadius:'8px', background: accentBg, border:`1px solid ${isProv?'rgba(0,245,160,0.18)':'rgba(74,222,128,0.18)'}`, cursor:'pointer', fontFamily:"'DM Sans',sans-serif", transition:'all .15s' }}
+          onMouseEnter={e=>e.currentTarget.style.opacity='.85'}
           onMouseLeave={e=>e.currentTarget.style.opacity='1'}
         >
-          <div style={{ width:'20px', height:'20px', borderRadius:'50%', background: isProv?'#0B1F3A':'#064E3B', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'8px', fontWeight:700, color: isProv?'#00F5A0':'#4ADE80', flexShrink:0 }}>
+          <div style={{ width:'26px', height:'26px', borderRadius:'6px', background: isProv?'#00F5A0':'#4ADE80', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'9px', fontWeight:800, color: isProv?'#0B1F3A':'#052E1C', flexShrink:0 }}>
             {isProv?'AC':'WG'}
           </div>
-          <span style={{ fontSize:'11px', fontWeight:700, color:accentText, letterSpacing:'.3px' }}>
-            {isProv ? 'Proveedor' : 'Retail'}
-          </span>
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={accentText} strokeWidth="2.5" strokeLinecap="round" style={{ transform: profileOpen?'rotate(180deg)':'none', transition:'transform .2s' }}><path d="M6 9l6 6 6-6"/></svg>
+          {!isMobile && (
+            <div style={{ display:'flex', flexDirection:'column', gap:'1px' }}>
+              <span style={{ fontSize:'12px', fontWeight:600, color:'#fff', lineHeight:1.2 }}>
+                {isProv ? 'Arca Continental' : 'Wong S.A.'}
+              </span>
+              <span style={{ fontSize:'9px', color: isProv?'rgba(0,245,160,0.5)':'rgba(74,222,128,0.5)', lineHeight:1 }}>
+                {isProv ? 'Proveedor' : 'Retail'}
+              </span>
+            </div>
+          )}
+          {isMobile && (
+            <span style={{ fontSize:'11px', fontWeight:600, color:'#fff' }}>
+              {(() => {
+                const name = isProv ? 'Arca Continental' : 'Wong S.A.'
+                return name.length > 12 ? name.split(' ').map(w=>w[0]).join('') : name
+              })()}
+            </span>
+          )}
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={isProv?'rgba(0,245,160,0.4)':'rgba(74,222,128,0.4)'} strokeWidth="2.5" strokeLinecap="round" style={{ transform: profileOpen?'rotate(180deg)':'none', transition:'transform .2s' }}><path d="M6 9l6 6 6-6"/></svg>
         </button>
 
         {profileOpen && (

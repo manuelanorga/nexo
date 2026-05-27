@@ -6,6 +6,7 @@ import SistemaView from './views/SistemaView'
 import TransaccionesView from './views/TransaccionesView'
 import BillingView from './views/BillingView'
 import EquipoView from './views/EquipoView'
+import IntegracionesView from './views/IntegracionesView'
 
 const NAV = [
   { sec: 'Operaciones', items: [
@@ -173,6 +174,8 @@ export default function AdminPanel() {
             ? <BillingView {...{ accent, accentBg, text, text2, text3, border, white, bg }} />
             : view === 'equipo'
             ? <EquipoView {...{ accent, accentBg, text, text2, text3, border, white, bg }} />
+            : view === 'integraciones'
+            ? <IntegracionesView {...{ accent, accentBg, text, text2, text3, border, white, bg }} />
             : <ComingSoon label={COMING[view]} {...{ accent, accentBg, text2, text3, border }} />
           }
         </div>

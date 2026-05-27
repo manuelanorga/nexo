@@ -15,12 +15,19 @@ const TABS_RET = [
   { id: 'equipo',       label: 'Mi Equipo',             icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z' },
 ]
 
-const TEAM = [
+const TEAM_PROV = [
   { name:'Ricardo Torres',  email:'r.torres@arca.com.pe',  rol:'Admin de Ventas',      status:'active' },
   { name:'Claudia Mendoza', email:'c.mendoza@arca.com.pe', rol:'Facturador / Contador', status:'active' },
   { name:'Jorge Pinto',     email:'j.pinto@arca.com.pe',   rol:'Tesorero',             status:'active' },
   { name:'Sandra López',    email:'s.lopez@arca.com.pe',   rol:'Facturador / Contador', status:'invited' },
 ]
+
+const TEAM_RET = [
+  { name:'Ana Flores',    email:'a.flores@wong.com.pe',  rol:'Admin de Compras',          status:'active' },
+  { name:'Carlos Ruiz',   email:'c.ruiz@wong.com.pe',    rol:'Comprador / Op. Logístico', status:'active' },
+  { name:'Patricia Vega', email:'p.vega@wong.com.pe',    rol:'Aprobador Financiero',      status:'invited' },
+]
+
 
 const INVOICES = [
   { id:'INV-2025-005', fecha:'01 May 2025', plan:'Plan Enterprise', monto:'S/ 2,500', status:'Pagado' },
@@ -556,18 +563,25 @@ function TabAPI({ role }) {
   )
 }
 
-const ROL_INFO = {
+const ROL_INFO_PROV = {
   'Admin de Ventas':      { desc:'Acceso completo a todos los módulos', modules:['Catálogo','OCs','Despachos','Financiero','Reportes','API','Billing','Usuarios'], color:'#7C3AED', bg:'#F5F3FF' },
   'Facturador / Contador':{ desc:'Emite y gestiona documentos fiscales', modules:['Ver OCs entrantes','Generar XML factura','Subir a SUNAT','Ver estado documentos'], color:'#0E4D92', bg:'#EEF5FF' },
   'Tesorero':             { desc:'Gestiona pagos y factoring', modules:['Ver Órdenes de Pago','Cobro Inmediato','Factoring','Reportes financieros'], color:'#166534', bg:'#F0FDF4' },
 }
 
-function RolSelect({ value, onChange }) {
+const ROL_INFO_RET = {
+  'Admin de Compras':       { desc:'Acceso completo al módulo de compras', modules:['OCs','Despachos','Recepciones','Devoluciones','Reportes','Usuarios','Billing'], color:'#0E4D92', bg:'#EEF5FF' },
+  'Comprador / Op. Logístico': { desc:'Crea y gestiona órdenes de compra', modules:['Nueva OC','Ver OCs','Despachos','Recepciones','Devoluciones'], color:'#166534', bg:'#F0FDF4' },
+  'Aprobador Financiero':   { desc:'Aprueba OCs y gestiona pagos', modules:['Aprobar OCs','Ver facturas','Órdenes de Pago','Reportes financieros'], color:'#7C3AED', bg:'#F5F3FF' },
+}
+
+function RolSelect({ value, onChange, rolInfo }) {
   const [open, setOpen] = useState(false)
   const [tooltip, setTooltip] = useState(null)
   const [tooltipPos, setTooltipPos] = useState({ top:0, left:0 })
   const btnRef = useRef(null)
 
+  const ROL_INFO = rolInfo
   const handleTooltipEnter = (rol, e) => {
     const rect = e.currentTarget.getBoundingClientRect()
     setTooltipPos({ top: rect.top, left: rect.right + 10 })
@@ -623,8 +637,10 @@ function RolSelect({ value, onChange }) {
   )
 }
 
-function InviteModal({ onClose }) {
-  const [form, setForm] = useState({ name:'', email:'', rol:'Facturador / Contador' })
+function InviteModal({ onClose, rolInfo }) {
+  const ROL_INFO = rolInfo
+  const firstRol = Object.keys(rolInfo)[1] || Object.keys(rolInfo)[0]
+  const [form, setForm] = useState({ name:'', email:'', rol: firstRol })
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -664,15 +680,17 @@ function InviteModal({ onClose }) {
               </div>
               <div style={{ marginBottom:'20px' }}>
                 <label style={{ fontSize:'11px', fontWeight:600, color:'#6B8BAE', textTransform:'uppercase', letterSpacing:'.5px', display:'block', marginBottom:'5px' }}>Rol asignado</label>
-                <RolSelect value={form.rol} onChange={v=>setForm(f=>({...f,rol:v}))}/>
-                <div style={{ marginTop:'8px', padding:'8px 10px', background:ROL_INFO[form.rol].bg, borderRadius:'7px', border:`1px solid ${ROL_INFO[form.rol].color}20` }}>
-                  <div style={{ fontSize:'10px', fontWeight:600, color:ROL_INFO[form.rol].color, marginBottom:'4px' }}>Accesos del rol seleccionado</div>
-                  <div style={{ display:'flex', flexWrap:'wrap', gap:'4px' }}>
-                    {ROL_INFO[form.rol].modules.map(m => (
-                      <span key={m} style={{ fontSize:'9px', padding:'2px 7px', background:'rgba(255,255,255,0.7)', borderRadius:'10px', color:ROL_INFO[form.rol].color, fontWeight:500 }}>{m}</span>
-                    ))}
+                <RolSelect value={form.rol} onChange={v=>setForm(f=>({...f,rol:v}))} rolInfo={ROL_INFO}/>
+                {ROL_INFO[form.rol] && (
+                  <div style={{ marginTop:'8px', padding:'8px 10px', background:ROL_INFO[form.rol].bg, borderRadius:'7px', border:`1px solid ${ROL_INFO[form.rol].color}20` }}>
+                    <div style={{ fontSize:'10px', fontWeight:600, color:ROL_INFO[form.rol].color, marginBottom:'4px' }}>Accesos del rol seleccionado</div>
+                    <div style={{ display:'flex', flexWrap:'wrap', gap:'4px' }}>
+                      {ROL_INFO[form.rol].modules.map(m => (
+                        <span key={m} style={{ fontSize:'9px', padding:'2px 7px', background:'rgba(255,255,255,0.7)', borderRadius:'10px', color:ROL_INFO[form.rol].color, fontWeight:500 }}>{m}</span>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
               <div style={{ display:'flex', gap:'8px' }}>
                 <button onClick={onClose} style={{ flex:1, padding:'10px', border:'1px solid rgba(14,77,146,0.1)', borderRadius:'8px', background:'#F8FAFC', color:'#6B8BAE', fontSize:'13px', cursor:'pointer', fontFamily:"'DM Sans',sans-serif" }}>Cancelar</button>
@@ -692,7 +710,7 @@ function InviteModal({ onClose }) {
             <div style={{ fontSize:'16px', fontWeight:700, color:'#0B1F3A', marginBottom:'6px' }}>¡Invitación enviada!</div>
             <div style={{ fontSize:'12px', color:'#6B8BAE', marginBottom:'4px' }}><strong>{form.name}</strong> recibirá un email en</div>
             <div style={{ fontSize:'13px', fontWeight:600, color:'#0E4D92', marginBottom:'20px' }}>{form.email}</div>
-            <div style={{ fontSize:'11px', color:'#94A3B8', marginBottom:'20px' }}>Rol asignado: <strong style={{ color:ROL_INFO[form.rol].color }}>{form.rol}</strong></div>
+            <div style={{ fontSize:'11px', color:'#94A3B8', marginBottom:'20px' }}>Rol asignado: <strong style={{ color: ROL_INFO[form.rol]?.color || '#0B1F3A' }}>{form.rol}</strong></div>
             <button onClick={onClose} style={{ padding:'9px 24px', background:'#0B1F3A', border:'none', borderRadius:'8px', color:'#fff', fontSize:'13px', fontWeight:600, cursor:'pointer', fontFamily:"'DM Sans',sans-serif" }}>Listo</button>
           </div>
         )}
@@ -701,15 +719,17 @@ function InviteModal({ onClose }) {
   )
 }
 
-function TabEquipo() {
+function TabEquipo({ isProv }) {
   const [hovRow, setHovRow] = useState(null)
   const [showInvite, setShowInvite] = useState(false)
-  const [team, setTeam] = useState(TEAM.map(u => ({...u})))
+  const ROL_INFO = isProv ? ROL_INFO_PROV : ROL_INFO_RET
+  const [team, setTeam] = useState((isProv ? TEAM_PROV : TEAM_RET).map(u => ({...u})))
 
+  const roles = Object.keys(ROL_INFO)
   return (
     <div>
       <style>{`@keyframes lspin{to{transform:rotate(360deg)}} @keyframes fadeUp{from{opacity:0;transform:translate(-50%,-46%)}to{opacity:1;transform:translate(-50%,-50%)}}`}</style>
-      {showInvite && <InviteModal onClose={() => setShowInvite(false)}/>}
+      {showInvite && <InviteModal onClose={() => setShowInvite(false)} rolInfo={ROL_INFO}/>}
 
       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'16px', paddingBottom:'8px', borderBottom:'1px solid rgba(14,77,146,0.08)' }}>
         <div>
@@ -739,7 +759,7 @@ function TabEquipo() {
               <span style={{ fontSize:'12px', fontWeight:500, color:'#0B1F3A' }}>{u.name}</span>
             </div>
             <span style={{ fontSize:'11px', color:'#6B8BAE' }}>{u.email}</span>
-            <RolSelect value={u.rol} onChange={v => setTeam(t => t.map((x,j) => j===i?{...x,rol:v}:x))}/>
+            <RolSelect value={u.rol} onChange={v => setTeam(t => t.map((x,j) => j===i?{...x,rol:v}:x))} rolInfo={ROL_INFO}/>
             <span style={{ fontSize:'10px', fontWeight:600, padding:'3px 8px', borderRadius:'20px', background: u.status==='active'?'#F0FDF4':'#FFF7ED', color: u.status==='active'?'#166534':'#C2410C', display:'inline-block' }}>
               {u.status==='active'?'Activo':'Invitado'}
             </span>
@@ -1231,7 +1251,7 @@ export default function PerfilView({ role }) {
         {tab === 'empresa'  && <TabEmpresa/>}
         {tab === 'billing'   && (isProv ? <TabBilling/> : <TabBillingRetail/>)}
         {tab === 'api'      && <TabAPI role={role}/>}
-        {tab === 'equipo'   && <TabEquipo/>}
+        {tab === 'equipo'   && <TabEquipo isProv={isProv}/>}
         {tab === 'comercial' && isProv && <TabComercial comercial={comercial} setComercial={setComercial}/>}
       </div>
     </div>
